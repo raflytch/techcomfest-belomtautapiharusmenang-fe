@@ -220,7 +220,7 @@ export const Navbar01 = React.forwardRef(
           {/* Right side */}
           <div className="flex items-center gap-3">
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
               onClick={(e) => {
@@ -232,7 +232,7 @@ export const Navbar01 = React.forwardRef(
             </Button>
             <Button
               size="sm"
-              className="text-sm font-medium px-4 h-9 rounded-md shadow-sm bg-green-800 hover:opacity-40 hover:bg-green-800"
+              className="text-sm font-medium px-4 rounded-md shadow-sm bg-green-800 hover:opacity-40 hover:bg-green-800"
               onClick={(e) => {
                 e.preventDefault();
                 if (onCtaClick) onCtaClick();
