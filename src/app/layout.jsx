@@ -3,6 +3,7 @@ import "./globals.css";
 import { ReduxProvider } from "@/providers/redux-provider";
 import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Navbar01 } from "@/components/ui/shadcn-io/navbar-01";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -38,7 +39,10 @@ export default function RootLayout({ children }) {
                   `,
                 }}
               />
-              <div className="relative z-10">{children}</div>
+              <div className="relative z-10">
+                <Navbar01 />
+                {children}
+              </div>
             </div>
             <Toaster />
           </QueryProvider>
