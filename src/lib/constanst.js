@@ -29,7 +29,7 @@ export const problems = [
     icon: <BarChart3 className="w-12 h-12 text-green-600" />,
     title: "60% Sampah dari Rumah Tangga",
     description:
-      "Mayoritas sampah Indonesia berasal dari aktivitas rumah tangga, namun hanya 16% yang memilah sampah dengan benar.",
+      "Mayoritas sampah Indonesia berasal dari aktivitas rumah tangga, namun hanya sedikit yang memilah sampah dengan benar.",
     bgColor: "bg-green-50",
   },
   {
@@ -91,11 +91,8 @@ export const features = [
     icon: <Bot className="w-12 h-12 text-purple-600" />,
     title: "Verifikasi AI Otomatis",
     description:
-      "Upload foto atau video aksi hijau Anda.  AI kami akan memverifikasi jenis sampah, tanaman, atau produk ramah lingkungan secara otomatis.",
-    tags: [
-      { label: "Computer Vision", variant: "secondary" },
-      { label: "Real-time", variant: "secondary" },
-    ],
+      "Upload foto atau video aksi hijau Anda.  AI kami akan memverifikasi jenis sampah, tanaman, atau aksi hijau berkelanjutan secara otomatis.",
+    tags: [{ label: "Real-time", variant: "secondary" }],
     bgColor: "bg-purple-50",
   },
   {
@@ -103,10 +100,7 @@ export const features = [
     title: "Sistem Poin & Reward",
     description:
       "Setiap aksi terverifikasi dikonversi menjadi poin.  Tukar poin dengan voucher UMKM hijau atau sumbangkan untuk impact kolektif.",
-    tags: [
-      { label: "Gamifikasi", variant: "secondary" },
-      { label: "Voucher", variant: "secondary" },
-    ],
+    tags: [{ label: "Voucher", variant: "secondary" }],
     bgColor: "bg-pink-50",
   },
   {
@@ -128,14 +122,14 @@ export const steps = [
     icon: <Camera className="w-16 h-16 text-gray-700" />,
     title: "Lakukan Aksi Hijau",
     description:
-      "Pilah sampah, tanam pohon, atau gunakan produk ramah lingkungan. Upload foto/video aksi Anda ke platform.",
+      "Pilah sampah, tanam pohon, atau lakukan aksi hijau. Upload foto/video aksi Anda ke platform.",
   },
   {
     number: "02",
     icon: <Bot className="w-16 h-16 text-pink-600" />,
     title: "AI Verifikasi Otomatis",
     description:
-      "Teknologi AI Computer Vision mengklasifikasi jenis sampah, tanaman, atau produk hijau dengan skor akurasi tinggi.",
+      "Teknologi AI mengklasifikasi jenis sampah, tanaman, atau produk hijau dengan skor akurasi tinggi.",
   },
   {
     number: "03",
@@ -148,7 +142,6 @@ export const steps = [
     number: "04",
     icon: <Gift className="w-16 h-16 text-red-600" />,
     title: "Tukar Reward",
-    description:
-      "Gunakan poin untuk voucher UMKM hijau atau sumbangkan untuk impact komunitas seperti penanaman pohon kolektif.",
+    description: "Tukarkan poin dengan voucher UMKM ramah lingkungan.",
   },
 ];
