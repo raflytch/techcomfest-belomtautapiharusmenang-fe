@@ -12,8 +12,7 @@ import {
   Camera,
   Coins,
 } from "lucide-react";
-import logo from "../../public/images/logo-impact4action.png";
-
+import logo from "../../public/images/logo-sirkula.png";
 export const images = {
   logo,
 };

@@ -216,10 +216,10 @@ export const Navbar01 = React.forwardRef(
                 <Image
                   className="text-2xl w-10 h-10"
                   src={images.logo}
-                  alt="Impact2Action Logo"
+                  alt="Sirkula Logo"
                 />
                 <span className="hidden font-bold text-xl sm:inline-block text-green-800">
-                  Impact2Action
+                  Sirkula
                 </span>
               </button>
               {/* Navigation menu */}
