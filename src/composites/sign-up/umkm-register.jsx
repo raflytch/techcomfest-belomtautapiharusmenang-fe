@@ -28,14 +28,14 @@ export default function UmkmRegisterComposite() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    businessName: "",
-    ownerName: "",
+    name: "",
     email: "",
-    phone: "",
-    businessType: "",
-    address: "",
     password: "",
     confirmPassword: "",
+    umkmName: "",
+    umkmDescription: "",
+    umkmAddress: "",
+    umkmCategory: "",
   });
 
   const { mutate: register, isPending } = useRegisterUmkm();
@@ -50,7 +50,7 @@ export default function UmkmRegisterComposite() {
   };
 
   const handleSelectChange = (value) => {
-    setFormData({ ...formData, businessType: value });
+    setFormData({ ...formData, umkmCategory: value });
   };
 
   if (isPending) {
@@ -79,26 +79,26 @@ export default function UmkmRegisterComposite() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="businessName">Nama Bisnis/Usaha</Label>
+              <Label htmlFor="name">Nama Pemilik</Label>
               <Input
-                id="businessName"
-                name="businessName"
+                id="name"
+                name="name"
                 type="text"
-                placeholder="Nama toko/usaha Anda"
-                value={formData.businessName}
+                placeholder="Nama lengkap pemilik"
+                value={formData.name}
                 onChange={handleChange}
                 required
                 className="border"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="ownerName">Nama Pemilik</Label>
+              <Label htmlFor="umkmName">Nama Bisnis/Usaha</Label>
               <Input
-                id="ownerName"
-                name="ownerName"
+                id="umkmName"
+                name="umkmName"
                 type="text"
-                placeholder="Nama lengkap pemilik"
-                value={formData.ownerName}
+                placeholder="Nama toko/usaha Anda"
+                value={formData.umkmName}
                 onChange={handleChange}
                 required
                 className="border"
@@ -118,44 +118,46 @@ export default function UmkmRegisterComposite() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Nomor Telepon</Label>
+              <Label htmlFor="umkmCategory">Kategori Usaha</Label>
+              <Select
+                value={formData.umkmCategory}
+                onValueChange={handleSelectChange}
+              >
+                <SelectTrigger className="border">
+                  <SelectValue placeholder="Pilih kategori usaha" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Makanan & Minuman">
+                    Makanan & Minuman
+                  </SelectItem>
+                  <SelectItem value="Retail/Toko">Retail/Toko</SelectItem>
+                  <SelectItem value="Jasa">Jasa</SelectItem>
+                  <SelectItem value="Manufaktur">Manufaktur</SelectItem>
+                  <SelectItem value="Lainnya">Lainnya</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="umkmDescription">Deskripsi Usaha</Label>
               <Input
-                id="phone"
-                name="phone"
-                type="tel"
-                placeholder="08xxxxxxxxxx"
-                value={formData.phone}
+                id="umkmDescription"
+                name="umkmDescription"
+                type="text"
+                placeholder="Deskripsi singkat usaha Anda"
+                value={formData.umkmDescription}
                 onChange={handleChange}
                 required
                 className="border"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="businessType">Jenis Usaha</Label>
-              <Select
-                value={formData.businessType}
-                onValueChange={handleSelectChange}
-              >
-                <SelectTrigger className="border">
-                  <SelectValue placeholder="Pilih jenis usaha" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="makanan">Makanan & Minuman</SelectItem>
-                  <SelectItem value="retail">Retail/Toko</SelectItem>
-                  <SelectItem value="jasa">Jasa</SelectItem>
-                  <SelectItem value="manufaktur">Manufaktur</SelectItem>
-                  <SelectItem value="lainnya">Lainnya</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="address">Alamat Usaha</Label>
+              <Label htmlFor="umkmAddress">Alamat Usaha</Label>
               <Input
-                id="address"
-                name="address"
+                id="umkmAddress"
+                name="umkmAddress"
                 type="text"
                 placeholder="Alamat lengkap usaha"
-                value={formData.address}
+                value={formData.umkmAddress}
                 onChange={handleChange}
                 required
                 className="border"
