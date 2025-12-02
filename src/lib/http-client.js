@@ -12,15 +12,13 @@ const httpClient = axios.create({
   },
 });
 
-// Request interceptor - add token to headers
 httpClient.interceptors.request.use(
   (config) => {
-    const token = getCookie("token");
-
-    if (!token && typeof window !== "undefined") {
-      window.location.href = "/login";
-      return Promise.reject(new Error("No token found"));
+    if (config.skipAuth) {
+      return config;
     }
+
+    const token = getCookie("token");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -33,19 +31,16 @@ httpClient.interceptors.request.use(
   }
 );
 
-// Response interceptor - handle 401 errors
 httpClient.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
     if (error.response?.status === 401) {
-      // Delete token cookie
       deleteCookie("token");
 
-      // Redirect to login page
       if (typeof window !== "undefined") {
-        window.location.href = "/login";
+        window.location.href = "/auth";
       }
     }
 
