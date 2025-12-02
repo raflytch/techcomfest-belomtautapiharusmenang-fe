@@ -6,11 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { problems2 } from "@/lib/constanst";
 
-export default function ProblemsSection() {
+export default function ProblemsSection({ id }) {
   const [isVisible, sectionRef] = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20" id={id}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div
@@ -34,7 +34,7 @@ export default function ProblemsSection() {
           {problems2.map((problem, index) => (
             <Card
               key={index}
-              className={`border-none shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${
+              className={`border-2 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"

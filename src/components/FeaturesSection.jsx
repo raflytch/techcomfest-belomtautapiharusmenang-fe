@@ -10,10 +10,7 @@ export default function FeaturesSection() {
   const [isVisible, sectionRef] = useScrollAnimation();
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-20 bg-gradient-to-br from-gray-50 to-white"
-    >
+    <section ref={sectionRef} className="py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div
@@ -41,7 +38,7 @@ export default function FeaturesSection() {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className={`border-none shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 bg-white ${
+              className={`hover:shadow-xl transition-all duration-500 hover:-translate-y-2 bg-white ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-12"

@@ -18,12 +18,12 @@ export default function HomeComposite() {
   const [statsCount3, countRef3] = useCountUp(8, 1000, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
-      <div className="container mx-auto px-4 py-8 h-full">
+    <div className="min-h-screen">
+      <div className="w-full px-4 py-8 h-full bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
         {/* Header */}
         <div
           ref={heroRef}
-          className={`flex justify-between items-center mb-5 transition-all duration-700 ${
+          className={`flex justify-between items-center mb-5 transition-all duration-700  ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
           }`}
         >
@@ -117,7 +117,7 @@ export default function HomeComposite() {
         </div>
       </div>
 
-      <ProblemsSection />
+      <ProblemsSection id="problemsSection" />
       <FeaturesSection />
       <HowItWorksSection />
       <CTAFooter />

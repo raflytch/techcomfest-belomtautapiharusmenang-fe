@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
           <QueryProvider>
             <div className="min-h-screen w-full relative">
               <div className="absolute inset-0 z-0" />
-              <div className="relative z-10">
+              <div className="relative z-10 bg-zinc-50">
                 <Navbar01 />
                 {children}
               </div>

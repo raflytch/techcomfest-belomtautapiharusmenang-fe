@@ -20,7 +20,7 @@ export default function HowItWorksSection() {
   }, [isVisible]);
 
   return (
-    <section ref={sectionRef} className="py-20 bg-white">
+    <section ref={sectionRef} className="py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div
@@ -78,7 +78,7 @@ export default function HowItWorksSection() {
                   </div>
                 </div>
 
-                <Card className="border-none shadow-md hover:shadow-lg transition-all duration-300 bg-gray-50 w-full hover:-translate-y-2">
+                <Card className="border-2 hover:shadow-lg transition-all duration-300 bg-gray-50 w-full hover:-translate-y-2">
                   <CardContent className="p-6 text-center flex flex-col items-center h-full">
                     <div className="flex justify-center mb-4 mt-2 transition-transform duration-300 hover:scale-110 hover:rotate-6">
                       {step.icon}
