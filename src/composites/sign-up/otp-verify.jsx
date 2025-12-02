@@ -42,7 +42,7 @@ export default function OtpVerifyComposite() {
 
   const handleVerify = () => {
     if (otp.length === 6) {
-      verifyOtp({ email, otp });
+      verifyOtp({ email, code: otp });
     }
   };
 
