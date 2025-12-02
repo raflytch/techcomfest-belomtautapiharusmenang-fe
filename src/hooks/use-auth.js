@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
-import { setCookie, getCookie, deleteCookie } from "cookies-next";
+import { setCookie, getCookie, deleteCookie } from "cookies-next/client";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import {
@@ -44,13 +44,40 @@ export const useRegisterUmkm = () => {
 };
 
 export const useVerifyOtp = () => {
-  const router = useRouter();
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: authService.verifyOtp,
-    onSuccess: () => {
-      toast.success("Verifikasi berhasil! Silakan login.");
-      router.push("/auth");
+    onSuccess: (data) => {
+      const { accessToken, user } = data.data;
+
+      setCookie("token", accessToken, {
+        maxAge: 60 * 60 * 24 * 7,
+        path: "/",
+      });
+
+      dispatch(setUser(user));
+      queryClient.invalidateQueries({ queryKey: ["session"] });
+      toast.success("Verifikasi berhasil!");
+
+      // Use window.location for full page reload to ensure session is refreshed
+      switch (user.role) {
+        case "WARGA":
+          window.location.href = "/";
+          break;
+        case "UMKM":
+          window.location.href = "/dashboard/umkm";
+          break;
+        case "DLH":
+          window.location.href = "/dashboard/dinas";
+          break;
+        case "ADMIN":
+          window.location.href = "/dashboard/admin";
+          break;
+        default:
+          window.location.href = "/";
+      }
     },
     onError: (error) => {
       toast.error(error.response?.data?.message || "Verifikasi OTP gagal");

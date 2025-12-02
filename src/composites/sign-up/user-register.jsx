@@ -45,8 +45,8 @@ export default function UserRegisterComposite() {
 
   return (
     <AuthLayout>
-      <Card className="w-full max-w-md border shadow-none">
-        <CardHeader className="text-center">
+      <Card className="w-full max-w-md border shadow-none mx-4 sm:mx-0">
+        <CardHeader className="text-center px-4 sm:px-6">
           <Link
             href="/sign-up"
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 w-fit"
@@ -54,14 +54,14 @@ export default function UserRegisterComposite() {
             <ArrowLeft className="w-4 h-4" />
             Kembali
           </Link>
-          <CardTitle className="text-2xl font-bold">
+          <CardTitle className="text-xl sm:text-2xl font-bold">
             Daftar sebagai Pengguna
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm">
             Buat akun untuk mulai berkontribusi dalam pengelolaan sampah
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Nama Lengkap</Label>

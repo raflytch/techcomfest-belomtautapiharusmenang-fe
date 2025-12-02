@@ -1,9 +1,9 @@
 "use client";
 
 import axios from "axios";
-import { getCookie, deleteCookie } from "cookies-next";
+import { getCookie, deleteCookie } from "cookies-next/client";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const httpClient = axios.create({
   baseURL: BASE_URL,

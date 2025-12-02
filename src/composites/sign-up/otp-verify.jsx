@@ -47,7 +47,7 @@ export default function OtpVerifyComposite() {
   };
 
   const handleResend = () => {
-    resendOtp({ email });
+    resendOtp(email);
     setCountdown(60);
     setCanResend(false);
   };
