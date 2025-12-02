@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getCookie } from "cookies-next";
+import { getCookie } from "cookies-next/client";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function GuestGuard({ children }) {
