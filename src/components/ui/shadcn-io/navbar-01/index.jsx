@@ -1,6 +1,8 @@
 "use client";
 import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, useRef } from "react";
 import {
@@ -13,9 +15,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { navigationLinks } from "@/lib/constanst";
 import { images } from "@/lib/constanst";
+import { useSession, useLogout } from "@/hooks/use-auth";
+import { User, LogOut, Settings, LayoutDashboard } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Logo = (props) => {
   return (
@@ -97,6 +111,35 @@ export const Navbar01 = React.forwardRef(
     const [isMobile, setIsMobile] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const containerRef = useRef(null);
+    const router = useRouter();
+    const queryClient = useQueryClient();
+
+    const { data: session, isLoading, refetch } = useSession();
+    const { logout } = useLogout();
+
+    const getInitials = (name) => {
+      if (!name) return "U";
+      return name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2);
+    };
+
+    const getDashboardLink = () => {
+      if (!session) return "/";
+      switch (session.role) {
+        case "UMKM":
+          return "/dashboard/umkm";
+        case "DLH":
+          return "/dashboard/dinas";
+        case "ADMIN":
+          return "/dashboard/admin";
+        default:
+          return "/";
+      }
+    };
 
     const scrollToSection = (sectionId) => {
       if (sectionId === "#" || sectionId === "home") {
@@ -146,6 +189,14 @@ export const Navbar01 = React.forwardRef(
         resizeObserver.disconnect();
       };
     }, []);
+
+    useEffect(() => {
+      const handleFocus = () => {
+        refetch();
+      };
+      window.addEventListener("focus", handleFocus);
+      return () => window.removeEventListener("focus", handleFocus);
+    }, [refetch]);
 
     // Combine refs
     const combinedRef = React.useCallback(
@@ -246,30 +297,86 @@ export const Navbar01 = React.forwardRef(
               )}
             </div>
           </div>
-          {/* Right side */}
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onSignInClick) onSignInClick();
-              }}
-            >
-              {signInText}
-            </Button>
-            <Button
-              size="sm"
-              className="text-sm font-medium px-4 rounded-md shadow-sm bg-green-800 hover:opacity-40 hover:bg-green-800"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onCtaClick) onCtaClick();
-              }}
-            >
-              {ctaText}
-            </Button>
-          </div>
+          {isLoading ? (
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-9 w-9 rounded-full" />
+            </div>
+          ) : session ? (
+            <div className="flex items-center gap-3">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-9 w-9 rounded-full"
+                  >
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={session.avatarUrl} alt={session.name} />
+                      <AvatarFallback className="bg-green-100 text-green-800">
+                        {getInitials(session.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end">
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium">{session.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {session.email}
+                      </p>
+                      <p className="text-xs text-green-600 font-medium">
+                        {session.totalPoints} Poin
+                      </p>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Profil
+                    </Link>
+                  </DropdownMenuItem>
+                  {session.role !== "WARGA" && (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href={getDashboardLink()}
+                        className="cursor-pointer"
+                      >
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    className="cursor-pointer text-red-600 focus:text-red-600"
+                    onClick={logout}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Keluar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                onClick={() => router.push("/auth")}
+              >
+                Masuk
+              </Button>
+              <Button
+                size="sm"
+                className="text-sm font-medium px-4 rounded-md shadow-sm bg-green-800 hover:opacity-90 hover:bg-green-800"
+                onClick={() => router.push("/sign-up")}
+              >
+                Daftar
+              </Button>
+            </div>
+          )}
         </div>
       </header>
     );
