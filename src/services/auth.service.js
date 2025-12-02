@@ -22,7 +22,7 @@ export const authService = {
         email: data.email,
         name: data.name,
         password: data.password,
-        role: "WARGA",
+        role: "UMKM",
         umkmName: data.umkmName,
         umkmDescription: data.umkmDescription,
         umkmAddress: data.umkmAddress,
