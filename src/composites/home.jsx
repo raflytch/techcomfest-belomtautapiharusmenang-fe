@@ -1,67 +1,126 @@
 "use client";
 
-import Image from "next/image";
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Play, Sparkles } from "lucide-react";
+import { useCountUp } from "@/hooks/useCountsUp";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import ProblemsSection from "@/components/ProblemsSection";
+import FeaturesSection from "@/components/FeaturesSection";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import CTAFooter from "@/components/CTAFooter";
 
 export default function HomeComposite() {
+  const [isVisible, heroRef] = useScrollAnimation();
+  const [statsCount1, countRef1] = useCountUp(15847, 2000);
+  const [statsCount2, countRef2] = useCountUp(2341, 2000);
+  const [statsCount3, countRef3] = useCountUp(8, 1000, 0);
+
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen">
+      <div className="w-full px-4 py-8 h-full bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+        {/* Header */}
+        <div
+          ref={heroRef}
+          className={`flex justify-between items-center mb-5 transition-all duration-700  ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
+          }`}
+        >
+          <Badge className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-sm animate-pulse">
+            <Sparkles className="w-4 h-4 mr-2" />
+            AI-Powered Sustainability Platform
+          </Badge>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left Content */}
+          <div className="space-y-8">
+            <div
+              className={`transition-all duration-700 delay-100 ${
+                isVisible
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 -translate-x-8"
+              }`}
+            >
+              <h1 className="text-5xl font-bold text-gray-900 mb-4">
+                Sense Every Action,
+              </h1>
+              <h1 className="text-5xl font-bold text-green-600 mb-6">
+                Reward Every Impact
+              </h1>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Ubah setiap aksi hijau Anda menjadi data dampak nyata. Pilah
+                sampah, tanam pohon, konsumsi produk ramah lingkungan—semua
+                terverifikasi AI dan mendapat reward!
+              </p>
+            </div>
+
+            {/* Stats with counter animation */}
+            <div
+              className={`grid grid-cols-3 gap-8 transition-all duration-700 delay-300 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <div
+                ref={countRef1}
+                className="hover:scale-110 transition-transform duration-300"
+              >
+                <div className="text-4xl font-bold text-green-600 mb-2">
+                  {statsCount1.toLocaleString()}
+                </div>
+                <div className="text-sm text-gray-600">Aksi Hijau</div>
+              </div>
+              <div
+                ref={countRef2}
+                className="hover:scale-110 transition-transform duration-300"
+              >
+                <div className="text-4xl font-bold text-green-600 mb-2">
+                  {statsCount2.toLocaleString()}
+                </div>
+                <div className="text-sm text-gray-600">Pengguna Aktif</div>
+              </div>
+              <div
+                ref={countRef3}
+                className="hover:scale-110 transition-transform duration-300"
+              >
+                <div className="text-4xl font-bold text-green-600 mb-2">
+                  {Number(statsCount3).toFixed(1)} Ton
+                </div>
+                <div className="text-sm text-gray-600">Sampah Terpilah</div>
+              </div>
+            </div>
+
+            {/* CTA Buttons */}
+            <div
+              className={`flex gap-4 transition-all duration-700 delay-500 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
+            >
+              <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-lg hover:scale-105 transition-transform duration-300">
+                Mulai Aksi Hijau
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+              <Button
+                variant="outline"
+                className="px-6 py-6 text-lg bg-white hover:scale-105 transition-transform duration-300"
+              >
+                <Play className="w-5 h-5 mr-2" />
+                Lihat Demo
+              </Button>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
+
+      <ProblemsSection id="problemsSection" />
+      <FeaturesSection id="featuresSection" />
+      <HowItWorksSection id="howItWorksSection" />
+      <CTAFooter />
     </div>
   );
 }

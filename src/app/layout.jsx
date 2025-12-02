@@ -3,6 +3,7 @@ import "./globals.css";
 import { ReduxProvider } from "@/providers/redux-provider";
 import { QueryProvider } from "@/providers/query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Navbar01 } from "@/components/ui/shadcn-io/navbar-01";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -21,24 +22,12 @@ export default function RootLayout({ children }) {
       <body className={`${poppins.variable} font-sans antialiased`}>
         <ReduxProvider>
           <QueryProvider>
-            <div className="min-h-screen w-full bg-[#f0fdfa] relative">
-              <div
-                className="absolute inset-0 z-0"
-                style={{
-                  backgroundImage: `
-                    linear-gradient(45deg, 
-                      rgba(240,253,250,1) 0%, 
-                      rgba(204,251,241,0.7) 30%, 
-                      rgba(153,246,228,0.5) 60%, 
-                      rgba(94,234,212,0.4) 100%
-                    ),
-                    radial-gradient(circle at 40% 30%, rgba(255,255,255,0.8) 0%, transparent 40%),
-                    radial-gradient(circle at 80% 70%, rgba(167,243,208,0.5) 0%, transparent 50%),
-                    radial-gradient(circle at 20% 80%, rgba(209,250,229,0.6) 0%, transparent 45%)
-                  `,
-                }}
-              />
-              <div className="relative z-10">{children}</div>
+            <div className="min-h-screen w-full relative">
+              <div className="absolute inset-0 z-0" />
+              <div className="relative z-10 bg-zinc-50">
+                <Navbar01 />
+                {children}
+              </div>
             </div>
             <Toaster />
           </QueryProvider>
