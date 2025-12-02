@@ -118,8 +118,8 @@ export default function HomeComposite() {
       </div>
 
       <ProblemsSection id="problemsSection" />
-      <FeaturesSection />
-      <HowItWorksSection />
+      <FeaturesSection id="featuresSection" />
+      <HowItWorksSection id="howItWorksSection" />
       <CTAFooter />
     </div>
   );

@@ -6,11 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { features } from "@/lib/constanst";
 
-export default function FeaturesSection() {
+export default function FeaturesSection({ id }) {
   const [isVisible, sectionRef] = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-20">
+    <section ref={sectionRef} className="py-20" id={id}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div

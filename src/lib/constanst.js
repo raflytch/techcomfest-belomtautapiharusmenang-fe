@@ -20,8 +20,8 @@ export const images = {
 
 export const navigationLinks = [
   { href: "#", label: "Home", active: true },
-  { href: "#features", label: "Features" },
-  { href: "#about", label: "About" },
+  { href: "featuresSection", label: "Features" },
+  { href: "aboutUs", label: "About Us" },
 ];
 
 export const problems = [

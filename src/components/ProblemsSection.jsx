@@ -22,7 +22,7 @@ export default function ProblemsSection({ id }) {
             variant="outline"
             className="mb-6 bg-green-50 text-green-700 border-green-200 px-4 py-2"
           >
-            Mengapa Impact2Action?
+            Mengapa Sirkula?
           </Badge>
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
             Masalah yang Kami Selesaikan

@@ -82,91 +82,12 @@ export default function CTAFooter() {
         </div>
       </section>
 
-      <footer className="bg-gray-900 text-gray-300 py-16">
+      <footer className="bg-gray-900 py-5">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-            <div className="md:col-span-1">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-white" />
-                </div>
-                <span className="text-xl font-bold text-white">
-                  Impact2Action
-                </span>
-              </div>
-              <p className="text-sm text-gray-400 mb-4">
-                Sense Every Action, Reward Every Impact
-              </p>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Platform AI-driven untuk melacak, memverifikasi, dan memberikan
-                reward pada setiap aksi keberlanjutan Anda.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4">Platform</h3>
-              <ul className="space-y-3">
-                {[
-                  "Untuk Warga",
-                  "Untuk UMKM",
-                  "Untuk Kelurahan",
-                  "Untuk Bank Sampah",
-                ].map((item, index) => (
-                  <li key={index}>
-                    <a
-                      href="#"
-                      className="text-gray-400 hover:text-green-400 transition-colors text-sm hover:translate-x-1 inline-block duration-300"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4">Sumber Daya</h3>
-              <ul className="space-y-3">
-                {["Dokumentasi", "Panduan", "FAQ", "Blog"].map(
-                  (item, index) => (
-                    <li key={index}>
-                      <a
-                        href="#"
-                        className="text-gray-400 hover:text-green-400 transition-colors text-sm hover:translate-x-1 inline-block duration-300"
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-white font-semibold mb-4">Perusahaan</h3>
-              <ul className="space-y-3">
-                {["Tentang Kami", "Kontak", "Karir", "Privacy Policy"].map(
-                  (item, index) => (
-                    <li key={index}>
-                      <a
-                        href="#"
-                        className="text-gray-400 hover:text-green-400 transition-colors text-sm hover:translate-x-1 inline-block duration-300"
-                      >
-                        {item}
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8">
-            <div className="flex justify-center items-center">
-              <p className="text-sm text-gray-400">
-                © 2024 Impact2Action. All rights reserved.
-              </p>
-            </div>
+          <div className="flex justify-center items-center">
+            <p className="text-sm text-gray-300">
+              © 2024 Sirkula. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>

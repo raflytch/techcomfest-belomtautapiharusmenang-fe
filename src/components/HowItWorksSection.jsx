@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { steps } from "@/lib/constanst";
 
-export default function HowItWorksSection() {
+export default function HowItWorksSection({ id }) {
   const [isVisible, sectionRef] = useScrollAnimation();
   const [lineProgress, setLineProgress] = useState(0);
 
@@ -20,7 +20,7 @@ export default function HowItWorksSection() {
   }, [isVisible]);
 
   return (
-    <section ref={sectionRef} className="py-20">
+    <section ref={sectionRef} className="py-20" id={id}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div
@@ -34,7 +34,7 @@ export default function HowItWorksSection() {
           >
             Cara Kerja
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
             Mudah, Cepat, dan Terverifikasi
           </h2>
         </div>
