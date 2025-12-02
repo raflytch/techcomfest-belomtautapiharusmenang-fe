@@ -17,9 +17,6 @@ export default function AuthLayout({ children }) {
             alt="Sirkula Logo"
             className="w-16 h-16 sm:w-20 sm:h-20"
           />
-          <span className="text-xl sm:text-2xl font-bold text-green-800">
-            Sirkula
-          </span>
         </Link>
         {children}
       </div>
