@@ -1,4 +1,17 @@
-import { BarChart3, Trash2, Lightbulb, TrendingDown } from "lucide-react";
+import {
+  BarChart3,
+  Trash2,
+  Lightbulb,
+  TrendingDown,
+  AlertCircle,
+  TrendingUp,
+  Gift,
+  Users,
+  Bot,
+  Target,
+  Camera,
+  Coins,
+} from "lucide-react";
 import logo from "../../public/images/logo-impact4action.png";
 
 export const images = {
@@ -39,5 +52,103 @@ export const problems = [
     description:
       "Aksi hijau warga dan UMKM hijau belum tercatat sebagai data dampak yang terukur.",
     bgColor: "bg-pink-50",
+  },
+];
+
+export const problems2 = [
+  {
+    icon: <AlertCircle className="w-10 h-10 text-red-600" />,
+    title: "Tidak Ada Verifikasi Aksi Hijau",
+    description:
+      "Warga sulit membuktikan kontribusi nyata mereka terhadap lingkungan. Aksi hijau seperti pemilahan sampah atau penanaman pohon tidak tercatat secara terverifikasi.",
+    bgColor: "bg-red-50",
+  },
+  {
+    icon: <TrendingUp className="w-10 h-10 text-blue-600" />,
+    title: "Data Dampak Lingkungan Tidak Terintegrasi",
+    description:
+      "Kelurahan dan bank sampah kesulitan melacak dampak kolektif dari program keberlanjutan. Data tersebar dan tidak real-time.",
+    bgColor: "bg-blue-50",
+  },
+  {
+    icon: <Gift className="w-10 h-10 text-purple-600" />,
+    title: "Tidak Ada Insentif untuk Aksi Hijau",
+    description:
+      "Warga tidak mendapat reward atau apresiasi nyata dari aksi hijau mereka, sehingga motivasi untuk konsisten berkurang.",
+    bgColor: "bg-purple-50",
+  },
+  {
+    icon: <Users className="w-10 h-10 text-orange-600" />,
+    title: "UMKM Hijau Sulit Menjangkau Konsumen",
+    description:
+      "UMKM yang menjual produk ramah lingkungan kesulitan menemukan target market yang peduli keberlanjutan.",
+    bgColor: "bg-orange-50",
+  },
+];
+
+export const features = [
+  {
+    icon: <Bot className="w-12 h-12 text-purple-600" />,
+    title: "Verifikasi AI Otomatis",
+    description:
+      "Upload foto atau video aksi hijau Anda.  AI kami akan memverifikasi jenis sampah, tanaman, atau produk ramah lingkungan secara otomatis.",
+    tags: [
+      { label: "Computer Vision", variant: "secondary" },
+      { label: "Real-time", variant: "secondary" },
+    ],
+    bgColor: "bg-purple-50",
+  },
+  {
+    icon: <Target className="w-12 h-12 text-pink-600" />,
+    title: "Sistem Poin & Reward",
+    description:
+      "Setiap aksi terverifikasi dikonversi menjadi poin.  Tukar poin dengan voucher UMKM hijau atau sumbangkan untuk impact kolektif.",
+    tags: [
+      { label: "Gamifikasi", variant: "secondary" },
+      { label: "Voucher", variant: "secondary" },
+    ],
+    bgColor: "bg-pink-50",
+  },
+  {
+    icon: <BarChart3 className="w-12 h-12 text-green-600" />,
+    title: "Dashboard Impact",
+    description:
+      "Lihat dampak kolektif dari aksi hijau Anda dan komunitas.  Data real-time untuk kelurahan, bank sampah, dan UMKM.",
+    tags: [
+      { label: "Analytics", variant: "secondary" },
+      { label: "Visualisasi", variant: "secondary" },
+    ],
+    bgColor: "bg-green-50",
+  },
+];
+
+export const steps = [
+  {
+    number: "01",
+    icon: <Camera className="w-16 h-16 text-gray-700" />,
+    title: "Lakukan Aksi Hijau",
+    description:
+      "Pilah sampah, tanam pohon, atau gunakan produk ramah lingkungan. Upload foto/video aksi Anda ke platform.",
+  },
+  {
+    number: "02",
+    icon: <Bot className="w-16 h-16 text-pink-600" />,
+    title: "AI Verifikasi Otomatis",
+    description:
+      "Teknologi AI Computer Vision mengklasifikasi jenis sampah, tanaman, atau produk hijau dengan skor akurasi tinggi.",
+  },
+  {
+    number: "03",
+    icon: <Coins className="w-16 h-16 text-yellow-600" />,
+    title: "Dapatkan Poin",
+    description:
+      "Aksi terverifikasi dikonversi menjadi poin.  Semakin tinggi skor AI, semakin besar poin yang Anda dapat.",
+  },
+  {
+    number: "04",
+    icon: <Gift className="w-16 h-16 text-red-600" />,
+    title: "Tukar Reward",
+    description:
+      "Gunakan poin untuk voucher UMKM hijau atau sumbangkan untuk impact komunitas seperti penanaman pohon kolektif.",
   },
 ];
