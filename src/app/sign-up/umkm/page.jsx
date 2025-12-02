@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useRegisterUmkm } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 const UMKM_CATEGORIES = [
   "Makanan & Minuman",
@@ -80,6 +81,10 @@ export default function UmkmSignUpPage() {
   const handleSelectChange = (value) => {
     setFormData({ ...formData, umkmCategory: value });
   };
+
+  if (isPending) {
+    return <FullscreenLoader text="Mendaftarkan UMKM..." />;
+  }
 
   return (
     <AuthLayout>

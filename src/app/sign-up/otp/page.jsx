@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/input-otp";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useVerifyOtp, useResendOtp } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 function OTPContent() {
   const searchParams = useSearchParams();
@@ -55,6 +56,10 @@ function OTPContent() {
   const handleOtpChange = (value) => {
     setOtp(value);
   };
+
+  if (isVerifying) {
+    return <FullscreenLoader text="Memverifikasi kode..." />;
+  }
 
   return (
     <AuthLayout>

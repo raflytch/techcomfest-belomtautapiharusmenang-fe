@@ -28,6 +28,8 @@ import { navigationLinks } from "@/lib/constanst";
 import { images } from "@/lib/constanst";
 import { useSession, useLogout } from "@/hooks/use-auth";
 import { User, LogOut, Settings, LayoutDashboard } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Logo = (props) => {
   return (
@@ -110,8 +112,9 @@ export const Navbar01 = React.forwardRef(
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const containerRef = useRef(null);
     const router = useRouter();
+    const queryClient = useQueryClient();
 
-    const { data: session, isLoading } = useSession();
+    const { data: session, isLoading, refetch } = useSession();
     const { logout } = useLogout();
 
     const getInitials = (name) => {
@@ -186,6 +189,14 @@ export const Navbar01 = React.forwardRef(
         resizeObserver.disconnect();
       };
     }, []);
+
+    useEffect(() => {
+      const handleFocus = () => {
+        refetch();
+      };
+      window.addEventListener("focus", handleFocus);
+      return () => window.removeEventListener("focus", handleFocus);
+    }, [refetch]);
 
     // Combine refs
     const combinedRef = React.useCallback(
@@ -286,7 +297,11 @@ export const Navbar01 = React.forwardRef(
               )}
             </div>
           </div>
-          {session ? (
+          {isLoading ? (
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-9 w-9 rounded-full" />
+            </div>
+          ) : session ? (
             <div className="flex items-center gap-3">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

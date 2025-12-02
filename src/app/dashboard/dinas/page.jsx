@@ -49,6 +49,7 @@ import {
 } from "@/components/ui/dialog";
 import { images } from "@/lib/constanst";
 import { useSession, useGetAllUsers, useGetUserById } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function DinasDashboardPage() {
   const router = useRouter();
@@ -107,11 +108,7 @@ export default function DinasDashboardPage() {
   };
 
   if (sessionLoading) {
-    return (
-      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600" />
-      </div>
-    );
+    return <FullscreenLoader text="Memuat dashboard..." />;
   }
 
   if (!session || session.role !== "DLH") {

@@ -16,6 +16,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useRegisterUser } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function UserSignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,6 +55,10 @@ export default function UserSignUpPage() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  if (isPending) {
+    return <FullscreenLoader text="Mendaftarkan akun..." />;
+  }
 
   return (
     <AuthLayout>

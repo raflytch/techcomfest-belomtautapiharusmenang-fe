@@ -71,7 +71,6 @@ export const useResendOtp = () => {
 };
 
 export const useLogin = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
@@ -89,21 +88,22 @@ export const useLogin = () => {
       queryClient.invalidateQueries({ queryKey: ["session"] });
       toast.success("Login berhasil!");
 
+      // Use window.location for full page reload to ensure session is refreshed
       switch (user.role) {
         case "WARGA":
-          router.push("/");
+          window.location.href = "/";
           break;
         case "UMKM":
-          router.push("/dashboard/umkm");
+          window.location.href = "/dashboard/umkm";
           break;
         case "DLH":
-          router.push("/dashboard/dinas");
+          window.location.href = "/dashboard/dinas";
           break;
         case "ADMIN":
-          router.push("/dashboard/admin");
+          window.location.href = "/dashboard/admin";
           break;
         default:
-          router.push("/");
+          window.location.href = "/";
       }
     },
     onError: (error) => {
@@ -145,7 +145,7 @@ export const useLogout = () => {
     dispatch(clearUser());
     queryClient.clear();
     toast.success("Logout berhasil!");
-    router.push("/");
+    router.push("/auth");
   };
 
   return { logout };

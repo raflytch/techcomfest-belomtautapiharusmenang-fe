@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useLogin } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -29,17 +30,12 @@ export default function AdminLoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    loginMutation.mutate(formData, {
-      onSuccess: (response) => {
-        const user = response.data?.user;
-        if (user?.role === "ADMIN") {
-          router.push("/dashboard/admin");
-        } else {
-          router.push("/");
-        }
-      },
-    });
+    loginMutation.mutate(formData);
   };
+
+  if (loginMutation.isPending) {
+    return <FullscreenLoader text="Sedang masuk..." />;
+  }
 
   return (
     <AuthLayout>

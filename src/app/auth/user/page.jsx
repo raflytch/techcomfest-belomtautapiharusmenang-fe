@@ -16,6 +16,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useLogin } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function UserLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +35,10 @@ export default function UserLoginPage() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  if (isPending) {
+    return <FullscreenLoader text="Sedang masuk..." />;
+  }
 
   return (
     <AuthLayout>

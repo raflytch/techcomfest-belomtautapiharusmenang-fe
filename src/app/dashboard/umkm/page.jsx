@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/select";
 import { images } from "@/lib/constanst";
 import { useSession, useUpdateUmkmProfile } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 const UMKM_CATEGORIES = [
   "Makanan & Minuman",
@@ -101,11 +102,12 @@ export default function UmkmDashboardPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600" />
-      </div>
-    );
+    return <FullscreenLoader text="Memuat dashboard..." />;
+  }
+
+  // Show fullscreen loader for mutation (update UMKM profile)
+  if (isUpdating) {
+    return <FullscreenLoader text="Menyimpan perubahan..." />;
   }
 
   if (!session || session.role !== "UMKM") {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +9,6 @@ import {
   Mail,
   Calendar,
   Award,
-  Settings,
   Trash2,
   Camera,
   ArrowLeft,
@@ -30,6 +29,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
   DialogContent,
@@ -51,6 +51,75 @@ import {
   useRequestDeleteAccount,
   useConfirmDeleteAccount,
 } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
+
+function ProfileSkeleton() {
+  return (
+    <div className="min-h-screen bg-zinc-50">
+      <div className="container mx-auto max-w-4xl px-4 py-8">
+        <Skeleton className="h-5 w-40 mb-6" />
+        <div className="flex items-center gap-4 mb-8">
+          <Skeleton className="w-10 h-10 rounded-full" />
+          <Skeleton className="h-8 w-32" />
+        </div>
+        <div className="grid gap-6 lg:grid-cols-3">
+          <Card className="border shadow-none lg:col-span-1">
+            <CardContent className="pt-6">
+              <div className="flex flex-col items-center">
+                <Skeleton className="h-24 w-24 rounded-full mb-4" />
+                <Skeleton className="h-6 w-32 mb-2" />
+                <Skeleton className="h-4 w-40 mb-2" />
+                <Skeleton className="h-6 w-16 rounded-full" />
+                <Separator className="my-4" />
+                <div className="w-full space-y-3">
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="w-4 h-4 rounded" />
+                    <Skeleton className="h-4 w-20" />
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="w-4 h-4 rounded" />
+                    <Skeleton className="h-4 w-36" />
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Skeleton className="w-4 h-4 rounded" />
+                    <Skeleton className="h-4 w-28" />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border shadow-none lg:col-span-2">
+            <CardHeader>
+              <Skeleton className="h-6 w-40 mb-2" />
+              <Skeleton className="h-4 w-64" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="h-10 w-full mb-6" />
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-16 w-16 rounded-full" />
+                  <div>
+                    <Skeleton className="h-9 w-28 mb-1" />
+                    <Skeleton className="h-3 w-40" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-16" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+                <Skeleton className="h-10 w-36" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -137,62 +206,88 @@ export default function ProfilePage() {
     }
   };
 
+  useEffect(() => {
+    if (!isLoading && !session) {
+      router.push("/auth");
+    }
+  }, [isLoading, session, router]);
+
   if (isLoading) {
+    return <ProfileSkeleton />;
+  }
+
+  // Show fullscreen loader for mutations (POST/PATCH/DELETE operations)
+  if (isUpdating || isRequestingDelete || isConfirmingDelete) {
     return (
-      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600" />
-      </div>
+      <FullscreenLoader
+        text={
+          isUpdating
+            ? "Menyimpan perubahan..."
+            : isRequestingDelete
+            ? "Memproses permintaan..."
+            : "Menghapus akun..."
+        }
+      />
     );
   }
 
   if (!session) {
-    router.push("/auth");
     return null;
   }
 
   return (
     <div className="min-h-screen bg-zinc-50">
-      <div className="container mx-auto max-w-4xl px-4 py-8">
+      <div className="container mx-auto max-w-4xl px-4 py-6 sm:py-8">
         <Link
           href="/"
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
+          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 sm:mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Kembali ke Beranda
         </Link>
 
-        <div className="flex items-center gap-4 mb-8">
-          <Image src={images.logo} alt="Sirkula Logo" className="w-10 h-10" />
-          <h1 className="text-2xl font-bold text-green-800">Profil Saya</h1>
+        <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <Image
+            src={images.logo}
+            alt="Sirkula Logo"
+            className="w-8 h-8 sm:w-10 sm:h-10"
+          />
+          <h1 className="text-xl sm:text-2xl font-bold text-green-800">
+            Profil Saya
+          </h1>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          <Card className="border shadow-none md:col-span-1">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+          <Card className="border shadow-none lg:col-span-1">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
-                <Avatar className="h-24 w-24 mb-4">
+                <Avatar className="h-20 w-20 sm:h-24 sm:w-24 mb-4">
                   <AvatarImage src={session.avatarUrl} alt={session.name} />
-                  <AvatarFallback className="bg-green-100 text-green-800 text-2xl">
+                  <AvatarFallback className="bg-green-100 text-green-800 text-xl sm:text-2xl">
                     {getInitials(session.name)}
                   </AvatarFallback>
                 </Avatar>
-                <h2 className="text-xl font-semibold">{session.name}</h2>
-                <p className="text-sm text-muted-foreground">{session.email}</p>
+                <h2 className="text-lg sm:text-xl font-semibold">
+                  {session.name}
+                </h2>
+                <p className="text-xs sm:text-sm text-muted-foreground break-all">
+                  {session.email}
+                </p>
                 <Badge className="mt-2 bg-green-100 text-green-800 hover:bg-green-100">
                   {session.role}
                 </Badge>
                 <Separator className="my-4" />
                 <div className="w-full space-y-3">
-                  <div className="flex items-center gap-3 text-sm">
-                    <Award className="w-4 h-4 text-green-600" />
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <Award className="w-4 h-4 text-green-600 shrink-0" />
                     <span>{session.totalPoints} Poin</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
                     <span>Bergabung {formatDate(session.createdAt)}</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Mail className="w-4 h-4 text-muted-foreground" />
+                  <div className="flex items-center gap-3 text-xs sm:text-sm">
+                    <Mail className="w-4 h-4 text-muted-foreground shrink-0" />
                     <span>
                       {session.isEmailVerified
                         ? "Email Terverifikasi"
@@ -204,23 +299,29 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none md:col-span-2">
-            <CardHeader>
-              <CardTitle>Pengaturan Akun</CardTitle>
-              <CardDescription>
+          <Card className="border shadow-none lg:col-span-2">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg sm:text-xl">
+                Pengaturan Akun
+              </CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Kelola informasi profil dan keamanan akun Anda
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="profile" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="profile">Profil</TabsTrigger>
-                  <TabsTrigger value="security">Keamanan</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2 mb-4">
+                  <TabsTrigger value="profile" className="text-xs sm:text-sm">
+                    Profil
+                  </TabsTrigger>
+                  <TabsTrigger value="security" className="text-xs sm:text-sm">
+                    Keamanan
+                  </TabsTrigger>
                 </TabsList>
-                <TabsContent value="profile" className="space-y-4 pt-4">
+                <TabsContent value="profile" className="space-y-4">
                   <form onSubmit={handleProfileUpdate} className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <Avatar className="h-16 w-16">
+                    <div className="flex flex-col sm:flex-row items-center gap-4">
+                      <Avatar className="h-14 w-14 sm:h-16 sm:w-16">
                         <AvatarImage
                           src={avatarPreview || session.avatarUrl}
                           alt={session.name}
@@ -229,7 +330,7 @@ export default function ProfilePage() {
                           {getInitials(session.name)}
                         </AvatarFallback>
                       </Avatar>
-                      <div>
+                      <div className="text-center sm:text-left">
                         <input
                           type="file"
                           ref={fileInputRef}
@@ -246,13 +347,15 @@ export default function ProfilePage() {
                           <Camera className="w-4 h-4 mr-2" />
                           Ganti Foto
                         </Button>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
                           JPEG, PNG, GIF, WebP. Maks 5MB
                         </p>
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="name">Nama Lengkap</Label>
+                      <Label htmlFor="name" className="text-xs sm:text-sm">
+                        Nama Lengkap
+                      </Label>
                       <Input
                         id="name"
                         placeholder={session.name}
@@ -263,31 +366,38 @@ export default function ProfilePage() {
                             name: e.target.value,
                           })
                         }
-                        className="border"
+                        className="border text-sm"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email" className="text-xs sm:text-sm">
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         value={session.email}
                         disabled
-                        className="border bg-muted"
+                        className="border bg-muted text-sm"
                       />
                     </div>
                     <Button
                       type="submit"
-                      className="bg-green-600 hover:bg-green-700"
+                      className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-sm"
                       disabled={isUpdating}
                     >
                       {isUpdating ? "Menyimpan..." : "Simpan Perubahan"}
                     </Button>
                   </form>
                 </TabsContent>
-                <TabsContent value="security" className="space-y-4 pt-4">
+                <TabsContent value="security" className="space-y-4">
                   <form onSubmit={handleProfileUpdate} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="currentPassword">Password Saat Ini</Label>
+                      <Label
+                        htmlFor="currentPassword"
+                        className="text-xs sm:text-sm"
+                      >
+                        Password Saat Ini
+                      </Label>
                       <div className="relative">
                         <Input
                           id="currentPassword"
@@ -300,7 +410,7 @@ export default function ProfilePage() {
                               currentPassword: e.target.value,
                             })
                           }
-                          className="border pr-10"
+                          className="border pr-10 text-sm"
                         />
                         <button
                           type="button"
@@ -316,7 +426,12 @@ export default function ProfilePage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="newPassword">Password Baru</Label>
+                      <Label
+                        htmlFor="newPassword"
+                        className="text-xs sm:text-sm"
+                      >
+                        Password Baru
+                      </Label>
                       <div className="relative">
                         <Input
                           id="newPassword"
@@ -329,7 +444,7 @@ export default function ProfilePage() {
                               newPassword: e.target.value,
                             })
                           }
-                          className="border pr-10"
+                          className="border pr-10 text-sm"
                         />
                         <button
                           type="button"
@@ -346,7 +461,7 @@ export default function ProfilePage() {
                     </div>
                     <Button
                       type="submit"
-                      className="bg-green-600 hover:bg-green-700"
+                      className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-sm"
                       disabled={
                         isUpdating ||
                         !profileData.currentPassword ||
@@ -360,10 +475,10 @@ export default function ProfilePage() {
                   <Separator className="my-6" />
 
                   <div className="space-y-4">
-                    <h3 className="text-lg font-medium text-red-600">
+                    <h3 className="text-base sm:text-lg font-medium text-red-600">
                       Zona Berbahaya
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Setelah Anda menghapus akun, tidak ada jalan kembali.
                       Harap pastikan.
                     </p>
@@ -372,29 +487,33 @@ export default function ProfilePage() {
                       onOpenChange={setDeleteDialogOpen}
                     >
                       <DialogTrigger asChild>
-                        <Button variant="destructive">
+                        <Button
+                          variant="destructive"
+                          className="w-full sm:w-auto text-sm"
+                        >
                           <Trash2 className="w-4 h-4 mr-2" />
                           Hapus Akun
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-w-[90vw] sm:max-w-md">
                         <DialogHeader>
-                          <DialogTitle>
+                          <DialogTitle className="text-base sm:text-lg">
                             {deleteStep === 1
                               ? "Konfirmasi Hapus Akun"
                               : "Verifikasi OTP"}
                           </DialogTitle>
-                          <DialogDescription>
+                          <DialogDescription className="text-xs sm:text-sm">
                             {deleteStep === 1
                               ? "Tindakan ini tidak dapat dibatalkan. Akun Anda akan dihapus secara permanen."
                               : "Masukkan kode OTP yang telah dikirim ke email Anda."}
                           </DialogDescription>
                         </DialogHeader>
                         {deleteStep === 1 ? (
-                          <DialogFooter>
+                          <DialogFooter className="flex-col sm:flex-row gap-2">
                             <Button
                               variant="outline"
                               onClick={() => setDeleteDialogOpen(false)}
+                              className="w-full sm:w-auto"
                             >
                               Batal
                             </Button>
@@ -402,6 +521,7 @@ export default function ProfilePage() {
                               variant="destructive"
                               onClick={handleDeleteRequest}
                               disabled={isRequestingDelete}
+                              className="w-full sm:w-auto"
                             >
                               {isRequestingDelete
                                 ? "Memproses..."
@@ -417,16 +537,34 @@ export default function ProfilePage() {
                                 onChange={setDeleteOtp}
                               >
                                 <InputOTPGroup>
-                                  <InputOTPSlot index={0} className="border" />
-                                  <InputOTPSlot index={1} className="border" />
-                                  <InputOTPSlot index={2} className="border" />
-                                  <InputOTPSlot index={3} className="border" />
-                                  <InputOTPSlot index={4} className="border" />
-                                  <InputOTPSlot index={5} className="border" />
+                                  <InputOTPSlot
+                                    index={0}
+                                    className="border h-10 w-10 sm:h-12 sm:w-12"
+                                  />
+                                  <InputOTPSlot
+                                    index={1}
+                                    className="border h-10 w-10 sm:h-12 sm:w-12"
+                                  />
+                                  <InputOTPSlot
+                                    index={2}
+                                    className="border h-10 w-10 sm:h-12 sm:w-12"
+                                  />
+                                  <InputOTPSlot
+                                    index={3}
+                                    className="border h-10 w-10 sm:h-12 sm:w-12"
+                                  />
+                                  <InputOTPSlot
+                                    index={4}
+                                    className="border h-10 w-10 sm:h-12 sm:w-12"
+                                  />
+                                  <InputOTPSlot
+                                    index={5}
+                                    className="border h-10 w-10 sm:h-12 sm:w-12"
+                                  />
                                 </InputOTPGroup>
                               </InputOTP>
                             </div>
-                            <DialogFooter>
+                            <DialogFooter className="flex-col sm:flex-row gap-2">
                               <Button
                                 variant="outline"
                                 onClick={() => {
@@ -434,6 +572,7 @@ export default function ProfilePage() {
                                   setDeleteOtp("");
                                   setDeleteDialogOpen(false);
                                 }}
+                                className="w-full sm:w-auto"
                               >
                                 Batal
                               </Button>
@@ -443,6 +582,7 @@ export default function ProfilePage() {
                                 disabled={
                                   isConfirmingDelete || deleteOtp.length !== 6
                                 }
+                                className="w-full sm:w-auto"
                               >
                                 {isConfirmingDelete
                                   ? "Menghapus..."

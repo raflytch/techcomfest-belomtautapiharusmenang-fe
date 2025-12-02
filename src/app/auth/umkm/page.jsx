@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useLogin } from "@/hooks/use-auth";
+import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function UmkmLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,6 +34,10 @@ export default function UmkmLoginPage() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  if (isPending) {
+    return <FullscreenLoader text="Sedang masuk..." />;
+  }
 
   return (
     <AuthLayout>

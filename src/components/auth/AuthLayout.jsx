@@ -7,9 +7,19 @@ import { images } from "@/lib/constanst";
 export default function AuthLayout({ children }) {
   return (
     <div className="min-h-screen bg-zinc-50 flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
-        <Link href="/" className="flex items-center gap-2 mb-8">
-          <Image src={images.logo} alt="Sirkula Logo" className="w-12 h-12" />
+      <div className="flex-1 flex flex-col items-center justify-center px-4 py-6 sm:py-8">
+        <Link
+          href="/"
+          className="flex flex-col items-center gap-2 mb-6 sm:mb-8"
+        >
+          <Image
+            src={images.logo}
+            alt="Sirkula Logo"
+            className="w-16 h-16 sm:w-20 sm:h-20"
+          />
+          <span className="text-xl sm:text-2xl font-bold text-green-800">
+            Sirkula
+          </span>
         </Link>
         {children}
       </div>
