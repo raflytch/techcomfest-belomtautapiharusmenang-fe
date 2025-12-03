@@ -1,22 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  Store,
-  MapPin,
-  FileText,
-  Camera,
-  ArrowLeft,
-  Save,
-  LayoutDashboard,
-} from "lucide-react";
+import { Store, Ticket, ArrowRight, TrendingUp, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -26,43 +13,37 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { images } from "@/lib/constanst";
-import { useSession, useUpdateUmkmProfile } from "@/hooks/use-auth";
-import FullscreenLoader from "@/components/ui/fullscreen-loader";
-
-const UMKM_CATEGORIES = [
-  "Makanan & Minuman",
-  "Fashion & Pakaian",
-  "Kerajinan Tangan",
-  "Pertanian & Perkebunan",
-  "Kesehatan & Kecantikan",
-  "Jasa & Layanan",
-  "Teknologi",
-  "Lainnya",
-];
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { useSession } from "@/hooks/use-auth";
+import { useGetMyVouchers, useGetVoucherStats } from "@/hooks/use-vouchers";
 
 export default function UmkmDashboardComposite() {
   const router = useRouter();
-  const logoInputRef = useRef(null);
   const { data: session, isLoading } = useSession();
-  const { mutate: updateUmkmProfile, isPending: isUpdating } =
-    useUpdateUmkmProfile();
+  const { data: vouchersData, isLoading: isVouchersLoading } =
+    useGetMyVouchers();
+  const { data: statsData, isLoading: isStatsLoading } = useGetVoucherStats();
 
-  const [umkmData, setUmkmData] = useState({
-    umkmName: "",
-    umkmDescription: "",
-    umkmAddress: "",
-    umkmCategory: "",
-  });
-  const [logoFile, setLogoFile] = useState(null);
-  const [logoPreview, setLogoPreview] = useState(null);
+  const vouchers = vouchersData?.data || [];
+  const activeVouchers = vouchers.filter((v) => v.isActive);
+  const stats = statsData?.data || null;
+
+  const chartData = stats
+    ? [
+        { name: "Pending", value: stats.claimsByStatus?.pending || 0 },
+        { name: "Digunakan", value: stats.claimsByStatus?.used || 0 },
+        { name: "Kadaluarsa", value: stats.claimsByStatus?.expired || 0 },
+      ]
+    : [];
 
   const getInitials = (name) => {
     if (!name) return "U";
@@ -74,227 +55,303 @@ export default function UmkmDashboardComposite() {
       .slice(0, 2);
   };
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setLogoFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return "Selamat Pagi";
+    if (hour >= 12 && hour < 15) return "Selamat Siang";
+    if (hour >= 15 && hour < 18) return "Selamat Sore";
+    return "Selamat Malam";
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = {};
-    if (umkmData.umkmName) data.umkmName = umkmData.umkmName;
-    if (umkmData.umkmDescription)
-      data.umkmDescription = umkmData.umkmDescription;
-    if (umkmData.umkmAddress) data.umkmAddress = umkmData.umkmAddress;
-    if (umkmData.umkmCategory) data.umkmCategory = umkmData.umkmCategory;
-    if (logoFile) data.logo = logoFile;
-
-    if (Object.keys(data).length > 0) {
-      updateUmkmProfile(data);
-    }
-  };
-
-  if (isLoading) {
-    return <FullscreenLoader text="Memuat dashboard..." />;
-  }
-
-  // Show fullscreen loader for mutation (update UMKM profile)
-  if (isUpdating) {
-    return <FullscreenLoader text="Menyimpan perubahan..." />;
-  }
-
-  if (!session || session.role !== "UMKM") {
+  if (!isLoading && (!session || session.role !== "UMKM")) {
     router.push("/");
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <div className="container mx-auto max-w-4xl px-4 py-8">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Kembali ke Beranda
-        </Link>
-
-        <div className="flex items-center gap-4 mb-8">
-          <Image src={images.logo} alt="Sirkula Logo" className="w-10 h-10" />
-          <div>
-            <h1 className="text-2xl font-bold text-green-800">
-              Dashboard UMKM
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Kelola profil bisnis Anda
-            </p>
-          </div>
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-green-800">
+            {isLoading
+              ? "Dashboard UMKM"
+              : `${getGreeting()}, ${session?.name || "UMKM"}!`}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Selamat datang di dashboard UMKM Sirkula
+          </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          <Card className="border shadow-none md:col-span-1">
-            <CardContent className="pt-6">
-              <div className="flex flex-col items-center text-center">
-                <Avatar className="h-24 w-24 mb-4">
-                  <AvatarImage src={session.avatarUrl} alt={session.name} />
-                  <AvatarFallback className="bg-green-100 text-green-800 text-2xl">
-                    {getInitials(session.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <h2 className="text-xl font-semibold">{session.name}</h2>
-                <p className="text-sm text-muted-foreground">{session.email}</p>
-                <Badge className="mt-2 bg-green-100 text-green-800 hover:bg-green-100">
-                  {session.role}
-                </Badge>
-              </div>
+        <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+          {isStatsLoading ? (
+            <>
+              {[1, 2, 3, 4].map((i) => (
+                <Card key={i} className="border shadow-none">
+                  <CardHeader className="p-4 pb-2">
+                    <Skeleton className="h-4 w-20" />
+                  </CardHeader>
+                  <CardContent className="p-4 pt-0">
+                    <Skeleton className="h-8 w-16" />
+                  </CardContent>
+                </Card>
+              ))}
+            </>
+          ) : (
+            <>
+              <Card className="border shadow-none">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+                  <CardTitle className="text-xs sm:text-sm font-medium">
+                    Total Voucher
+                  </CardTitle>
+                  <Ticket className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="text-xl sm:text-2xl font-bold">
+                    {stats?.totalVouchers || 0}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border shadow-none">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+                  <CardTitle className="text-xs sm:text-sm font-medium">
+                    Total Kuota
+                  </CardTitle>
+                  <Package className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="text-xl sm:text-2xl font-bold">
+                    {stats?.totalQuota || 0}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border shadow-none">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+                  <CardTitle className="text-xs sm:text-sm font-medium">
+                    Total Ditukar
+                  </CardTitle>
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="text-xl sm:text-2xl font-bold">
+                    {stats?.totalRedeemed || 0}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border shadow-none">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+                  <CardTitle className="text-xs sm:text-sm font-medium">
+                    Klaim Pending
+                  </CardTitle>
+                  <Store className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent className="p-4 pt-0">
+                  <div className="text-xl sm:text-2xl font-bold text-amber-600">
+                    {stats?.claimsByStatus?.pending || 0}
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+        </div>
 
-              <div className="mt-6 space-y-2">
-                <Link href="/profile">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start border"
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+          <Card className="border shadow-none">
+            <CardContent className="p-4 sm:p-6">
+              {isLoading ? (
+                <div className="flex flex-col items-center text-center">
+                  <Skeleton className="h-20 w-20 sm:h-24 sm:w-24 rounded-full mb-4" />
+                  <Skeleton className="h-5 sm:h-6 w-32 mb-2" />
+                  <Skeleton className="h-4 w-40 mb-2" />
+                  <Skeleton className="h-6 w-16" />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center text-center">
+                  <Avatar className="h-20 w-20 sm:h-24 sm:w-24 mb-4">
+                    <AvatarImage
+                      src={session?.umkmLogoUrl || session?.avatarUrl}
+                      alt={session?.name}
+                    />
+                    <AvatarFallback className="bg-green-100 text-green-800 text-xl sm:text-2xl">
+                      {getInitials(session?.name)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <h2 className="text-lg sm:text-xl font-semibold">
+                    {session?.name}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-muted-foreground break-all">
+                    {session?.email}
+                  </p>
+                  <Badge className="mt-2 bg-green-100 text-green-800 hover:bg-green-100">
+                    {session?.role}
+                  </Badge>
+                  {session?.umkmName && (
+                    <p className="text-sm font-medium mt-3 text-green-700">
+                      {session.umkmName}
+                    </p>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="border shadow-none lg:col-span-2">
+            <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-4">
+              <CardTitle className="text-base sm:text-lg">Aksi Cepat</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
+                Akses cepat ke fitur-fitur utama
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-4 sm:p-6 pt-0 grid gap-3 sm:gap-4 grid-cols-2">
+              <Link href="/dashboard/umkm/profile">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto py-4 sm:py-6 flex flex-col items-center gap-1.5 sm:gap-2 border hover:bg-green-50 hover:border-green-200"
+                >
+                  <Store className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
+                  <span className="font-medium text-sm sm:text-base">
+                    Profil UMKM
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-muted-foreground text-center">
+                    Kelola informasi bisnis
+                  </span>
+                </Button>
+              </Link>
+              <Link href="/dashboard/umkm/voucher">
+                <Button
+                  variant="outline"
+                  className="w-full h-auto py-4 sm:py-6 flex flex-col items-center gap-1.5 sm:gap-2 border hover:bg-green-50 hover:border-green-200"
+                >
+                  <Ticket className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
+                  <span className="font-medium text-sm sm:text-base">
+                    Kelola Voucher
+                  </span>
+                  <span className="text-[10px] sm:text-xs text-muted-foreground text-center">
+                    Buat dan kelola voucher
+                  </span>
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+
+        {!isStatsLoading &&
+          stats &&
+          (stats.claimsByStatus?.pending > 0 ||
+            stats.claimsByStatus?.used > 0 ||
+            stats.claimsByStatus?.expired > 0) && (
+            <Card className="border shadow-none">
+              <CardHeader className="p-4 sm:p-6">
+                <CardTitle className="text-base sm:text-lg">
+                  Statistik Klaim
+                </CardTitle>
+                <CardDescription className="text-xs sm:text-sm">
+                  Ringkasan status klaim voucher
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-4 sm:p-6 pt-0">
+                <div className="h-[180px] sm:h-[220px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar
+                        dataKey="value"
+                        fill="#22c55e"
+                        radius={[4, 4, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+        <Card className="border shadow-none">
+          <CardHeader className="p-4 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <Ticket className="w-4 h-4 sm:w-5 sm:h-5" />
+                Voucher Aktif
+              </CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
+                Voucher yang sedang berlaku saat ini
+              </CardDescription>
+            </div>
+            <Link href="/dashboard/umkm/voucher">
+              <Button variant="ghost" size="sm" className="text-xs sm:text-sm">
+                Lihat Semua
+                <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent className="p-4 sm:p-6 pt-0">
+            {isVouchersLoading ? (
+              <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="p-3 sm:p-4 border rounded-lg space-y-2"
                   >
-                    <LayoutDashboard className="w-4 h-4 mr-2" />
-                    Profil Akun
+                    <Skeleton className="h-4 sm:h-5 w-3/4" />
+                    <Skeleton className="h-3 sm:h-4 w-full" />
+                    <div className="flex gap-2">
+                      <Skeleton className="h-5 w-14 sm:w-16" />
+                      <Skeleton className="h-5 w-14 sm:w-16" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : activeVouchers.length === 0 ? (
+              <div className="text-center py-6 sm:py-8">
+                <Ticket className="w-10 h-10 sm:w-12 sm:h-12 text-zinc-300 mx-auto mb-3" />
+                <p className="text-sm sm:text-base text-muted-foreground">
+                  Belum ada voucher aktif
+                </p>
+                <Link href="/dashboard/umkm/voucher">
+                  <Button className="mt-3 bg-green-600 hover:bg-green-700 text-sm">
+                    Buat Voucher
                   </Button>
                 </Link>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border shadow-none md:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Store className="w-5 h-5" />
-                Informasi UMKM
-              </CardTitle>
-              <CardDescription>
-                Perbarui informasi bisnis UMKM Anda agar lebih mudah ditemukan
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-20 w-20">
-                    <AvatarImage src={logoPreview || ""} alt="Logo UMKM" />
-                    <AvatarFallback className="bg-green-50 border-2 border-dashed border-green-200">
-                      <Store className="w-8 h-8 text-green-400" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <input
-                      type="file"
-                      ref={logoInputRef}
-                      onChange={handleLogoChange}
-                      accept="image/jpeg,image/png,image/gif,image/webp"
-                      className="hidden"
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => logoInputRef.current?.click()}
-                    >
-                      <Camera className="w-4 h-4 mr-2" />
-                      Upload Logo
-                    </Button>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      JPEG, PNG, GIF, WebP. Maks 5MB
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="umkmName">
-                    <Store className="w-4 h-4 inline mr-2" />
-                    Nama UMKM
-                  </Label>
-                  <Input
-                    id="umkmName"
-                    placeholder="Nama bisnis Anda"
-                    value={umkmData.umkmName}
-                    onChange={(e) =>
-                      setUmkmData({ ...umkmData, umkmName: e.target.value })
-                    }
-                    className="border"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="umkmCategory">Kategori UMKM</Label>
-                  <Select
-                    value={umkmData.umkmCategory}
-                    onValueChange={(value) =>
-                      setUmkmData({ ...umkmData, umkmCategory: value })
-                    }
+            ) : (
+              <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {activeVouchers.slice(0, 3).map((voucher) => (
+                  <div
+                    key={voucher.id}
+                    className="p-3 sm:p-4 border rounded-lg space-y-2 hover:bg-zinc-50 transition-colors"
                   >
-                    <SelectTrigger className="border w-full">
-                      <SelectValue placeholder="Pilih kategori" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {UMKM_CATEGORIES.map((category) => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="umkmAddress">
-                    <MapPin className="w-4 h-4 inline mr-2" />
-                    Alamat UMKM
-                  </Label>
-                  <Input
-                    id="umkmAddress"
-                    placeholder="Alamat lengkap bisnis Anda"
-                    value={umkmData.umkmAddress}
-                    onChange={(e) =>
-                      setUmkmData({ ...umkmData, umkmAddress: e.target.value })
-                    }
-                    className="border"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="umkmDescription">
-                    <FileText className="w-4 h-4 inline mr-2" />
-                    Deskripsi UMKM
-                  </Label>
-                  <Textarea
-                    id="umkmDescription"
-                    placeholder="Ceritakan tentang bisnis Anda, produk yang dijual, dll."
-                    value={umkmData.umkmDescription}
-                    onChange={(e) =>
-                      setUmkmData({
-                        ...umkmData,
-                        umkmDescription: e.target.value,
-                      })
-                    }
-                    className="border min-h-[120px]"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="bg-green-600 hover:bg-green-700"
-                  disabled={isUpdating}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  {isUpdating ? "Menyimpan..." : "Simpan Perubahan"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+                    <h4 className="font-medium text-sm sm:text-base line-clamp-1">
+                      {voucher.name}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
+                      {voucher.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 text-xs">
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] sm:text-xs"
+                      >
+                        {voucher.pointsRequired} Poin
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="text-[10px] sm:text-xs"
+                      >
+                        {voucher.discountType === "PERCENTAGE"
+                          ? `${voucher.discountValue}%`
+                          : `Rp${voucher.discountValue.toLocaleString(
+                              "id-ID"
+                            )}`}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
