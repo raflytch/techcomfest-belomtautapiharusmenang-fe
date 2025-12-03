@@ -16,8 +16,6 @@ import {
   Users,
   Package,
   Search,
-  Filter,
-  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,6 +73,7 @@ import {
   useUpdateVoucher,
   useDeleteVoucher,
 } from "@/hooks/use-vouchers";
+import { useDebounce } from "@/hooks/use-debounce";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 const DISCOUNT_TYPES = [
@@ -107,22 +106,12 @@ export default function UmkmVoucherComposite() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
-  // Filter states
+  // Search state with debounce
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [sortBy, setSortBy] = useState("created_at");
-  const [sortOrder, setSortOrder] = useState("desc");
-  const [minPoints, setMinPoints] = useState("");
-  const [maxPoints, setMaxPoints] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
+  const debouncedSearch = useDebounce(searchQuery, 500);
 
   const filterParams = {
-    search: searchQuery || undefined,
-    isActive: filterStatus === "all" ? undefined : filterStatus === "active",
-    sortBy,
-    sortOrder,
-    minPoints: minPoints ? parseInt(minPoints) : undefined,
-    maxPoints: maxPoints ? parseInt(maxPoints) : undefined,
+    search: debouncedSearch || undefined,
   };
 
   const { data: vouchersData, isLoading: isVouchersLoading } =
@@ -239,23 +228,6 @@ export default function UmkmVoucherComposite() {
     });
   };
 
-  const clearFilters = () => {
-    setSearchQuery("");
-    setFilterStatus("all");
-    setSortBy("created_at");
-    setSortOrder("desc");
-    setMinPoints("");
-    setMaxPoints("");
-  };
-
-  const hasActiveFilters =
-    searchQuery ||
-    filterStatus !== "all" ||
-    sortBy !== "created_at" ||
-    sortOrder !== "desc" ||
-    minPoints ||
-    maxPoints;
-
   const isMutating = isCreating || isUpdating || isDeleting;
 
   if (isMutating) {
@@ -299,35 +271,37 @@ export default function UmkmVoucherComposite() {
                 Tambah Voucher
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>
+            <DialogContent className="max-w-[95vw] sm:max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+              <DialogHeader className="space-y-2 sm:space-y-3">
+                <DialogTitle className="text-lg sm:text-xl">
                   {editingVoucher ? "Edit Voucher" : "Tambah Voucher Baru"}
                 </DialogTitle>
-                <DialogDescription>
+                <DialogDescription className="text-xs sm:text-sm">
                   {editingVoucher
                     ? "Perbarui informasi voucher"
                     : "Buat voucher baru untuk pelanggan Anda"}
                 </DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label>Gambar Voucher</Label>
-                  <div className="flex items-center gap-4">
-                    <div className="w-24 h-24 border-2 border-dashed rounded-lg flex items-center justify-center overflow-hidden bg-zinc-50">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div className="space-y-3 sm:space-y-4">
+                  <Label className="text-sm sm:text-base font-medium">
+                    Gambar Voucher
+                  </Label>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 border-2 border-dashed rounded-lg flex items-center justify-center overflow-hidden bg-zinc-50 shrink-0">
                       {imagePreview ? (
                         <Image
                           src={imagePreview}
                           alt="Preview"
-                          width={96}
-                          height={96}
+                          width={80}
+                          height={80}
                           className="object-cover w-full h-full"
                         />
                       ) : (
-                        <ImageIcon className="w-8 h-8 text-zinc-400" />
+                        <ImageIcon className="w-6 h-6 sm:w-8 sm:h-8 text-zinc-400" />
                       )}
                     </div>
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <input
                         type="file"
                         ref={imageInputRef}
@@ -339,11 +313,12 @@ export default function UmkmVoucherComposite() {
                         type="button"
                         variant="outline"
                         size="sm"
+                        className="w-full sm:w-auto h-9 sm:h-10 text-xs sm:text-sm"
                         onClick={() => imageInputRef.current?.click()}
                       >
                         Upload Gambar
                       </Button>
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
                         Opsional. JPEG, PNG, GIF, WebP
                       </p>
                     </div>
@@ -351,7 +326,9 @@ export default function UmkmVoucherComposite() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nama Voucher *</Label>
+                  <Label htmlFor="name" className="text-sm sm:text-base">
+                    Nama Voucher *
+                  </Label>
                   <Input
                     id="name"
                     placeholder="Contoh: Diskon 10% Makanan"
@@ -359,12 +336,15 @@ export default function UmkmVoucherComposite() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
+                    className="h-10 sm:h-11 text-sm sm:text-base"
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Deskripsi *</Label>
+                  <Label htmlFor="description" className="text-sm sm:text-base">
+                    Deskripsi *
+                  </Label>
                   <Textarea
                     id="description"
                     placeholder="Jelaskan detail voucher..."
@@ -372,13 +352,19 @@ export default function UmkmVoucherComposite() {
                     onChange={(e) =>
                       setFormData({ ...formData, description: e.target.value })
                     }
+                    className="min-h-20 sm:min-h-24 text-sm sm:text-base resize-none"
                     required
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="pointsRequired">Poin Dibutuhkan *</Label>
+                    <Label
+                      htmlFor="pointsRequired"
+                      className="text-sm sm:text-base"
+                    >
+                      Poin Dibutuhkan *
+                    </Label>
                     <Input
                       id="pointsRequired"
                       type="number"
@@ -391,11 +377,17 @@ export default function UmkmVoucherComposite() {
                           pointsRequired: e.target.value,
                         })
                       }
+                      className="h-10 sm:h-11 text-sm sm:text-base"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="quotaTotal">Kuota Total *</Label>
+                    <Label
+                      htmlFor="quotaTotal"
+                      className="text-sm sm:text-base"
+                    >
+                      Kuota Total *
+                    </Label>
                     <Input
                       id="quotaTotal"
                       type="number"
@@ -405,21 +397,27 @@ export default function UmkmVoucherComposite() {
                       onChange={(e) =>
                         setFormData({ ...formData, quotaTotal: e.target.value })
                       }
+                      className="h-10 sm:h-11 text-sm sm:text-base"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="discountType">Tipe Diskon *</Label>
+                    <Label
+                      htmlFor="discountType"
+                      className="text-sm sm:text-base"
+                    >
+                      Tipe Diskon *
+                    </Label>
                     <Select
                       value={formData.discountType}
                       onValueChange={(value) =>
                         setFormData({ ...formData, discountType: value })
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 sm:h-11 text-sm sm:text-base w-full">
                         <SelectValue placeholder="Pilih tipe" />
                       </SelectTrigger>
                       <SelectContent>
@@ -432,7 +430,12 @@ export default function UmkmVoucherComposite() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="discountValue">Nilai Diskon *</Label>
+                    <Label
+                      htmlFor="discountValue"
+                      className="text-sm sm:text-base"
+                    >
+                      Nilai Diskon *
+                    </Label>
                     <Input
                       id="discountValue"
                       type="number"
@@ -447,14 +450,17 @@ export default function UmkmVoucherComposite() {
                           discountValue: e.target.value,
                         })
                       }
+                      className="h-10 sm:h-11 text-sm sm:text-base"
                       required
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="validFrom">Berlaku Dari *</Label>
+                    <Label htmlFor="validFrom" className="text-sm sm:text-base">
+                      Berlaku Dari *
+                    </Label>
                     <Input
                       id="validFrom"
                       type="datetime-local"
@@ -462,11 +468,17 @@ export default function UmkmVoucherComposite() {
                       onChange={(e) =>
                         setFormData({ ...formData, validFrom: e.target.value })
                       }
+                      className="h-10 sm:h-11 text-sm sm:text-base"
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="validUntil">Berlaku Sampai *</Label>
+                    <Label
+                      htmlFor="validUntil"
+                      className="text-sm sm:text-base"
+                    >
+                      Berlaku Sampai *
+                    </Label>
                     <Input
                       id="validUntil"
                       type="datetime-local"
@@ -474,6 +486,7 @@ export default function UmkmVoucherComposite() {
                       onChange={(e) =>
                         setFormData({ ...formData, validUntil: e.target.value })
                       }
+                      className="h-10 sm:h-11 text-sm sm:text-base"
                       required
                     />
                   </div>
@@ -481,14 +494,16 @@ export default function UmkmVoucherComposite() {
 
                 {editingVoucher && (
                   <div className="space-y-2">
-                    <Label htmlFor="isActive">Status</Label>
+                    <Label htmlFor="isActive" className="text-sm sm:text-base">
+                      Status
+                    </Label>
                     <Select
                       value={formData.isActive ? "true" : "false"}
                       onValueChange={(value) =>
                         setFormData({ ...formData, isActive: value === "true" })
                       }
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-10 sm:h-11 text-sm sm:text-base w-full">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -499,17 +514,18 @@ export default function UmkmVoucherComposite() {
                   </div>
                 )}
 
-                <DialogFooter>
+                <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0 pt-4 sm:pt-6">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={handleCloseDialog}
+                    className="w-full sm:w-auto h-10 sm:h-11 text-sm sm:text-base order-2 sm:order-1"
                   >
                     Batal
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-green-600 hover:bg-green-700"
+                    className="bg-green-600 hover:bg-green-700 w-full sm:w-auto h-10 sm:h-11 text-sm sm:text-base order-1 sm:order-2"
                   >
                     {editingVoucher ? "Simpan Perubahan" : "Buat Voucher"}
                   </Button>
@@ -635,116 +651,16 @@ export default function UmkmVoucherComposite() {
             </Card>
           )}
 
-        {/* Search and Filter Section */}
-        <Card className="border shadow-none">
-          <CardContent className="p-3 sm:p-4">
-            <div className="flex flex-col gap-3">
-              {/* Search Bar */}
-              <div className="flex flex-col sm:flex-row gap-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Cari voucher..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-9 text-sm h-9"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-9 text-xs sm:text-sm"
-                    onClick={() => setShowFilters(!showFilters)}
-                  >
-                    <Filter className="w-4 h-4 mr-1.5" />
-                    Filter
-                    {hasActiveFilters && (
-                      <Badge className="ml-1.5 h-5 w-5 p-0 flex items-center justify-center text-[10px] bg-green-600">
-                        !
-                      </Badge>
-                    )}
-                  </Button>
-                  {hasActiveFilters && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-9 text-xs sm:text-sm text-muted-foreground"
-                      onClick={clearFilters}
-                    >
-                      <X className="w-4 h-4 mr-1" />
-                      Reset
-                    </Button>
-                  )}
-                </div>
-              </div>
-
-              {/* Filter Options */}
-              {showFilters && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 pt-2 border-t">
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">
-                      Status
-                    </Label>
-                    <Select
-                      value={filterStatus}
-                      onValueChange={setFilterStatus}
-                    >
-                      <SelectTrigger className="h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">Semua</SelectItem>
-                        <SelectItem value="active">Aktif</SelectItem>
-                        <SelectItem value="inactive">Nonaktif</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">
-                      Urutkan
-                    </Label>
-                    <Select value={sortBy} onValueChange={setSortBy}>
-                      <SelectTrigger className="h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="created_at">Terbaru</SelectItem>
-                        <SelectItem value="name">Nama</SelectItem>
-                        <SelectItem value="pointsRequired">Poin</SelectItem>
-                        <SelectItem value="quotaTotal">Kuota</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">
-                      Min Poin
-                    </Label>
-                    <Input
-                      type="number"
-                      placeholder="0"
-                      value={minPoints}
-                      onChange={(e) => setMinPoints(e.target.value)}
-                      className="h-8 text-xs"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">
-                      Max Poin
-                    </Label>
-                    <Input
-                      type="number"
-                      placeholder="9999"
-                      value={maxPoints}
-                      onChange={(e) => setMaxPoints(e.target.value)}
-                      className="h-8 text-xs"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        {/* Search Section */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Cari voucher..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 text-sm h-10 max-w-sm"
+          />
+        </div>
 
         {isVouchersLoading || isSessionLoading ? (
           <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
