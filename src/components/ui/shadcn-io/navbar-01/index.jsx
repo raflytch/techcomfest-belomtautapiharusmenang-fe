@@ -30,6 +30,7 @@ import { useSession, useLogout } from "@/hooks/use-auth";
 import { User, LogOut, Settings, LayoutDashboard, Trophy } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HamburgerIcon } from "lucide-react";
 
 // ... Logo dan HamburgerIcon sama ...
 
