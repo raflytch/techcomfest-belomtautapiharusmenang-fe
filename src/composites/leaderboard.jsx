@@ -2,7 +2,200 @@
 
 import { useState } from "react";
 import { useLeaderboard, useTopThree } from "@/hooks/useLeaderboard";
-import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
+import {
+  Trophy,
+  Medal,
+  Award,
+  ChevronLeft,
+  ChevronRight,
+  TrendingUp,
+  Star,
+  Flame,
+} from "lucide-react";
+
+// Helper function to get user initials
+const getInitials = (name) => {
+  if (!name) return "?";
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+};
+
+// Rank indicator component
+const RankIndicator = ({ rank, size = "md" }) => {
+  const sizes = {
+    sm: "w-6 h-6 text-xs",
+    md: "w-9 h-9 text-sm",
+    lg: "w-11 h-11 text-base",
+  };
+
+  const styles = {
+    1: "bg-amber-50 text-amber-600 border-amber-200",
+    2: "bg-slate-50 text-slate-500 border-slate-200",
+    3: "bg-orange-50 text-orange-600 border-orange-200",
+  };
+
+  const icons = {
+    1: <Trophy className={size === "sm" ? "w-3 h-3" : "w-4 h-4"} />,
+    2: <Medal className={size === "sm" ? "w-3 h-3" : "w-4 h-4"} />,
+    3: <Award className={size === "sm" ? "w-3 h-3" : "w-4 h-4"} />,
+  };
+
+  const baseStyle = styles[rank] || "bg-neutral-50 text-neutral-500 border-neutral-200";
+
+  return (
+    <div
+      className={`${sizes[size]} ${baseStyle} rounded-full border flex items-center justify-center font-medium`}
+    >
+      {icons[rank] || <span>{rank}</span>}
+    </div>
+  );
+};
+
+// Top 3 podium card component  
+const PodiumCard = ({ user, rank, isWinner = false }) => {
+  if (!user) return null;
+
+  const cardWidth = isWinner ? "w-44" : "w-36";
+  const avatarSize = isWinner ? "w-16 h-16" : "w-12 h-12";
+  const podiumHeight = rank === 1 ? "h-20" : rank === 2 ? "h-14" : "h-10";
+  
+  const podiumStyles = {
+    1: "bg-amber-50 border-amber-200 text-amber-600",
+    2: "bg-slate-50 border-slate-200 text-slate-500",
+    3: "bg-orange-50 border-orange-200 text-orange-600",
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      {/* Avatar */}
+      <div className="relative mb-2">
+        <Avatar className={`${avatarSize} border-2 ${rank === 1 ? "border-amber-300" : rank === 2 ? "border-slate-300" : "border-orange-300"}`}>
+          <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" />
+          <AvatarFallback className={`text-sm font-medium ${rank === 1 ? "bg-amber-50 text-amber-700" : rank === 2 ? "bg-slate-50 text-slate-600" : "bg-orange-50 text-orange-700"}`}>
+            {getInitials(user.name)}
+          </AvatarFallback>
+        </Avatar>
+        {isWinner && (
+          <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-100 border border-amber-300 rounded-full flex items-center justify-center">
+            <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+          </div>
+        )}
+      </div>
+
+      {/* User info */}
+      <div className={`${cardWidth} text-center mb-2`}>
+        <p className="font-medium text-neutral-800 truncate text-sm px-2">
+          {user.name}
+        </p>
+        <p className={`font-semibold ${rank === 1 ? "text-xl text-amber-600" : "text-lg text-neutral-700"}`}>
+          {user.totalPoints?.toLocaleString()}
+        </p>
+        <p className="text-[11px] text-neutral-400 uppercase tracking-wide">poin</p>
+      </div>
+
+      {/* Podium */}
+      <div
+        className={`${cardWidth} ${podiumHeight} ${podiumStyles[rank]} rounded-t-lg border border-b-0 flex items-center justify-center`}
+      >
+        <span className="text-lg font-bold">{rank}</span>
+      </div>
+    </div>
+  );
+};
+
+// Leaderboard row component
+const LeaderboardRow = ({ item, rank }) => {
+  const isTopThree = rank <= 3;
+
+  return (
+    <div
+      className={`group flex items-center gap-3 py-3 px-4 rounded-lg transition-colors ${
+        isTopThree
+          ? "bg-emerald-50/40 hover:bg-emerald-50/60"
+          : "hover:bg-neutral-50"
+      }`}
+    >
+      {/* Rank */}
+      <div className="w-9 flex justify-center">
+        <RankIndicator rank={rank} size="md" />
+      </div>
+
+      {/* Avatar */}
+      <Avatar className="w-9 h-9 border border-neutral-200">
+        <AvatarImage src={item.user?.avatarUrl} alt={item.user?.name} className="object-cover" />
+        <AvatarFallback className="bg-neutral-100 text-neutral-500 text-xs font-medium">
+          {getInitials(item.user?.name)}
+        </AvatarFallback>
+      </Avatar>
+
+      {/* User Info */}
+      <div className="flex-1 min-w-0">
+        <p className="font-medium text-neutral-800 truncate text-sm leading-tight">
+          {item.user?.name}
+        </p>
+        <p className="text-[11px] text-neutral-400 capitalize leading-tight">
+          {item.user?.role?.toLowerCase()}
+        </p>
+      </div>
+
+      {/* Stats */}
+      <div className="flex items-center gap-6">
+        <div className="text-right min-w-[4rem]">
+          <p className="font-semibold text-emerald-600 text-base leading-tight">
+            {item.totalPoints?.toLocaleString()}
+          </p>
+          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">poin</p>
+        </div>
+        <div className="text-right min-w-[3rem] hidden sm:block">
+          <p className="font-medium text-neutral-600 text-sm leading-tight">
+            {item.totalActions}
+          </p>
+          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">aksi</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Loading skeleton for leaderboard
+const LeaderboardSkeleton = () => (
+  <div className="space-y-2">
+    {[...Array(6)].map((_, i) => (
+      <div key={i} className="flex items-center gap-3 py-3 px-4">
+        <Skeleton className="w-9 h-9 rounded-full" />
+        <Skeleton className="w-9 h-9 rounded-full" />
+        <div className="flex-1 space-y-1.5">
+          <Skeleton className="h-3.5 w-28" />
+          <Skeleton className="h-2.5 w-16" />
+        </div>
+        <Skeleton className="h-5 w-14" />
+      </div>
+    ))}
+  </div>
+);
+
+// Top 3 skeleton
+const TopThreeSkeleton = () => (
+  <div className="flex justify-center items-end gap-3">
+    {[2, 1, 3].map((rank) => (
+      <div key={rank} className="flex flex-col items-center">
+        <Skeleton className={`${rank === 1 ? "w-16 h-16" : "w-12 h-12"} rounded-full mb-2`} />
+        <Skeleton className={`${rank === 1 ? "w-44" : "w-36"} h-12 rounded-lg mb-2`} />
+        <Skeleton className={`${rank === 1 ? "w-44 h-20" : rank === 2 ? "w-36 h-14" : "w-36 h-10"} rounded-t-lg`} />
+      </div>
+    ))}
+  </div>
+);
 
 const LeaderboardComposite = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,254 +207,120 @@ const LeaderboardComposite = () => {
     error,
   } = useLeaderboard(currentPage, 10);
 
-  const getMedalColor = (rank) => {
-    switch (rank) {
-      case 1:
-        return "bg-gradient-to-br from-yellow-400 to-yellow-600";
-      case 2:
-        return "bg-gradient-to-br from-gray-300 to-gray-500";
-      case 3:
-        return "bg-gradient-to-br from-amber-600 to-amber-800";
-      default:
-        return "bg-gray-200";
-    }
-  };
-
-  const getMedalIcon = (rank) => {
-    switch (rank) {
-      case 1:
-        return "👑";
-      case 2:
-        return "🥈";
-      case 3:
-        return "🥉";
-      default:
-        return rank;
-    }
-  };
-
-  if (loadingTop) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="py-10 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            🏆 Leaderboard Sirkula
+        <header className="text-center mb-12">
+          <Badge
+            variant="outline"
+            className="mb-3 border-emerald-200/80 text-emerald-600 bg-emerald-50/50 px-3 py-1 text-xs font-medium"
+          >
+            <Flame className="w-3 h-3 mr-1.5" />
+            Top Kontributor
+          </Badge>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900 tracking-tight mb-2">
+            Leaderboard
           </h1>
-          <p className="text-gray-600">Top kontributor dalam komunitas</p>
-        </div>
+          <p className="text-neutral-500 text-sm max-w-md mx-auto leading-relaxed">
+            Kumpulkan poin dari setiap aksi hijau dan tukarkan dengan reward menarik
+          </p>
+        </header>
 
         {/* Top 3 Podium */}
-        <div className="mb-12">
-          <div className="flex justify-center items-end gap-4 mb-8">
-            {/* Rank 2 */}
-            {topThree[1] && (
-              <div className="flex flex-col items-center">
-                <div className="relative mb-4">
-                  <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-gray-400 shadow-lg">
-                    <Image
-                      src={topThree[1].avatarUrl || "/default-avatar.png"}
-                      alt={topThree[1].name}
-                      width={96}
-                      height={96}
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center text-2xl shadow-lg">
-                    🥈
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow-lg p-4 w-40 text-center transform hover:scale-105 transition-transform">
-                  <h3 className="font-bold text-gray-800 truncate mb-1">
-                    {topThree[1].name}
-                  </h3>
-                  <p className="text-2xl font-bold text-gray-600">
-                    {topThree[1].totalPoints}
-                  </p>
-                  <p className="text-xs text-gray-500">poin</p>
-                </div>
-                <div className="w-40 h-32 bg-gradient-to-br from-gray-300 to-gray-500 mt-4 rounded-t-lg shadow-lg flex items-center justify-center">
-                  <span className="text-white text-4xl font-bold">2</span>
-                </div>
-              </div>
-            )}
-
-            {/* Rank 1 */}
-            {topThree[0] && (
-              <div className="flex flex-col items-center -mt-8">
-                <div className="relative mb-4">
-                  <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-yellow-400 shadow-2xl ring-4 ring-yellow-200">
-                    <Image
-                      src={topThree[0].avatarUrl || "/default-avatar.png"}
-                      alt={topThree[0].name}
-                      width={128}
-                      height={128}
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-3xl shadow-lg animate-pulse">
-                    👑
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow-2xl p-6 w-48 text-center transform hover:scale-105 transition-transform">
-                  <h3 className="font-bold text-gray-800 truncate mb-2">
-                    {topThree[0].name}
-                  </h3>
-                  <p className="text-3xl font-bold text-yellow-600">
-                    {topThree[0].totalPoints}
-                  </p>
-                  <p className="text-sm text-gray-500">poin</p>
-                </div>
-                <div className="w-48 h-40 bg-gradient-to-br from-yellow-400 to-yellow-600 mt-4 rounded-t-lg shadow-2xl flex items-center justify-center">
-                  <span className="text-white text-5xl font-bold">1</span>
-                </div>
-              </div>
-            )}
-
-            {/* Rank 3 */}
-            {topThree[2] && (
-              <div className="flex flex-col items-center">
-                <div className="relative mb-4">
-                  <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-amber-600 shadow-lg">
-                    <Image
-                      src={topThree[2].avatarUrl || "/default-avatar.png"}
-                      alt={topThree[2].name}
-                      width={96}
-                      height={96}
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-amber-600 to-amber-800 rounded-full flex items-center justify-center text-2xl shadow-lg">
-                    🥉
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg shadow-lg p-4 w-40 text-center transform hover:scale-105 transition-transform">
-                  <h3 className="font-bold text-gray-800 truncate mb-1">
-                    {topThree[2].name}
-                  </h3>
-                  <p className="text-2xl font-bold text-amber-700">
-                    {topThree[2].totalPoints}
-                  </p>
-                  <p className="text-xs text-gray-500">poin</p>
-                </div>
-                <div className="w-40 h-24 bg-gradient-to-br from-amber-600 to-amber-800 mt-4 rounded-t-lg shadow-lg flex items-center justify-center">
-                  <span className="text-white text-4xl font-bold">3</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* All Leaderboard */}
-        <div className="bg-white rounded-xl shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            📊 Semua Peringkat
-          </h2>
-
-          {loadingAll ? (
-            <div className="flex justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            </div>
-          ) : error ? (
-            <div className="text-center py-8 text-red-500">{error}</div>
+        <section className="mb-12">
+          {loadingTop ? (
+            <TopThreeSkeleton />
           ) : (
-            <>
-              <div className="space-y-3">
-                {leaderboardData.map((item) => (
-                  <div
-                    key={item.user.id}
-                    className={`flex items-center gap-4 p-4 rounded-lg transition-all hover:shadow-md ${
-                      item.rank <= 3
-                        ? "bg-gradient-to-r from-yellow-50 to-orange-50"
-                        : "bg-gray-50"
-                    }`}
-                  >
-                    {/* Rank Badge */}
-                    <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${getMedalColor(
-                        item.rank
-                      )} shadow-md`}
-                    >
-                      {item.rank <= 3 ? getMedalIcon(item.rank) : item.rank}
-                    </div>
-
-                    {/* Avatar */}
-                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-300">
-                      <Image
-                        src={item.user.avatarUrl || "/default-avatar.png"}
-                        alt={item.user.name}
-                        width={48}
-                        height={48}
-                        className="object-cover"
-                      />
-                    </div>
-
-                    {/* User Info */}
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800">
-                        {item.user.name}
-                      </h3>
-                      <p className="text-sm text-gray-500 capitalize">
-                        {item.user.role.toLowerCase()}
-                      </p>
-                    </div>
-
-                    {/* Points */}
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-blue-600">
-                        {item.totalPoints}
-                      </p>
-                      <p className="text-xs text-gray-500">poin</p>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-gray-700">
-                        {item.totalActions}
-                      </p>
-                      <p className="text-xs text-gray-500">aksi</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Pagination */}
-              {meta && meta.totalPages > 1 && (
-                <div className="flex justify-center items-center gap-4 mt-8">
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(1, prev - 1))
-                    }
-                    disabled={!meta.hasPreviousPage}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-blue-600 transition-colors"
-                  >
-                    ← Previous
-                  </button>
-
-                  <span className="text-gray-700 font-medium">
-                    Halaman {meta.page} dari {meta.totalPages}
-                  </span>
-
-                  <button
-                    onClick={() => setCurrentPage((prev) => prev + 1)}
-                    disabled={!meta.hasNextPage}
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed hover:bg-blue-600 transition-colors"
-                  >
-                    Next →
-                  </button>
-                </div>
-              )}
-            </>
+            <div className="flex justify-center items-end gap-2 sm:gap-4">
+              {/* Rank 2 */}
+              <PodiumCard user={topThree[1]} rank={2} />
+              {/* Rank 1 */}
+              <PodiumCard user={topThree[0]} rank={1} isWinner />
+              {/* Rank 3 */}
+              <PodiumCard user={topThree[2]} rank={3} />
+            </div>
           )}
+        </section>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4 mb-8">
+          <Separator className="flex-1" />
+          <span className="text-xs text-neutral-400 uppercase tracking-wider font-medium">Semua Peringkat</span>
+          <Separator className="flex-1" />
         </div>
+
+        {/* All Rankings */}
+        <Card className="border border-neutral-200/80 overflow-hidden">
+          <CardHeader className="py-4 px-5 border-b border-neutral-100 bg-neutral-50/50">
+            <CardTitle className="flex items-center gap-2 text-sm font-medium text-neutral-700">
+              <TrendingUp className="w-4 h-4 text-emerald-500" />
+              Peringkat Lengkap
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-2">
+            {loadingAll ? (
+              <LeaderboardSkeleton />
+            ) : error ? (
+              <div className="text-center py-10">
+                <p className="text-neutral-500 text-sm mb-3">{error}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.location.reload()}
+                  className="text-xs"
+                >
+                  Coba Lagi
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className="divide-y divide-neutral-100/80">
+                  {leaderboardData.map((item) => (
+                    <LeaderboardRow
+                      key={item.user?.id}
+                      item={item}
+                      rank={item.rank}
+                    />
+                  ))}
+                </div>
+
+                {/* Pagination */}
+                {meta && meta.totalPages > 1 && (
+                  <div className="flex justify-between items-center mt-4 pt-4 px-2 border-t border-neutral-100">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(1, prev - 1))
+                      }
+                      disabled={!meta.hasPreviousPage}
+                      className="text-xs gap-1 h-8"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                      Prev
+                    </Button>
+
+                    <span className="text-xs text-neutral-500">
+                      Hal. <span className="font-medium text-neutral-700">{meta.page}</span> dari {meta.totalPages}
+                    </span>
+
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setCurrentPage((prev) => prev + 1)}
+                      disabled={!meta.hasNextPage}
+                      className="text-xs gap-1 h-8"
+                    >
+                      Next
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
