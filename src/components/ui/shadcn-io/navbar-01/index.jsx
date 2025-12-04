@@ -2,7 +2,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, useRef } from "react";
 import {
@@ -27,41 +27,9 @@ import { cn } from "@/lib/utils";
 import { navigationLinks } from "@/lib/constanst";
 import { images } from "@/lib/constanst";
 import { useSession, useLogout } from "@/hooks/use-auth";
-import { User, LogOut, Settings, LayoutDashboard } from "lucide-react";
+import { User, LogOut, Settings, LayoutDashboard, Trophy } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const Logo = (props) => {
-  return (
-    <svg
-      width="1em"
-      height="1em"
-      viewBox="0 0 324 323"
-      fill="currentColor"
-      xmlns="http://www.w3. org/2000/svg"
-      {...props}
-    >
-      <rect
-        x="88. 1023"
-        y="144.792"
-        width="151.802"
-        height="36.5788"
-        rx="18.2894"
-        transform="rotate(-38.5799 88.1023 144. 792)"
-        fill="currentColor"
-      />
-      <rect
-        x="85.3459"
-        y="244.537"
-        width="151.802"
-        height="36.5788"
-        rx="18. 2894"
-        transform="rotate(-38.5799 85. 3459 244.537)"
-        fill="currentColor"
-      />
-    </svg>
-  );
-};
 
 // Hamburger icon component
 const HamburgerIcon = ({ className, ...props }) => (
@@ -80,7 +48,7 @@ const HamburgerIcon = ({ className, ...props }) => (
   >
     <path
       d="M4 12L20 12"
-      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(. 5,. 85,. 25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(. 5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
     />
     <path
       d="M4 12H20"
@@ -88,7 +56,7 @@ const HamburgerIcon = ({ className, ...props }) => (
     />
     <path
       d="M4 12H20"
-      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,. 25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
     />
   </svg>
 );
@@ -112,6 +80,7 @@ export const Navbar01 = React.forwardRef(
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const containerRef = useRef(null);
     const router = useRouter();
+    const pathname = usePathname();
     const queryClient = useQueryClient();
 
     const { data: session, isLoading, refetch } = useSession();
@@ -141,8 +110,34 @@ export const Navbar01 = React.forwardRef(
       }
     };
 
+    // Cek apakah link adalah hash section atau route path
+    const isHashLink = (href) => {
+      return href.startsWith("#");
+    };
+
+    const handleNavigation = (e, href) => {
+      // Jika bukan hash link, biarkan Link component handle routing
+      if (!isHashLink(href)) {
+        setIsPopoverOpen(false);
+        return;
+      }
+
+      // Jika hash link
+      const isHomePage = pathname === "/";
+      const sectionId = href === "#" ? "home" : href.substring(1);
+
+      if (!isHomePage) {
+        // Jika tidak di home, biarkan Link redirect dengan hash
+        return;
+      } else {
+        // Jika sudah di home, prevent default dan scroll
+        e.preventDefault();
+        scrollToSection(sectionId);
+      }
+    };
+
     const scrollToSection = (sectionId) => {
-      if (sectionId === "#" || sectionId === "home") {
+      if (sectionId === "home") {
         window.scrollTo({
           top: 0,
           behavior: "smooth",
@@ -150,6 +145,7 @@ export const Navbar01 = React.forwardRef(
         setIsPopoverOpen(false);
         return;
       }
+
       const element = document.getElementById(sectionId);
 
       if (!element) {
@@ -166,9 +162,18 @@ export const Navbar01 = React.forwardRef(
         behavior: "smooth",
       });
 
-      // Tutup popover mobile setelah klik
       setIsPopoverOpen(false);
     };
+
+    // Handle scroll setelah redirect dari halaman lain
+    useEffect(() => {
+      if (pathname === "/" && window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        setTimeout(() => {
+          scrollToSection(sectionId);
+        }, 100);
+      }
+    }, [pathname]);
 
     useEffect(() => {
       const checkWidth = () => {
@@ -211,6 +216,15 @@ export const Navbar01 = React.forwardRef(
       [ref]
     );
 
+    // Convert hash link to proper href
+    const getLinkHref = (href) => {
+      if (!isHashLink(href)) {
+        return href; // Return as is for routes like /leaderboard
+      }
+      // For hash links, convert to home page with hash
+      return href === "#" ? "/" : `/${href}`;
+    };
+
     return (
       <header
         ref={combinedRef}
@@ -240,8 +254,9 @@ export const Navbar01 = React.forwardRef(
                     <NavigationMenuList className="flex-col items-start gap-1">
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index} className="w-full">
-                          <button
-                            onClick={() => scrollToSection(link.href)}
+                          <Link
+                            href={getLinkHref(link.href)}
+                            onClick={(e) => handleNavigation(e, link.href)}
                             className={cn(
                               "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
                               link.active
@@ -249,8 +264,11 @@ export const Navbar01 = React.forwardRef(
                                 : "text-foreground/80"
                             )}
                           >
+                            {link.label === "Leaderboard" && (
+                              <Trophy className="mr-2 h-4 w-4" />
+                            )}
                             {link.label}
-                          </button>
+                          </Link>
                         </NavigationMenuItem>
                       ))}
                     </NavigationMenuList>
@@ -260,8 +278,14 @@ export const Navbar01 = React.forwardRef(
             )}
             {/* Main nav */}
             <div className="flex items-center gap-6">
-              <button
-                onClick={() => scrollToSection("home")}
+              <Link
+                href="/"
+                onClick={(e) => {
+                  if (pathname === "/") {
+                    e.preventDefault();
+                    scrollToSection("home");
+                  }
+                }}
                 className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
               >
                 <Image
@@ -272,24 +296,30 @@ export const Navbar01 = React.forwardRef(
                 <span className="hidden font-bold text-xl sm:inline-block text-green-800">
                   Sirkula
                 </span>
-              </button>
+              </Link>
               {/* Navigation menu */}
               {!isMobile && (
                 <NavigationMenu className="flex">
                   <NavigationMenuList className="gap-1">
                     {navigationLinks.map((link, index) => (
                       <NavigationMenuItem key={index}>
-                        <button
-                          onClick={() => scrollToSection(link.href)}
+                        <Link
+                          href={getLinkHref(link.href)}
+                          onClick={(e) => handleNavigation(e, link.href)}
                           className={cn(
                             "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer no-underline",
-                            link.active
+                            link.active ||
+                              pathname === link.href ||
+                              (link.href === "#" && pathname === "/")
                               ? "bg-accent text-accent-foreground"
                               : "text-foreground/80 hover:text-foreground"
                           )}
                         >
+                          {link.label === "Leaderboard" && (
+                            <Trophy className="mr-1. 5 h-4 w-4" />
+                          )}
                           {link.label}
-                        </button>
+                        </Link>
                       </NavigationMenuItem>
                     ))}
                   </NavigationMenuList>
@@ -334,6 +364,12 @@ export const Navbar01 = React.forwardRef(
                     <Link href="/profile" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
                       Profil
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/leaderboard" className="cursor-pointer">
+                      <Trophy className="mr-2 h-4 w-4" />
+                      Leaderboard
                     </Link>
                   </DropdownMenuItem>
                   {session.role !== "WARGA" && (
