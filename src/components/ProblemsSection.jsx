@@ -43,9 +43,11 @@ export default function ProblemsSection({ id }) {
             >
               <CardContent className="p-6 md:p-8">
                 <div className="w-12 h-12 border border-slate-200 rounded-xl flex items-center justify-center mb-6">
-                  {React.cloneElement(problem.icon, {
-                    className: "w-6 h-6 text-slate-600",
-                  })}
+                  {React.isValidElement(problem.icon)
+                    ? React.cloneElement(problem.icon, {
+                        className: "w-6 h-6 text-slate-600",
+                      })
+                    : problem.icon}
                 </div>
                 <h3 className="text-lg md:text-xl font-semibold text-slate-900 mb-3">
                   {problem.title}

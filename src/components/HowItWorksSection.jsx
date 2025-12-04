@@ -81,9 +81,11 @@ export default function HowItWorksSection({ id }) {
                 <Card className="border border-slate-200 bg-white hover:border-slate-300 transition-colors duration-200 w-full">
                   <CardContent className="p-5 md:p-6 text-center flex flex-col items-center h-full">
                     <div className="flex justify-center mb-4 mt-2">
-                      {React.cloneElement(step.icon, {
-                        className: "w-10 h-10 md:w-12 md:h-12 text-slate-500",
-                      })}
+                      {React.isValidElement(step.icon)
+                        ? React.cloneElement(step.icon, {
+                            className: "w-10 h-10 md:w-12 md:h-12 text-slate-500",
+                          })
+                        : step.icon}
                     </div>
                     <h3 className="text-base md:text-lg font-semibold text-slate-900 mb-2">
                       {step.title}
