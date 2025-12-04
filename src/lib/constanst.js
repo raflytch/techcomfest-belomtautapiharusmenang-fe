@@ -19,8 +19,9 @@ export const images = {
 
 export const navigationLinks = [
   { href: "#", label: "Home" },
-  { href: "featuresSection", label: "Features" },
-  { href: "aboutUs", label: "About Us" },
+  { href: "#featuresSection", label: "Features" },
+  { href: "#aboutUs", label: "About Us" },
+  { href: "/leaderboard", label: "Leaderboard" },
 ];
 
 export const problems = [
