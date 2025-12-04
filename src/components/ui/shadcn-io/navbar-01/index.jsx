@@ -281,9 +281,6 @@ export const Navbar01 = React.forwardRef(
                               : "text-foreground/80 hover:text-foreground"
                           )}
                         >
-                          {link.label === "Leaderboard" && (
-                            <Trophy className="mr-1. 5 h-4 w-4" />
-                          )}
                           {link.label}
                         </Link>
                       </NavigationMenuItem>
