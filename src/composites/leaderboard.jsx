@@ -49,14 +49,18 @@ const LeaderboardComposite = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-b from-blue-50 to-indigo-50 py-8 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
             🏆 Leaderboard Sirkula
           </h1>
-          <p className="text-gray-600">Top kontributor dalam komunitas</p>
+          <p className="text-gray-600">
+            Top kontributor dalam komunitas <br /> Teruslah berkontribusi setiap
+            hari dan kumpulkan poin untuk ditukarkan dengan berbagai reward
+            menarik!
+          </p>
         </div>
 
         {/* Top 3 Podium */}
@@ -107,7 +111,7 @@ const LeaderboardComposite = () => {
                       className="object-cover"
                     />
                   </div>
-                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-3xl shadow-lg animate-pulse">
+                  <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-3xl shadow-lg">
                     👑
                   </div>
                 </div>
@@ -161,7 +165,7 @@ const LeaderboardComposite = () => {
         </div>
 
         {/* All Leaderboard */}
-        <div className="bg-white rounded-xl shadow-xl p-6">
+        <div className="bg-white rounded-xl border-2 p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             📊 Semua Peringkat
           </h2>
