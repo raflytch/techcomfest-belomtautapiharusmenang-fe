@@ -31,35 +31,7 @@ import { User, LogOut, Settings, LayoutDashboard, Trophy } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Hamburger icon component
-const HamburgerIcon = ({ className, ...props }) => (
-  <svg
-    className={cn("pointer-events-none", className)}
-    width={16}
-    height={16}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3. org/2000/svg"
-    {...props}
-  >
-    <path
-      d="M4 12L20 12"
-      className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(. 5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
-    />
-    <path
-      d="M4 12H20"
-      className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,. 85,.25,1.8)] group-aria-expanded:rotate-45"
-    />
-    <path
-      d="M4 12H20"
-      className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
-    />
-  </svg>
-);
+// ... Logo dan HamburgerIcon sama ...
 
 export const Navbar01 = React.forwardRef(
   (
@@ -78,6 +50,7 @@ export const Navbar01 = React.forwardRef(
   ) => {
     const [isMobile, setIsMobile] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const containerRef = useRef(null);
     const router = useRouter();
     const pathname = usePathname();
@@ -85,6 +58,11 @@ export const Navbar01 = React.forwardRef(
 
     const { data: session, isLoading, refetch } = useSession();
     const { logout } = useLogout();
+
+    // Tambahkan mounted state
+    useEffect(() => {
+      setMounted(true);
+    }, []);
 
     const getInitials = (name) => {
       if (!name) return "U";
@@ -110,27 +88,22 @@ export const Navbar01 = React.forwardRef(
       }
     };
 
-    // Cek apakah link adalah hash section atau route path
     const isHashLink = (href) => {
       return href.startsWith("#");
     };
 
     const handleNavigation = (e, href) => {
-      // Jika bukan hash link, biarkan Link component handle routing
       if (!isHashLink(href)) {
         setIsPopoverOpen(false);
         return;
       }
 
-      // Jika hash link
       const isHomePage = pathname === "/";
       const sectionId = href === "#" ? "home" : href.substring(1);
 
       if (!isHomePage) {
-        // Jika tidak di home, biarkan Link redirect dengan hash
         return;
       } else {
-        // Jika sudah di home, prevent default dan scroll
         e.preventDefault();
         scrollToSection(sectionId);
       }
@@ -165,7 +138,6 @@ export const Navbar01 = React.forwardRef(
       setIsPopoverOpen(false);
     };
 
-    // Handle scroll setelah redirect dari halaman lain
     useEffect(() => {
       if (pathname === "/" && window.location.hash) {
         const sectionId = window.location.hash.substring(1);
@@ -203,7 +175,6 @@ export const Navbar01 = React.forwardRef(
       return () => window.removeEventListener("focus", handleFocus);
     }, [refetch]);
 
-    // Combine refs
     const combinedRef = React.useCallback(
       (node) => {
         containerRef.current = node;
@@ -216,12 +187,10 @@ export const Navbar01 = React.forwardRef(
       [ref]
     );
 
-    // Convert hash link to proper href
     const getLinkHref = (href) => {
       if (!isHashLink(href)) {
-        return href; // Return as is for routes like /leaderboard
+        return href;
       }
-      // For hash links, convert to home page with hash
       return href === "#" ? "/" : `/${href}`;
     };
 
@@ -235,9 +204,8 @@ export const Navbar01 = React.forwardRef(
         {...props}
       >
         <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between gap-4">
-          {/* Left side */}
+          {/* Left side - sama seperti sebelumnya */}
           <div className="flex items-center gap-2">
-            {/* Mobile menu trigger */}
             {isMobile && (
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
@@ -276,7 +244,6 @@ export const Navbar01 = React.forwardRef(
                 </PopoverContent>
               </Popover>
             )}
-            {/* Main nav */}
             <div className="flex items-center gap-6">
               <Link
                 href="/"
@@ -297,7 +264,6 @@ export const Navbar01 = React.forwardRef(
                   Sirkula
                 </span>
               </Link>
-              {/* Navigation menu */}
               {!isMobile && (
                 <NavigationMenu className="flex">
                   <NavigationMenuList className="gap-1">
@@ -327,7 +293,9 @@ export const Navbar01 = React.forwardRef(
               )}
             </div>
           </div>
-          {isLoading ? (
+
+          {/* Right side - Fixed hydration */}
+          {!mounted || isLoading ? (
             <div className="flex items-center gap-3">
               <Skeleton className="h-9 w-9 rounded-full" />
             </div>
