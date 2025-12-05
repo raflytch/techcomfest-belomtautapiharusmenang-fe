@@ -4,6 +4,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { voucherService } from "@/services/voucher.service";
 
+// ============ PUBLIC HOOKS ============
+
+export const useGetAllVouchers = (params = {}) => {
+  return useQuery({
+    queryKey: ["vouchers", params],
+    queryFn: () => voucherService.getAllVouchers(params),
+  });
+};
+
 export const useGetVoucherById = (id) => {
   return useQuery({
     queryKey: ["voucher", id],
@@ -11,6 +20,58 @@ export const useGetVoucherById = (id) => {
     enabled: !!id,
   });
 };
+
+// ============ WARGA HOOKS ============
+
+export const useGetMyClaims = (params = {}) => {
+  return useQuery({
+    queryKey: ["my-claims", params],
+    queryFn: () => voucherService.getMyClaims(params),
+  });
+};
+
+export const useGetWargaStats = () => {
+  return useQuery({
+    queryKey: ["warga-stats"],
+    queryFn: voucherService.getWargaStats,
+  });
+};
+
+export const useRedeemVoucher = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: voucherService.redeemVoucher,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vouchers"] });
+      queryClient.invalidateQueries({ queryKey: ["voucher"] });
+      queryClient.invalidateQueries({ queryKey: ["my-claims"] });
+      queryClient.invalidateQueries({ queryKey: ["warga-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["session"] });
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Gagal menukar voucher");
+    },
+  });
+};
+
+export const useUseVoucherClaim = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: voucherService.useVoucherClaim,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-claims"] });
+      queryClient.invalidateQueries({ queryKey: ["warga-stats"] });
+      toast.success("Voucher berhasil digunakan");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Gagal menggunakan voucher");
+    },
+  });
+};
+
+// ============ UMKM HOOKS ============
 
 export const useGetMyVouchers = (params = {}) => {
   return useQuery({
