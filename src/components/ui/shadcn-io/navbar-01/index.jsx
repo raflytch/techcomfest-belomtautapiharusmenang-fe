@@ -27,12 +27,10 @@ import { cn } from "@/lib/utils";
 import { navigationLinks } from "@/lib/constanst";
 import { images } from "@/lib/constanst";
 import { useSession, useLogout } from "@/hooks/use-auth";
-import { User, LogOut, Settings, LayoutDashboard, Trophy } from "lucide-react";
+import { User, LogOut, LayoutDashboard, Trophy } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
-import { HamburgerIcon } from "lucide-react";
-
-// ... Logo dan HamburgerIcon sama ...
+import { Menu } from "lucide-react";
 
 export const Navbar01 = React.forwardRef(
   (
@@ -52,6 +50,7 @@ export const Navbar01 = React.forwardRef(
     const [isMobile, setIsMobile] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const containerRef = useRef(null);
     const router = useRouter();
     const pathname = usePathname();
@@ -63,6 +62,16 @@ export const Navbar01 = React.forwardRef(
     // Tambahkan mounted state
     useEffect(() => {
       setMounted(true);
+    }, []);
+
+    // Scroll listener for navbar background
+    useEffect(() => {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 10);
+      };
+      handleScroll();
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     const getInitials = (name) => {
@@ -199,7 +208,10 @@ export const Navbar01 = React.forwardRef(
       <header
         ref={combinedRef}
         className={cn(
-          "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline",
+          "sticky top-0 z-50 w-full px-4 md:px-6 [&_*]:no-underline transition-all duration-300",
+          pathname === "/" && !isScrolled
+            ? "border-none bg-transparent"
+            : "border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
           className
         )}
         {...props}
@@ -211,11 +223,16 @@ export const Navbar01 = React.forwardRef(
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
-                    className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                    className={cn(
+                      "group h-9 w-9",
+                      pathname === "/" && !isScrolled
+                        ? "text-white hover:bg-white/10"
+                        : "hover:bg-accent hover:text-accent-foreground"
+                    )}
                     variant="ghost"
                     size="icon"
                   >
-                    <HamburgerIcon />
+                    <Menu />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="start" className="w-48 p-2">
@@ -233,9 +250,6 @@ export const Navbar01 = React.forwardRef(
                                 : "text-foreground/80"
                             )}
                           >
-                            {link.label === "Leaderboard" && (
-                              <Trophy className="mr-2 h-4 w-4" />
-                            )}
                             {link.label}
                           </Link>
                         </NavigationMenuItem>
@@ -261,7 +275,14 @@ export const Navbar01 = React.forwardRef(
                   src={images.logo}
                   alt="Sirkula Logo"
                 />
-                <span className="hidden font-bold text-xl sm:inline-block text-green-800">
+                <span
+                  className={cn(
+                    "hidden font-bold text-xl sm:inline-block transition-colors",
+                    pathname === "/" && !isScrolled
+                      ? "text-white"
+                      : "text-green-800"
+                  )}
+                >
                   Sirkula
                 </span>
               </Link>
@@ -274,12 +295,18 @@ export const Navbar01 = React.forwardRef(
                           href={getLinkHref(link.href)}
                           onClick={(e) => handleNavigation(e, link.href)}
                           className={cn(
-                            "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer no-underline",
-                            link.active ||
-                              pathname === link.href ||
-                              (link.href === "#" && pathname === "/")
+                            "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer no-underline",
+                            pathname === "/" && !isScrolled
+                              ? link.active ||
+                                pathname === link.href ||
+                                (link.href === "#" && pathname === "/")
+                                ? "bg-white/10 text-white"
+                                : "text-white hover:text-white hover:bg-white/10"
+                              : link.active ||
+                                pathname === link.href ||
+                                (link.href === "#" && pathname === "/")
                               ? "bg-accent text-accent-foreground"
-                              : "text-foreground/80 hover:text-foreground"
+                              : "text-foreground/80 hover:text-foreground hover:bg-accent"
                           )}
                         >
                           {link.label}
@@ -365,14 +392,24 @@ export const Navbar01 = React.forwardRef(
               <Button
                 variant="outline"
                 size="sm"
-                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                className={cn(
+                  "text-sm font-medium transition-colors text-white",
+                  pathname === "/" && !isScrolled
+                    ? "border-white/30 text-white bg-white/10 hover:bg-white/10 hover:opacity-70 hover:text-white"
+                    : "hover:bg-accent hover:text-accent-foreground border-black/30 text-black"
+                )}
                 onClick={() => router.push("/auth")}
               >
                 Masuk
               </Button>
               <Button
                 size="sm"
-                className="text-sm font-medium px-4 rounded-md shadow-sm bg-green-800 hover:opacity-90 hover:bg-green-800"
+                className={cn(
+                  "text-sm font-medium px-4 rounded-md shadow-sm",
+                  pathname === "/" && !isScrolled
+                    ? "bg-emerald-500 hover:bg-emerald-400 text-white"
+                    : "bg-green-800 hover:opacity-90 hover:bg-green-800"
+                )}
                 onClick={() => router.push("/sign-up")}
               >
                 Daftar
@@ -386,5 +423,3 @@ export const Navbar01 = React.forwardRef(
 );
 
 Navbar01.displayName = "Navbar01";
-
-export { Logo, HamburgerIcon };
