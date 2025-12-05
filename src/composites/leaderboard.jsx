@@ -50,7 +50,8 @@ const RankIndicator = ({ rank, size = "md" }) => {
     3: <Award className={size === "sm" ? "w-3 h-3" : "w-4 h-4"} />,
   };
 
-  const baseStyle = styles[rank] || "bg-neutral-50 text-neutral-500 border-neutral-200";
+  const baseStyle =
+    styles[rank] || "bg-neutral-50 text-neutral-500 border-neutral-200";
 
   return (
     <div
@@ -61,14 +62,14 @@ const RankIndicator = ({ rank, size = "md" }) => {
   );
 };
 
-// Top 3 podium card component  
+// Top 3 podium card component
 const PodiumCard = ({ user, rank, isWinner = false }) => {
   if (!user) return null;
 
   const cardWidth = isWinner ? "w-44" : "w-36";
   const avatarSize = isWinner ? "w-16 h-16" : "w-12 h-12";
   const podiumHeight = rank === 1 ? "h-20" : rank === 2 ? "h-14" : "h-10";
-  
+
   const podiumStyles = {
     1: "bg-amber-50 border-amber-200 text-amber-600",
     2: "bg-slate-50 border-slate-200 text-slate-500",
@@ -79,9 +80,29 @@ const PodiumCard = ({ user, rank, isWinner = false }) => {
     <div className="flex flex-col items-center">
       {/* Avatar */}
       <div className="relative mb-2">
-        <Avatar className={`${avatarSize} border-2 ${rank === 1 ? "border-amber-300" : rank === 2 ? "border-slate-300" : "border-orange-300"}`}>
-          <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" />
-          <AvatarFallback className={`text-sm font-medium ${rank === 1 ? "bg-amber-50 text-amber-700" : rank === 2 ? "bg-slate-50 text-slate-600" : "bg-orange-50 text-orange-700"}`}>
+        <Avatar
+          className={`${avatarSize} border-2 ${
+            rank === 1
+              ? "border-amber-300"
+              : rank === 2
+              ? "border-slate-300"
+              : "border-orange-300"
+          }`}
+        >
+          <AvatarImage
+            src={user.avatarUrl}
+            alt={user.name}
+            className="object-cover"
+          />
+          <AvatarFallback
+            className={`text-sm font-medium ${
+              rank === 1
+                ? "bg-amber-50 text-amber-700"
+                : rank === 2
+                ? "bg-slate-50 text-slate-600"
+                : "bg-orange-50 text-orange-700"
+            }`}
+          >
             {getInitials(user.name)}
           </AvatarFallback>
         </Avatar>
@@ -97,10 +118,16 @@ const PodiumCard = ({ user, rank, isWinner = false }) => {
         <p className="font-medium text-neutral-800 truncate text-sm px-2">
           {user.name}
         </p>
-        <p className={`font-semibold ${rank === 1 ? "text-xl text-amber-600" : "text-lg text-neutral-700"}`}>
+        <p
+          className={`font-semibold ${
+            rank === 1 ? "text-xl text-amber-600" : "text-lg text-neutral-700"
+          }`}
+        >
           {user.totalPoints?.toLocaleString()}
         </p>
-        <p className="text-[11px] text-neutral-400 uppercase tracking-wide">poin</p>
+        <p className="text-[11px] text-neutral-400 uppercase tracking-wide">
+          poin
+        </p>
       </div>
 
       {/* Podium */}
@@ -132,7 +159,11 @@ const LeaderboardRow = ({ item, rank }) => {
 
       {/* Avatar */}
       <Avatar className="w-9 h-9 border border-neutral-200">
-        <AvatarImage src={item.user?.avatarUrl} alt={item.user?.name} className="object-cover" />
+        <AvatarImage
+          src={item.user?.avatarUrl}
+          alt={item.user?.name}
+          className="object-cover"
+        />
         <AvatarFallback className="bg-neutral-100 text-neutral-500 text-xs font-medium">
           {getInitials(item.user?.name)}
         </AvatarFallback>
@@ -154,13 +185,17 @@ const LeaderboardRow = ({ item, rank }) => {
           <p className="font-semibold text-emerald-600 text-base leading-tight">
             {item.totalPoints?.toLocaleString()}
           </p>
-          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">poin</p>
+          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">
+            poin
+          </p>
         </div>
         <div className="text-right min-w-[3rem] hidden sm:block">
           <p className="font-medium text-neutral-600 text-sm leading-tight">
             {item.totalActions}
           </p>
-          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">aksi</p>
+          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">
+            aksi
+          </p>
         </div>
       </div>
     </div>
@@ -189,9 +224,19 @@ const TopThreeSkeleton = () => (
   <div className="flex justify-center items-end gap-3">
     {[2, 1, 3].map((rank) => (
       <div key={rank} className="flex flex-col items-center">
-        <Skeleton className={`${rank === 1 ? "w-16 h-16" : "w-12 h-12"} rounded-full mb-2`} />
-        <Skeleton className={`${rank === 1 ? "w-44" : "w-36"} h-12 rounded-lg mb-2`} />
-        <Skeleton className={`${rank === 1 ? "w-44 h-20" : rank === 2 ? "w-36 h-14" : "w-36 h-10"} rounded-t-lg`} />
+        <Skeleton
+          className={`${
+            rank === 1 ? "w-16 h-16" : "w-12 h-12"
+          } rounded-full mb-2`}
+        />
+        <Skeleton
+          className={`${rank === 1 ? "w-44" : "w-36"} h-12 rounded-lg mb-2`}
+        />
+        <Skeleton
+          className={`${
+            rank === 1 ? "w-44 h-20" : rank === 2 ? "w-36 h-14" : "w-36 h-10"
+          } rounded-t-lg`}
+        />
       </div>
     ))}
   </div>
@@ -223,7 +268,8 @@ const LeaderboardComposite = () => {
             Leaderboard
           </h1>
           <p className="text-neutral-500 text-sm max-w-md mx-auto leading-relaxed">
-            Kumpulkan poin dari setiap aksi hijau dan tukarkan dengan reward menarik
+            Kumpulkan poin dari setiap aksi hijau dan tukarkan dengan reward
+            menarik
           </p>
         </header>
 
@@ -246,7 +292,9 @@ const LeaderboardComposite = () => {
         {/* Divider */}
         <div className="flex items-center gap-4 mb-8">
           <Separator className="flex-1" />
-          <span className="text-xs text-neutral-400 uppercase tracking-wider font-medium">Semua Peringkat</span>
+          <span className="text-xs text-neutral-400 uppercase tracking-wider font-medium">
+            Semua Peringkat
+          </span>
           <Separator className="flex-1" />
         </div>
 
@@ -302,7 +350,11 @@ const LeaderboardComposite = () => {
                     </Button>
 
                     <span className="text-xs text-neutral-500">
-                      Hal. <span className="font-medium text-neutral-700">{meta.page}</span> dari {meta.totalPages}
+                      Hal.{" "}
+                      <span className="font-medium text-neutral-700">
+                        {meta.page}
+                      </span>{" "}
+                      dari {meta.totalPages}
                     </span>
 
                     <Button
