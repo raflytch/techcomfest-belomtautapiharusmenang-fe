@@ -1,6 +1,59 @@
 import httpClient from "@/lib/http-client";
 
 export const voucherService = {
+  // Get all vouchers (public)
+  getAllVouchers: async (params = {}) => {
+    const response = await httpClient.get("/vouchers", {
+      params: {
+        page: params.page || 1,
+        limit: params.limit || 10,
+        ...(params.search && { search: params.search }),
+      },
+      skipAuth: true,
+    });
+    return response.data;
+  },
+
+  // Get voucher by ID (public)
+  getVoucherById: async (id) => {
+    const response = await httpClient.get(`/vouchers/${id}`, {
+      skipAuth: true,
+    });
+    return response.data;
+  },
+
+  // Warga: Get my claims
+  getMyClaims: async (params = {}) => {
+    const response = await httpClient.get("/vouchers/warga/my-claims", {
+      params: {
+        page: params.page || 1,
+        limit: params.limit || 10,
+      },
+    });
+    return response.data;
+  },
+
+  // Warga: Get stats
+  getWargaStats: async () => {
+    const response = await httpClient.get("/vouchers/warga/stats");
+    return response.data;
+  },
+
+  // Warga: Redeem voucher
+  redeemVoucher: async (voucherId) => {
+    const response = await httpClient.post(`/vouchers/${voucherId}/redeem`);
+    return response.data;
+  },
+
+  // Warga: Use voucher claim
+  useVoucherClaim: async (claimId) => {
+    const response = await httpClient.post(
+      `/vouchers/warga/claims/${claimId}/use`
+    );
+    return response.data;
+  },
+
+  // UMKM functions below
   createVoucher: async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);

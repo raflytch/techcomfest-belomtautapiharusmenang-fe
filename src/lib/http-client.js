@@ -20,6 +20,11 @@ httpClient.interceptors.request.use(
 
     const token = getCookie("token");
 
+    if (!token && typeof window !== "undefined") {
+      window.location.href = "/auth";
+      return Promise.reject(new Error("No authentication token"));
+    }
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -38,10 +43,6 @@ httpClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       deleteCookie("token");
-
-      if (typeof window !== "undefined") {
-        window.location.href = "/auth";
-      }
     }
 
     return Promise.reject(error);

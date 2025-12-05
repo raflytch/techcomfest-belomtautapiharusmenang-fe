@@ -27,11 +27,50 @@ import { cn } from "@/lib/utils";
 import { navigationLinks } from "@/lib/constanst";
 import { images } from "@/lib/constanst";
 import { useSession, useLogout } from "@/hooks/use-auth";
-import { User, LogOut, Settings, LayoutDashboard, Trophy } from "lucide-react";
+import {
+  User,
+  LogOut,
+  LayoutDashboard,
+  Trophy,
+  Gift,
+  Menu,
+  X,
+  Coins,
+  ChevronRight,
+} from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// ... Logo dan HamburgerIcon sama ...
+// Custom Hamburger Icon
+const HamburgerIcon = ({ isOpen }) => {
+  return (
+    <div className="relative w-5 h-4 flex flex-col justify-between">
+      <span
+        className={cn(
+          "block h-0.5 w-5 bg-current rounded-full transition-all duration-300",
+          isOpen && "rotate-45 translate-y-1.5"
+        )}
+      />
+      <span
+        className={cn(
+          "block h-0.5 w-5 bg-current rounded-full transition-all duration-300",
+          isOpen && "opacity-0"
+        )}
+      />
+      <span
+        className={cn(
+          "block h-0.5 w-5 bg-current rounded-full transition-all duration-300",
+          isOpen && "-rotate-45 -translate-y-1.5"
+        )}
+      />
+    </div>
+  );
+};
+
+// Logo Component
+const Logo = () => (
+  <Image className="text-2xl w-10 h-10" src={images.logo} alt="Sirkula Logo" />
+);
 
 export const Navbar01 = React.forwardRef(
   (
@@ -59,7 +98,6 @@ export const Navbar01 = React.forwardRef(
     const { data: session, isLoading, refetch } = useSession();
     const { logout } = useLogout();
 
-    // Tambahkan mounted state
     useEffect(() => {
       setMounted(true);
     }, []);
@@ -194,57 +232,105 @@ export const Navbar01 = React.forwardRef(
       return href === "#" ? "/" : `/${href}`;
     };
 
+    const getLinkIcon = (label) => {
+      switch (label) {
+        case "Leaderboard":
+          return <Trophy className="h-4 w-4" />;
+        case "Tukar Poin":
+          return <Gift className="h-4 w-4" />;
+        default:
+          return null;
+      }
+    };
+
+    const isActiveLink = (href) => {
+      if (href === "#" && pathname === "/") return true;
+      if (!isHashLink(href) && pathname === href) return true;
+      return false;
+    };
+
     return (
       <header
         ref={combinedRef}
         className={cn(
-          "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 md:px-6 [&_*]:no-underline",
+          "sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-200/50 px-4 md:px-6 [&_*]:no-underline",
           className
         )}
         {...props}
       >
         <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between gap-4">
-          {/* Left side - sama seperti sebelumnya */}
-          <div className="flex items-center gap-2">
+          {/* Left side */}
+          <div className="flex items-center gap-3">
             {isMobile && (
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
-                    className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                    className="h-9 w-9 hover:bg-zinc-100"
                     variant="ghost"
                     size="icon"
                   >
-                    <HamburgerIcon />
+                    <HamburgerIcon isOpen={isPopoverOpen} />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent align="start" className="w-48 p-2">
-                  <NavigationMenu className="max-w-none">
-                    <NavigationMenuList className="flex-col items-start gap-1">
-                      {navigationLinks.map((link, index) => (
-                        <NavigationMenuItem key={index} className="w-full">
-                          <Link
-                            href={getLinkHref(link.href)}
-                            onClick={(e) => handleNavigation(e, link.href)}
-                            className={cn(
-                              "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
-                              link.active
-                                ? "bg-accent text-accent-foreground"
-                                : "text-foreground/80"
-                            )}
-                          >
-                            {link.label === "Leaderboard" && (
-                              <Trophy className="mr-2 h-4 w-4" />
-                            )}
-                            {link.label}
-                          </Link>
-                        </NavigationMenuItem>
-                      ))}
-                    </NavigationMenuList>
-                  </NavigationMenu>
+                <PopoverContent
+                  align="start"
+                  className="w-64 p-3 bg-white/95 backdrop-blur-md border border-zinc-200/60 shadow-lg rounded-xl"
+                >
+                  <nav className="space-y-1">
+                    {navigationLinks.map((link, index) => {
+                      const icon = getLinkIcon(link.label);
+                      return (
+                        <Link
+                          key={index}
+                          href={getLinkHref(link.href)}
+                          onClick={(e) => handleNavigation(e, link.href)}
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                            isActiveLink(link.href)
+                              ? "bg-green-50 text-green-700"
+                              : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                          )}
+                        >
+                          {icon && (
+                            <span
+                              className={cn(
+                                "p-1.5 rounded-md",
+                                isActiveLink(link.href)
+                                  ? "bg-green-100"
+                                  : "bg-zinc-100"
+                              )}
+                            >
+                              {icon}
+                            </span>
+                          )}
+                          <span>{link.label}</span>
+                          <ChevronRight className="h-4 w-4 ml-auto opacity-40" />
+                        </Link>
+                      );
+                    })}
+                  </nav>
+
+                  {/* Mobile User Info */}
+                  {session && (
+                    <div className="mt-3 pt-3 border-t border-zinc-200/60">
+                      <div className="flex items-center gap-3 px-3 py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg">
+                        <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
+                          <Coins className="h-4 w-4 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-xs text-zinc-500">Poin Kamu</p>
+                          <p className="font-semibold text-green-700">
+                            {session.totalPoints} Poin
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </PopoverContent>
               </Popover>
             )}
-            <div className="flex items-center gap-6">
+
+            <div className="flex items-center gap-8">
               <Link
                 href="/"
                 onClick={(e) => {
@@ -253,128 +339,188 @@ export const Navbar01 = React.forwardRef(
                     scrollToSection("home");
                   }
                 }}
-                className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
+                className="flex items-center gap-2.5 group"
               >
-                <Image
-                  className="text-2xl w-10 h-10"
-                  src={images.logo}
-                  alt="Sirkula Logo"
-                />
-                <span className="hidden font-bold text-xl sm:inline-block text-green-800">
+                <div className="relative">
+                  <Logo />
+                  <div className="absolute inset-0 rounded-full bg-green-400/20 scale-0 group-hover:scale-150 transition-transform duration-300" />
+                </div>
+                <span className="hidden sm:inline-block font-bold text-xl bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
                   Sirkula
                 </span>
               </Link>
+
+              {/* Desktop Navigation */}
               {!isMobile && (
                 <NavigationMenu className="flex">
                   <NavigationMenuList className="gap-1">
-                    {navigationLinks.map((link, index) => (
-                      <NavigationMenuItem key={index}>
-                        <Link
-                          href={getLinkHref(link.href)}
-                          onClick={(e) => handleNavigation(e, link.href)}
-                          className={cn(
-                            "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer no-underline",
-                            link.active ||
-                              pathname === link.href ||
-                              (link.href === "#" && pathname === "/")
-                              ? "bg-accent text-accent-foreground"
-                              : "text-foreground/80 hover:text-foreground"
-                          )}
-                        >
-                          {link.label === "Leaderboard" && (
-                            <Trophy className="mr-1. 5 h-4 w-4" />
-                          )}
-                          {link.label}
-                        </Link>
-                      </NavigationMenuItem>
-                    ))}
+                    {navigationLinks.map((link, index) => {
+                      const icon = getLinkIcon(link.label);
+                      return (
+                        <NavigationMenuItem key={index}>
+                          <Link
+                            href={getLinkHref(link.href)}
+                            onClick={(e) => handleNavigation(e, link.href)}
+                            className={cn(
+                              "group inline-flex h-9 items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all",
+                              isActiveLink(link.href)
+                                ? "bg-green-50 text-green-700"
+                                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                            )}
+                          >
+                            {icon}
+                            {link.label}
+                          </Link>
+                        </NavigationMenuItem>
+                      );
+                    })}
                   </NavigationMenuList>
                 </NavigationMenu>
               )}
             </div>
           </div>
 
-          {/* Right side - Fixed hydration */}
+          {/* Right side */}
           {!mounted || isLoading ? (
             <div className="flex items-center gap-3">
               <Skeleton className="h-9 w-9 rounded-full" />
             </div>
           ) : session ? (
             <div className="flex items-center gap-3">
+              {/* Points Badge - Desktop Only */}
+              {!isMobile && (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-50 to-emerald-50 rounded-full border border-green-100">
+                  <Coins className="h-4 w-4 text-green-600" />
+                  <span className="text-sm font-semibold text-green-700">
+                    {session.totalPoints}
+                  </span>
+                </div>
+              )}
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="relative h-9 w-9 rounded-full"
+                    className="relative h-10 w-10 rounded-full ring-2 ring-zinc-100 hover:ring-green-200 transition-all"
                   >
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={session.avatarUrl} alt={session.name} />
-                      <AvatarFallback className="bg-green-100 text-green-800">
+                      <AvatarFallback className="bg-gradient-to-br from-green-100 to-emerald-100 text-green-700 font-semibold">
                         {getInitials(session.name)}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end">
-                  <div className="flex items-center justify-start gap-2 p-2">
-                    <div className="flex flex-col space-y-1 leading-none">
-                      <p className="font-medium">{session.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {session.email}
-                      </p>
-                      <p className="text-xs text-green-600 font-medium">
+                <DropdownMenuContent
+                  className="w-64 p-2 bg-white/95 backdrop-blur-md border border-zinc-200/60 shadow-lg rounded-xl"
+                  align="end"
+                >
+                  {/* User Info Header */}
+                  <div className="px-3 py-3 mb-2 bg-gradient-to-r from-zinc-50 to-zinc-100/50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage
+                          src={session.avatarUrl}
+                          alt={session.name}
+                        />
+                        <AvatarFallback className="bg-gradient-to-br from-green-100 to-emerald-100 text-green-700 font-semibold">
+                          {getInitials(session.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-zinc-900 truncate">
+                          {session.name}
+                        </p>
+                        <p className="text-xs text-zinc-500 truncate">
+                          {session.email}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex items-center gap-2 px-2.5 py-1.5 bg-white rounded-md">
+                      <Coins className="h-4 w-4 text-green-600" />
+                      <span className="text-sm font-semibold text-green-700">
                         {session.totalPoints} Poin
-                      </p>
+                      </span>
                     </div>
                   </div>
-                  <DropdownMenuSeparator />
+
                   <DropdownMenuItem asChild>
-                    <Link href="/profile" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      Profil
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                    >
+                      <div className="h-8 w-8 rounded-md bg-zinc-100 flex items-center justify-center">
+                        <User className="h-4 w-4 text-zinc-600" />
+                      </div>
+                      <span className="font-medium">Profil</span>
                     </Link>
                   </DropdownMenuItem>
+
                   <DropdownMenuItem asChild>
-                    <Link href="/leaderboard" className="cursor-pointer">
-                      <Trophy className="mr-2 h-4 w-4" />
-                      Leaderboard
+                    <Link
+                      href="/reedem"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                    >
+                      <div className="h-8 w-8 rounded-md bg-green-100 flex items-center justify-center">
+                        <Gift className="h-4 w-4 text-green-600" />
+                      </div>
+                      <span className="font-medium">Tukar Poin</span>
                     </Link>
                   </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/leaderboard"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                    >
+                      <div className="h-8 w-8 rounded-md bg-amber-100 flex items-center justify-center">
+                        <Trophy className="h-4 w-4 text-amber-600" />
+                      </div>
+                      <span className="font-medium">Leaderboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+
                   {session.role !== "WARGA" && (
                     <DropdownMenuItem asChild>
                       <Link
                         href={getDashboardLink()}
-                        className="cursor-pointer"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
                       >
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                        Dashboard
+                        <div className="h-8 w-8 rounded-md bg-blue-100 flex items-center justify-center">
+                          <LayoutDashboard className="h-4 w-4 text-blue-600" />
+                        </div>
+                        <span className="font-medium">Dashboard</span>
                       </Link>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuSeparator />
+
+                  <DropdownMenuSeparator className="my-2" />
+
                   <DropdownMenuItem
-                    className="cursor-pointer text-red-600 focus:text-red-600"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
                     onClick={logout}
                   >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Keluar
+                    <div className="h-8 w-8 rounded-md bg-red-100 flex items-center justify-center">
+                      <LogOut className="h-4 w-4 text-red-600" />
+                    </div>
+                    <span className="font-medium">Keluar</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
-                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+                className="text-sm font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 rounded-lg"
                 onClick={() => router.push("/auth")}
               >
                 Masuk
               </Button>
               <Button
                 size="sm"
-                className="text-sm font-medium px-4 rounded-md shadow-sm bg-green-800 hover:opacity-90 hover:bg-green-800"
+                className="text-sm font-medium px-4 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-sm"
                 onClick={() => router.push("/sign-up")}
               >
                 Daftar

@@ -22,6 +22,7 @@ export const navigationLinks = [
   { href: "#featuresSection", label: "Features" },
   { href: "#aboutUs", label: "About Us" },
   { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/reedem", label: "Tukar Poin" },
 ];
 
 export const problems = [
