@@ -11,6 +11,8 @@ import {
   Target,
   Camera,
   Coins,
+  Home,
+  Sparkles,
 } from "lucide-react";
 import logo from "../../public/images/logo-sirkula.png";
 export const images = {
@@ -18,9 +20,10 @@ export const images = {
 };
 
 export const navigationLinks = [
-  { href: "#", label: "Home" },
-  { href: "/leaderboard", label: "Leaderboard" },
-  { href: "/reedem", label: "Tukar Poin" },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/sirkula-green-action", label: "Sirkula-AI", icon: Sparkles },
+  { href: "/leaderboard", label: "Leaderboard", icon: BarChart3 },
+  { href: "/reedem", label: "Tukar Poin", icon: Gift },
 ];
 
 export const problems = [

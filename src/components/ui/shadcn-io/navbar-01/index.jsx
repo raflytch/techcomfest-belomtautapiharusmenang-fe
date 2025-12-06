@@ -37,6 +37,7 @@ import {
   X,
   Coins,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -200,7 +201,7 @@ export const Navbar01 = React.forwardRef(
       const checkWidth = () => {
         if (containerRef.current) {
           const width = containerRef.current.offsetWidth;
-          setIsMobile(width < 768);
+          setIsMobile(width < 1024); // lg breakpoint for tablet
         }
       };
 
@@ -244,19 +245,17 @@ export const Navbar01 = React.forwardRef(
     };
 
     const getLinkIcon = (label) => {
-      switch (label) {
-        case "Leaderboard":
-          return <Trophy className="h-4 w-4" />;
-        case "Tukar Poin":
-          return <Gift className="h-4 w-4" />;
-        default:
-          return null;
+      const link = navigationLinks.find((l) => l.label === label);
+      if (link && link.icon) {
+        const Icon = link.icon;
+        return <Icon className="h-4 w-4" />;
       }
+      return null;
     };
 
     const isActiveLink = (href) => {
-      if (href === "#" && pathname === "/") return true;
-      if (!isHashLink(href) && pathname === href) return true;
+      if (href === "/" && pathname === "/") return true;
+      if (href !== "/" && pathname.startsWith(href)) return true;
       return false;
     };
 
@@ -264,7 +263,7 @@ export const Navbar01 = React.forwardRef(
       <header
         ref={combinedRef}
         className={cn(
-          "sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-200/50 px-4 md:px-6 [&_*]:no-underline",
+          "sticky top-0 z-9999 w-full bg-white/80 backdrop-blur-md border-b border-zinc-200/50 px-4 md:px-6 **:no-underline",
           className
         )}
         {...props}
@@ -324,7 +323,7 @@ export const Navbar01 = React.forwardRef(
                   {/* Mobile User Info */}
                   {session && (
                     <div className="mt-3 pt-3 border-t border-zinc-200/60">
-                      <div className="flex items-center gap-3 px-3 py-2 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg">
+                      <div className="flex items-center gap-3 px-3 py-2 bg-linear-to-r from-green-50 to-emerald-50 rounded-lg">
                         <div className="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
                           <Coins className="h-4 w-4 text-green-600" />
                         </div>
@@ -356,14 +355,14 @@ export const Navbar01 = React.forwardRef(
                   <Logo />
                   <div className="absolute inset-0 rounded-full bg-green-400/20 scale-0 group-hover:scale-150 transition-transform duration-300" />
                 </div>
-                <span className="hidden sm:inline-block font-bold text-xl bg-gradient-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
+                <span className="hidden sm:inline-block font-bold text-xl bg-linear-to-r from-green-700 to-emerald-600 bg-clip-text text-transparent">
                   Sirkula
                 </span>
               </Link>
 
               {/* Desktop Navigation */}
               {!isMobile && (
-                <NavigationMenu className="flex">
+                <NavigationMenu className="hidden lg:flex">
                   <NavigationMenuList className="gap-1">
                     {navigationLinks.map((link, index) => {
                       const icon = getLinkIcon(link.label);
@@ -398,9 +397,9 @@ export const Navbar01 = React.forwardRef(
             </div>
           ) : session ? (
             <div className="flex items-center gap-3">
-              {/* Points Badge - Desktop Only */}
+              {/* Points Display - Desktop Only */}
               {!isMobile && (
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-50 to-emerald-50 rounded-full border border-green-100">
+                <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-linear-to-r from-green-50 to-emerald-50 rounded-full border border-green-100">
                   <Coins className="h-4 w-4 text-green-600" />
                   <span className="text-sm font-semibold text-green-700">
                     {session.totalPoints}
@@ -416,7 +415,7 @@ export const Navbar01 = React.forwardRef(
                   >
                     <Avatar className="h-9 w-9">
                       <AvatarImage src={session.avatarUrl} alt={session.name} />
-                      <AvatarFallback className="bg-gradient-to-br from-green-100 to-emerald-100 text-green-700 font-semibold">
+                      <AvatarFallback className="bg-linear-to-br from-green-100 to-emerald-100 text-green-700 font-semibold">
                         {getInitials(session.name)}
                       </AvatarFallback>
                     </Avatar>
@@ -427,14 +426,14 @@ export const Navbar01 = React.forwardRef(
                   align="end"
                 >
                   {/* User Info Header */}
-                  <div className="px-3 py-3 mb-2 bg-gradient-to-r from-zinc-50 to-zinc-100/50 rounded-lg">
+                  <div className="px-3 py-3 mb-2 bg-linear-to-r from-zinc-50 to-zinc-100/50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-10 w-10">
                         <AvatarImage
                           src={session.avatarUrl}
                           alt={session.name}
                         />
-                        <AvatarFallback className="bg-gradient-to-br from-green-100 to-emerald-100 text-green-700 font-semibold">
+                        <AvatarFallback className="bg-linear-to-br from-green-100 to-emerald-100 text-green-700 font-semibold">
                           {getInitials(session.name)}
                         </AvatarFallback>
                       </Avatar>
@@ -464,6 +463,18 @@ export const Navbar01 = React.forwardRef(
                         <User className="h-4 w-4 text-zinc-600" />
                       </div>
                       <span className="font-medium">Profil</span>
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/sirkula-green-action"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                    >
+                      <div className="h-8 w-8 rounded-md bg-purple-100 flex items-center justify-center">
+                        <Sparkles className="h-4 w-4 text-purple-600" />
+                      </div>
+                      <span className="font-medium">Sirkula-AI</span>
                     </Link>
                   </DropdownMenuItem>
 
@@ -531,7 +542,7 @@ export const Navbar01 = React.forwardRef(
               </Button>
               <Button
                 size="sm"
-                className="text-sm font-medium px-4 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-sm"
+                className="text-sm font-medium px-4 rounded-lg bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-sm"
                 onClick={() => router.push("/sign-up")}
               >
                 Daftar
