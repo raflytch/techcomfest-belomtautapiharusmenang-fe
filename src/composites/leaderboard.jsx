@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useLeaderboard, useTopThree } from "@/hooks/useLeaderboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { images } from "@/lib/constanst";
 import {
   Trophy,
   Medal,
@@ -19,95 +21,117 @@ import {
   Flame,
 } from "lucide-react";
 
-// Helper function to get user initials
-const getInitials = (name) => {
-  if (!name) return "?";
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+// Helper function for avatar fallback
+const AvatarFallbackContent = () => {
+  return (
+    <Image
+      src={images.logo}
+      alt="Sirkula"
+      className="w-full h-full object-cover"
+    />
+  );
 };
 
 // Rank indicator component
 const RankIndicator = ({ rank, size = "md" }) => {
   const sizes = {
-    sm: "w-6 h-6 text-xs",
-    md: "w-9 h-9 text-sm",
-    lg: "w-11 h-11 text-base",
+    sm: "w-7 h-7 text-xs",
+    md: "w-8 h-8 text-xs",
+    lg: "w-10 h-10 text-sm",
   };
 
   const styles = {
-    1: "bg-amber-50 text-amber-600 border-amber-200",
-    2: "bg-slate-50 text-slate-500 border-slate-200",
-    3: "bg-orange-50 text-orange-600 border-orange-200",
+    1: "bg-gradient-to-br from-amber-400 to-amber-500 text-white border border-amber-300",
+    2: "bg-gradient-to-br from-zinc-300 to-zinc-400 text-white border border-zinc-300",
+    3: "bg-gradient-to-br from-orange-400 to-orange-500 text-white border border-orange-300",
   };
 
   const icons = {
-    1: <Trophy className={size === "sm" ? "w-3 h-3" : "w-4 h-4"} />,
-    2: <Medal className={size === "sm" ? "w-3 h-3" : "w-4 h-4"} />,
-    3: <Award className={size === "sm" ? "w-3 h-3" : "w-4 h-4"} />,
+    1: <Trophy className={size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5"} />,
+    2: <Medal className={size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5"} />,
+    3: <Award className={size === "sm" ? "w-3 h-3" : "w-3.5 h-3.5"} />,
   };
 
-  const baseStyle = styles[rank] || "bg-neutral-50 text-neutral-500 border-neutral-200";
+  const baseStyle =
+    styles[rank] || "bg-white text-zinc-700 border border-zinc-200";
 
   return (
     <div
-      className={`${sizes[size]} ${baseStyle} rounded-full border flex items-center justify-center font-medium`}
+      className={`${sizes[size]} ${baseStyle} rounded-full flex items-center justify-center font-semibold`}
     >
       {icons[rank] || <span>{rank}</span>}
     </div>
   );
 };
 
-// Top 3 podium card component  
+// Top 3 podium card component
 const PodiumCard = ({ user, rank, isWinner = false }) => {
   if (!user) return null;
 
-  const cardWidth = isWinner ? "w-44" : "w-36";
-  const avatarSize = isWinner ? "w-16 h-16" : "w-12 h-12";
-  const podiumHeight = rank === 1 ? "h-20" : rank === 2 ? "h-14" : "h-10";
-  
+  const cardWidth = isWinner ? "w-32 sm:w-40" : "w-28 sm:w-32";
+  const avatarSize = isWinner
+    ? "w-14 h-14 sm:w-16 sm:w-16"
+    : "w-11 h-11 sm:w-12 sm:h-12";
+  const podiumHeight =
+    rank === 1 ? "h-16 sm:h-20" : rank === 2 ? "h-12 sm:h-16" : "h-10 sm:h-12";
+
   const podiumStyles = {
-    1: "bg-amber-50 border-amber-200 text-amber-600",
-    2: "bg-slate-50 border-slate-200 text-slate-500",
-    3: "bg-orange-50 border-orange-200 text-orange-600",
+    1: "bg-gradient-to-br from-amber-400 to-amber-500 text-white border-2 border-amber-300",
+    2: "bg-gradient-to-br from-zinc-300 to-zinc-400 text-white border-2 border-zinc-300",
+    3: "bg-gradient-to-br from-orange-400 to-orange-500 text-white border-2 border-orange-300",
+  };
+
+  const borderColor = {
+    1: "border-amber-400",
+    2: "border-zinc-400",
+    3: "border-orange-400",
   };
 
   return (
     <div className="flex flex-col items-center">
       {/* Avatar */}
-      <div className="relative mb-2">
-        <Avatar className={`${avatarSize} border-2 ${rank === 1 ? "border-amber-300" : rank === 2 ? "border-slate-300" : "border-orange-300"}`}>
-          <AvatarImage src={user.avatarUrl} alt={user.name} className="object-cover" />
-          <AvatarFallback className={`text-sm font-medium ${rank === 1 ? "bg-amber-50 text-amber-700" : rank === 2 ? "bg-slate-50 text-slate-600" : "bg-orange-50 text-orange-700"}`}>
-            {getInitials(user.name)}
+      <div className="relative mb-2 sm:mb-3">
+        <Avatar className={`${avatarSize} border-2 ${borderColor[rank]}`}>
+          <AvatarImage
+            src={user.avatarUrl}
+            alt={user.name}
+            className="object-cover"
+          />
+          <AvatarFallback className="bg-white p-1">
+            <AvatarFallbackContent />
           </AvatarFallback>
         </Avatar>
         {isWinner && (
-          <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-100 border border-amber-300 rounded-full flex items-center justify-center">
-            <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+          <div className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-linear-to-br from-amber-400 to-amber-500 border border-amber-300 rounded-full flex items-center justify-center">
+            <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white fill-white" />
           </div>
         )}
       </div>
 
       {/* User info */}
       <div className={`${cardWidth} text-center mb-2`}>
-        <p className="font-medium text-neutral-800 truncate text-sm px-2">
+        <p className="font-semibold text-zinc-800 truncate text-xs sm:text-sm px-1 sm:px-2">
           {user.name}
         </p>
-        <p className={`font-semibold ${rank === 1 ? "text-xl text-amber-600" : "text-lg text-neutral-700"}`}>
+        <p
+          className={`font-bold ${
+            rank === 1
+              ? "text-lg sm:text-xl text-amber-600"
+              : "text-base sm:text-lg text-zinc-700"
+          } mt-0.5`}
+        >
           {user.totalPoints?.toLocaleString()}
         </p>
-        <p className="text-[11px] text-neutral-400 uppercase tracking-wide">poin</p>
+        <p className="text-[10px] sm:text-[11px] text-zinc-400 uppercase tracking-wide">
+          poin
+        </p>
       </div>
 
       {/* Podium */}
       <div
-        className={`${cardWidth} ${podiumHeight} ${podiumStyles[rank]} rounded-t-lg border border-b-0 flex items-center justify-center`}
+        className={`${cardWidth} ${podiumHeight} ${podiumStyles[rank]} rounded-t-xl flex items-center justify-center`}
       >
-        <span className="text-lg font-bold">{rank}</span>
+        <span className="text-base sm:text-lg font-bold">{rank}</span>
       </div>
     </div>
   );
@@ -119,48 +143,56 @@ const LeaderboardRow = ({ item, rank }) => {
 
   return (
     <div
-      className={`group flex items-center gap-3 py-3 px-4 rounded-lg transition-colors ${
+      className={`group flex items-center gap-2 sm:gap-3 py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg transition-all ${
         isTopThree
-          ? "bg-emerald-50/40 hover:bg-emerald-50/60"
-          : "hover:bg-neutral-50"
+          ? "bg-zinc-50/80 hover:bg-zinc-100/80"
+          : "hover:bg-zinc-50/50"
       }`}
     >
       {/* Rank */}
-      <div className="w-9 flex justify-center">
+      <div className="w-8 sm:w-9 flex justify-center shrink-0">
         <RankIndicator rank={rank} size="md" />
       </div>
 
       {/* Avatar */}
-      <Avatar className="w-9 h-9 border border-neutral-200">
-        <AvatarImage src={item.user?.avatarUrl} alt={item.user?.name} className="object-cover" />
-        <AvatarFallback className="bg-neutral-100 text-neutral-500 text-xs font-medium">
-          {getInitials(item.user?.name)}
+      <Avatar className="w-8 h-8 sm:w-9 sm:h-9 border border-zinc-200 shrink-0">
+        <AvatarImage
+          src={item.user?.avatarUrl}
+          alt={item.user?.name}
+          className="object-cover"
+        />
+        <AvatarFallback className="bg-white p-0.5">
+          <AvatarFallbackContent />
         </AvatarFallback>
       </Avatar>
 
       {/* User Info */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-neutral-800 truncate text-sm leading-tight">
+        <p className="font-semibold text-zinc-800 truncate text-xs sm:text-sm leading-tight">
           {item.user?.name}
         </p>
-        <p className="text-[11px] text-neutral-400 capitalize leading-tight">
+        <p className="text-[10px] sm:text-[11px] text-zinc-500 capitalize leading-tight mt-0.5">
           {item.user?.role?.toLowerCase()}
         </p>
       </div>
 
       {/* Stats */}
-      <div className="flex items-center gap-6">
-        <div className="text-right min-w-[4rem]">
-          <p className="font-semibold text-emerald-600 text-base leading-tight">
+      <div className="flex items-center gap-3 sm:gap-6 shrink-0">
+        <div className="text-right">
+          <p className="font-bold text-emerald-600 text-sm sm:text-base leading-tight">
             {item.totalPoints?.toLocaleString()}
           </p>
-          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">poin</p>
+          <p className="text-[9px] sm:text-[10px] text-zinc-400 uppercase tracking-wide">
+            poin
+          </p>
         </div>
-        <div className="text-right min-w-[3rem] hidden sm:block">
-          <p className="font-medium text-neutral-600 text-sm leading-tight">
+        <div className="text-right min-w-10 hidden sm:block">
+          <p className="font-semibold text-zinc-700 text-sm leading-tight">
             {item.totalActions}
           </p>
-          <p className="text-[10px] text-neutral-400 uppercase tracking-wide">aksi</p>
+          <p className="text-[10px] text-zinc-400 uppercase tracking-wide">
+            aksi
+          </p>
         </div>
       </div>
     </div>
@@ -189,9 +221,19 @@ const TopThreeSkeleton = () => (
   <div className="flex justify-center items-end gap-3">
     {[2, 1, 3].map((rank) => (
       <div key={rank} className="flex flex-col items-center">
-        <Skeleton className={`${rank === 1 ? "w-16 h-16" : "w-12 h-12"} rounded-full mb-2`} />
-        <Skeleton className={`${rank === 1 ? "w-44" : "w-36"} h-12 rounded-lg mb-2`} />
-        <Skeleton className={`${rank === 1 ? "w-44 h-20" : rank === 2 ? "w-36 h-14" : "w-36 h-10"} rounded-t-lg`} />
+        <Skeleton
+          className={`${
+            rank === 1 ? "w-16 h-16" : "w-12 h-12"
+          } rounded-full mb-2`}
+        />
+        <Skeleton
+          className={`${rank === 1 ? "w-44" : "w-36"} h-12 rounded-lg mb-2`}
+        />
+        <Skeleton
+          className={`${
+            rank === 1 ? "w-44 h-20" : rank === 2 ? "w-36 h-14" : "w-36 h-10"
+          } rounded-t-lg`}
+        />
       </div>
     ))}
   </div>
@@ -208,31 +250,32 @@ const LeaderboardComposite = () => {
   } = useLeaderboard(currentPage, 10);
 
   return (
-    <div className="py-10 px-4 sm:px-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="py-6 sm:py-10 px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <header className="text-center mb-12">
+        <header className="text-center mb-8 sm:mb-12">
           <Badge
             variant="outline"
-            className="mb-3 border-emerald-200/80 text-emerald-600 bg-emerald-50/50 px-3 py-1 text-xs font-medium"
+            className="mb-3 border-emerald-500/40 text-emerald-700 bg-emerald-50 px-3 py-1 text-xs font-semibold"
           >
             <Flame className="w-3 h-3 mr-1.5" />
             Top Kontributor
           </Badge>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-neutral-900 tracking-tight mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 tracking-tight mb-2">
             Leaderboard
           </h1>
-          <p className="text-neutral-500 text-sm max-w-md mx-auto leading-relaxed">
-            Kumpulkan poin dari setiap aksi hijau dan tukarkan dengan reward menarik
+          <p className="text-zinc-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+            Kumpulkan poin dari setiap aksi hijau dan tukarkan dengan reward
+            menarik
           </p>
         </header>
 
         {/* Top 3 Podium */}
-        <section className="mb-12">
+        <section className="mb-8 sm:mb-12">
           {loadingTop ? (
             <TopThreeSkeleton />
           ) : (
-            <div className="flex justify-center items-end gap-2 sm:gap-4">
+            <div className="flex justify-center items-end gap-1.5 sm:gap-3 md:gap-4">
               {/* Rank 2 */}
               <PodiumCard user={topThree[1]} rank={2} />
               {/* Rank 1 */}
@@ -244,21 +287,23 @@ const LeaderboardComposite = () => {
         </section>
 
         {/* Divider */}
-        <div className="flex items-center gap-4 mb-8">
+        <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
           <Separator className="flex-1" />
-          <span className="text-xs text-neutral-400 uppercase tracking-wider font-medium">Semua Peringkat</span>
+          <span className="text-[10px] sm:text-xs text-zinc-500 uppercase tracking-wider font-semibold">
+            Semua Peringkat
+          </span>
           <Separator className="flex-1" />
         </div>
 
         {/* All Rankings */}
-        <Card className="border border-neutral-200/80 overflow-hidden">
-          <CardHeader className="py-4 px-5 border-b border-neutral-100 bg-neutral-50/50">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-neutral-700">
-              <TrendingUp className="w-4 h-4 text-emerald-500" />
+        <Card className="border-2 border-zinc-200 overflow-hidden">
+          <CardHeader className="py-3 sm:py-4 px-4 sm:px-5 border-b border-zinc-200 bg-white">
+            <CardTitle className="flex items-center gap-2 text-sm sm:text-base font-semibold text-zinc-800">
+              <TrendingUp className="w-4 h-4 text-emerald-600" />
               Peringkat Lengkap
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-2">
+          <CardContent className="p-1.5 sm:p-2">
             {loadingAll ? (
               <LeaderboardSkeleton />
             ) : error ? (
@@ -287,33 +332,37 @@ const LeaderboardComposite = () => {
 
                 {/* Pagination */}
                 {meta && meta.totalPages > 1 && (
-                  <div className="flex justify-between items-center mt-4 pt-4 px-2 border-t border-neutral-100">
+                  <div className="flex justify-between items-center mt-3 sm:mt-4 pt-3 sm:pt-4 px-2 sm:px-3 border-t border-zinc-100">
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={() =>
                         setCurrentPage((prev) => Math.max(1, prev - 1))
                       }
                       disabled={!meta.hasPreviousPage}
-                      className="text-xs gap-1 h-8"
+                      className="text-xs gap-1 h-7 sm:h-8 px-2 sm:px-3 border-zinc-200"
                     >
-                      <ChevronLeft className="w-3.5 h-3.5" />
-                      Prev
+                      <ChevronLeft className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                      <span className="hidden sm:inline">Prev</span>
                     </Button>
 
-                    <span className="text-xs text-neutral-500">
-                      Hal. <span className="font-medium text-neutral-700">{meta.page}</span> dari {meta.totalPages}
+                    <span className="text-[10px] sm:text-xs text-zinc-600">
+                      Hal.{" "}
+                      <span className="font-bold text-zinc-900">
+                        {meta.page}
+                      </span>{" "}
+                      / {meta.totalPages}
                     </span>
 
                     <Button
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
                       onClick={() => setCurrentPage((prev) => prev + 1)}
                       disabled={!meta.hasNextPage}
-                      className="text-xs gap-1 h-8"
+                      className="text-xs gap-1 h-7 sm:h-8 px-2 sm:px-3 border-zinc-200"
                     >
-                      Next
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Next</span>
+                      <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     </Button>
                   </div>
                 )}

@@ -55,7 +55,7 @@ import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 function ProfileSkeleton() {
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen">
       <div className="container mx-auto max-w-4xl px-4 py-8">
         <Skeleton className="h-5 w-40 mb-6" />
         <div className="flex items-center gap-4 mb-8">
@@ -157,7 +157,7 @@ export default function ProfileComposite() {
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("id-ID", {
       day: "numeric",
-      month: "long",
+      month: "short",
       year: "numeric",
     });
   };
@@ -236,7 +236,7 @@ export default function ProfileComposite() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen">
       <div className="container mx-auto max-w-4xl px-4 py-6 sm:py-8">
         <Link
           href="/"
@@ -246,52 +246,66 @@ export default function ProfileComposite() {
           Kembali ke Beranda
         </Link>
 
-        <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <Image
-            src={images.logo}
-            alt="Sirkula Logo"
-            className="w-8 h-8 sm:w-10 sm:h-10"
-          />
-          <h1 className="text-xl sm:text-2xl font-bold text-green-800">
+        <div className="flex items-center gap-3 mb-6 sm:mb-8">
+          <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+            <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+          </div>
+          <h1 className="text-xl sm:text-2xl font-bold text-zinc-900">
             Profil Saya
           </h1>
         </div>
 
         <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
-          <Card className="border shadow-none lg:col-span-1">
-            <CardContent className="pt-6">
+          <Card className="border border-zinc-200 bg-white lg:col-span-1">
+            <CardContent className="pt-5">
               <div className="flex flex-col items-center text-center">
-                <Avatar className="h-20 w-20 sm:h-24 sm:w-24 mb-4">
+                <Avatar className="h-16 w-16 sm:h-20 sm:w-20 mb-3">
                   <AvatarImage src={session.avatarUrl} alt={session.name} />
-                  <AvatarFallback className="bg-green-100 text-green-800 text-xl sm:text-2xl">
+                  <AvatarFallback className="bg-emerald-50 text-emerald-700 text-base sm:text-lg">
                     {getInitials(session.name)}
                   </AvatarFallback>
                 </Avatar>
-                <h2 className="text-lg sm:text-xl font-semibold">
+                <h2 className="text-base sm:text-lg font-semibold text-zinc-900 leading-tight">
                   {session.name}
                 </h2>
-                <p className="text-xs sm:text-sm text-muted-foreground break-all">
+                <p
+                  className="text-[11px] sm:text-xs text-zinc-500 truncate max-w-full px-1"
+                  title={session.email}
+                >
                   {session.email}
                 </p>
-                <Badge className="mt-2 bg-green-100 text-green-800 hover:bg-green-100">
+                <Badge className="mt-2 bg-emerald-50 text-emerald-700 hover:bg-emerald-50 font-medium text-[10px] sm:text-xs">
                   {session.role}
                 </Badge>
-                <Separator className="my-4" />
-                <div className="w-full space-y-3">
-                  <div className="flex items-center gap-3 text-xs sm:text-sm">
-                    <Award className="w-4 h-4 text-green-600 shrink-0" />
-                    <span>{session.totalPoints} Poin</span>
+                <Separator className="my-3" />
+                <div className="w-full space-y-2">
+                  <div className="flex items-center gap-2 text-[11px] sm:text-xs">
+                    <Award className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span className="text-zinc-700 font-medium">
+                      {session.totalPoints} Poin
+                    </span>
                   </div>
                   <div className="flex items-center gap-3 text-xs sm:text-sm">
-                    <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <span>Bergabung {formatDate(session.createdAt)}</span>
+                    <Calendar className="w-4 h-4 text-zinc-400 shrink-0" />
+                    <span
+                      className="text-zinc-600 truncate"
+                      title={`Bergabung ${formatDate(session.createdAt)}`}
+                    >
+                      {formatDate(session.createdAt)}
+                    </span>
                   </div>
                   <div className="flex items-center gap-3 text-xs sm:text-sm">
-                    <Mail className="w-4 h-4 text-muted-foreground shrink-0" />
-                    <span>
+                    <Mail className="w-4 h-4 text-zinc-400 shrink-0" />
+                    <span
+                      className={
+                        session.isEmailVerified
+                          ? "text-emerald-600"
+                          : "text-amber-600"
+                      }
+                    >
                       {session.isEmailVerified
-                        ? "Email Terverifikasi"
-                        : "Email Belum Diverifikasi"}
+                        ? "Terverifikasi"
+                        : "Belum Verifikasi"}
                     </span>
                   </div>
                 </div>
@@ -299,34 +313,40 @@ export default function ProfileComposite() {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none lg:col-span-2">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg sm:text-xl">
+          <Card className="border border-zinc-200 bg-white lg:col-span-2">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base sm:text-lg text-zinc-900">
                 Pengaturan Akun
               </CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
+              <CardDescription className="text-[11px] sm:text-xs text-zinc-500">
                 Kelola informasi profil dan keamanan akun Anda
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="profile" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 mb-4">
-                  <TabsTrigger value="profile" className="text-xs sm:text-sm">
+                  <TabsTrigger
+                    value="profile"
+                    className="text-[11px] sm:text-xs"
+                  >
                     Profil
                   </TabsTrigger>
-                  <TabsTrigger value="security" className="text-xs sm:text-sm">
+                  <TabsTrigger
+                    value="security"
+                    className="text-[11px] sm:text-xs"
+                  >
                     Keamanan
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="profile" className="space-y-4">
                   <form onSubmit={handleProfileUpdate} className="space-y-4">
-                    <div className="flex flex-col sm:flex-row items-center gap-4">
-                      <Avatar className="h-14 w-14 sm:h-16 sm:w-16">
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                      <Avatar className="h-12 w-12 sm:h-14 sm:w-14">
                         <AvatarImage
                           src={avatarPreview || session.avatarUrl}
                           alt={session.name}
                         />
-                        <AvatarFallback className="bg-green-100 text-green-800">
+                        <AvatarFallback className="bg-emerald-50 text-emerald-700 text-sm">
                           {getInitials(session.name)}
                         </AvatarFallback>
                       </Avatar>
@@ -342,18 +362,22 @@ export default function ProfileComposite() {
                           type="button"
                           variant="outline"
                           size="sm"
+                          className="h-8 text-xs"
                           onClick={() => fileInputRef.current?.click()}
                         >
-                          <Camera className="w-4 h-4 mr-2" />
+                          <Camera className="w-3.5 h-3.5 mr-1.5" />
                           Ganti Foto
                         </Button>
-                        <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
+                        <p className="text-[10px] text-muted-foreground mt-1">
                           JPEG, PNG, GIF, WebP. Maks 5MB
                         </p>
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="name" className="text-xs sm:text-sm">
+                    <div className="space-y-1.5">
+                      <Label
+                        htmlFor="name"
+                        className="text-[11px] sm:text-xs text-zinc-700"
+                      >
                         Nama Lengkap
                       </Label>
                       <Input
@@ -366,23 +390,26 @@ export default function ProfileComposite() {
                             name: e.target.value,
                           })
                         }
-                        className="border text-sm"
+                        className="border text-xs h-9"
                       />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-xs sm:text-sm">
+                    <div className="space-y-1.5">
+                      <Label
+                        htmlFor="email"
+                        className="text-[11px] sm:text-xs text-zinc-700"
+                      >
                         Email
                       </Label>
                       <Input
                         id="email"
                         value={session.email}
                         disabled
-                        className="border bg-muted text-sm"
+                        className="border bg-muted text-xs h-9"
                       />
                     </div>
                     <Button
                       type="submit"
-                      className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-sm"
+                      className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-xs h-9"
                       disabled={isUpdating}
                     >
                       {isUpdating ? "Menyimpan..." : "Simpan Perubahan"}
@@ -391,10 +418,10 @@ export default function ProfileComposite() {
                 </TabsContent>
                 <TabsContent value="security" className="space-y-4">
                   <form onSubmit={handleProfileUpdate} className="space-y-4">
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label
                         htmlFor="currentPassword"
-                        className="text-xs sm:text-sm"
+                        className="text-[11px] sm:text-xs text-zinc-700"
                       >
                         Password Saat Ini
                       </Label>
@@ -410,7 +437,7 @@ export default function ProfileComposite() {
                               currentPassword: e.target.value,
                             })
                           }
-                          className="border pr-10 text-sm"
+                          className="border pr-10 text-xs h-9"
                         />
                         <button
                           type="button"
@@ -425,10 +452,10 @@ export default function ProfileComposite() {
                         </button>
                       </div>
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label
                         htmlFor="newPassword"
-                        className="text-xs sm:text-sm"
+                        className="text-[11px] sm:text-xs text-zinc-700"
                       >
                         Password Baru
                       </Label>
@@ -444,7 +471,7 @@ export default function ProfileComposite() {
                               newPassword: e.target.value,
                             })
                           }
-                          className="border pr-10 text-sm"
+                          className="border pr-10 text-xs h-9"
                         />
                         <button
                           type="button"
@@ -461,7 +488,7 @@ export default function ProfileComposite() {
                     </div>
                     <Button
                       type="submit"
-                      className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-sm"
+                      className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-xs h-9"
                       disabled={
                         isUpdating ||
                         !profileData.currentPassword ||
@@ -472,13 +499,13 @@ export default function ProfileComposite() {
                     </Button>
                   </form>
 
-                  <Separator className="my-6" />
+                  <Separator className="my-5" />
 
-                  <div className="space-y-4">
-                    <h3 className="text-base sm:text-lg font-medium text-red-600">
+                  <div className="space-y-3">
+                    <h3 className="text-sm sm:text-base font-medium text-red-600">
                       Zona Berbahaya
                     </h3>
-                    <p className="text-xs sm:text-sm text-muted-foreground">
+                    <p className="text-[11px] sm:text-xs text-muted-foreground">
                       Setelah Anda menghapus akun, tidak ada jalan kembali.
                       Harap pastikan.
                     </p>
@@ -489,20 +516,20 @@ export default function ProfileComposite() {
                       <DialogTrigger asChild>
                         <Button
                           variant="destructive"
-                          className="w-full sm:w-auto text-sm"
+                          className="w-full sm:w-auto text-xs h-9"
                         >
-                          <Trash2 className="w-4 h-4 mr-2" />
+                          <Trash2 className="w-3.5 h-3.5 mr-1.5" />
                           Hapus Akun
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="max-w-[90vw] sm:max-w-md">
                         <DialogHeader>
-                          <DialogTitle className="text-base sm:text-lg">
+                          <DialogTitle className="text-sm sm:text-base">
                             {deleteStep === 1
                               ? "Konfirmasi Hapus Akun"
                               : "Verifikasi OTP"}
                           </DialogTitle>
-                          <DialogDescription className="text-xs sm:text-sm">
+                          <DialogDescription className="text-[11px] sm:text-xs">
                             {deleteStep === 1
                               ? "Tindakan ini tidak dapat dibatalkan. Akun Anda akan dihapus secara permanen."
                               : "Masukkan kode OTP yang telah dikirim ke email Anda."}
