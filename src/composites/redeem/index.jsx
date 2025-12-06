@@ -13,6 +13,7 @@ import { useSession } from "@/hooks/use-auth";
 import { useDebounce } from "@/hooks/use-debounce";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { SparklesText } from "@/components/ui/sparkles-text";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -270,9 +271,13 @@ export default function RedeemComposite() {
               <div className="h-10 w-10 rounded-xl bg-emerald-600 flex items-center justify-center">
                 <Gift className="h-5 w-5 text-white" />
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-zinc-900">
+              <SparklesText
+                colors={{ first: "#10b981", second: "#14b8a6" }}
+                className="text-2xl md:text-3xl font-bold"
+                sparklesCount={8}
+              >
                 Tukar Poin
-              </h1>
+              </SparklesText>
             </div>
             <p className="text-zinc-500 ml-13">
               Tukarkan poin kamu dengan voucher menarik dari UMKM lokal
