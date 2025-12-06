@@ -20,8 +20,10 @@ httpClient.interceptors.request.use(
 
     const token = getCookie("token");
 
-    if (!token && typeof window !== "undefined") {
-      window.location.href = "/auth";
+    if (!token) {
+      if (typeof window !== "undefined") {
+        window.location.href = "/auth";
+      }
       return Promise.reject(new Error("No authentication token"));
     }
 

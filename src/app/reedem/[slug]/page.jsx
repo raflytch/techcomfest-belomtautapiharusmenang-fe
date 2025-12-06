@@ -5,6 +5,8 @@ export const metadata = {
   description: "Detail dan penukaran voucher",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function VoucherDetailPage({ params }) {
   const { slug } = await params;
   return <VoucherDetailComposite slug={slug} />;

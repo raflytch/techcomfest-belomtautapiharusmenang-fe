@@ -5,6 +5,8 @@ export const metadata = {
   description: "Tukarkan poin dengan voucher menarik dari UMKM lokal",
 };
 
+export const dynamic = "force-dynamic";
+
 export default function RedeemPage() {
   return <RedeemComposite />;
 }

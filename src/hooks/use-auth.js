@@ -62,21 +62,23 @@ export const useVerifyOtp = () => {
       toast.success("Verifikasi berhasil!");
 
       // Use window.location for full page reload to ensure session is refreshed
-      switch (user.role) {
-        case "WARGA":
-          window.location.href = "/";
-          break;
-        case "UMKM":
-          window.location.href = "/dashboard/umkm";
-          break;
-        case "DLH":
-          window.location.href = "/dashboard/dinas";
-          break;
-        case "ADMIN":
-          window.location.href = "/dashboard/admin";
-          break;
-        default:
-          window.location.href = "/";
+      if (typeof window !== "undefined") {
+        switch (user.role) {
+          case "WARGA":
+            window.location.href = "/";
+            break;
+          case "UMKM":
+            window.location.href = "/dashboard/umkm";
+            break;
+          case "DLH":
+            window.location.href = "/dashboard/dinas";
+            break;
+          case "ADMIN":
+            window.location.href = "/dashboard/admin";
+            break;
+          default:
+            window.location.href = "/";
+        }
       }
     },
     onError: (error) => {
@@ -116,21 +118,23 @@ export const useLogin = () => {
       toast.success("Login berhasil!");
 
       // Use window.location for full page reload to ensure session is refreshed
-      switch (user.role) {
-        case "WARGA":
-          window.location.href = "/";
-          break;
-        case "UMKM":
-          window.location.href = "/dashboard/umkm";
-          break;
-        case "DLH":
-          window.location.href = "/dashboard/dinas";
-          break;
-        case "ADMIN":
-          window.location.href = "/dashboard/admin";
-          break;
-        default:
-          window.location.href = "/";
+      if (typeof window !== "undefined") {
+        switch (user.role) {
+          case "WARGA":
+            window.location.href = "/";
+            break;
+          case "UMKM":
+            window.location.href = "/dashboard/umkm";
+            break;
+          case "DLH":
+            window.location.href = "/dashboard/dinas";
+            break;
+          case "ADMIN":
+            window.location.href = "/dashboard/admin";
+            break;
+          default:
+            window.location.href = "/";
+        }
       }
     },
     onError: (error) => {
