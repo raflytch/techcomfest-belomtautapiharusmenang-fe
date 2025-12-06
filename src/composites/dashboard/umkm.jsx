@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Link from "next/link";
 import { Store, Ticket, ArrowRight, TrendingUp, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -63,8 +64,13 @@ export default function UmkmDashboardComposite() {
     return "Selamat Malam";
   };
 
+  useEffect(() => {
+    if (!isLoading && (!session || session.role !== "UMKM")) {
+      router.push("/");
+    }
+  }, [isLoading, session, router]);
+
   if (!isLoading && (!session || session.role !== "UMKM")) {
-    router.push("/");
     return null;
   }
 

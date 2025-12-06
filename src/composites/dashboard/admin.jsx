@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -110,8 +110,13 @@ export default function AdminDashboardComposite() {
     return <FullscreenLoader text="Memuat dashboard..." />;
   }
 
+  useEffect(() => {
+    if (!session || session.role !== "ADMIN") {
+      router.push("/");
+    }
+  }, [session, router]);
+
   if (!session || session.role !== "ADMIN") {
-    router.push("/");
     return null;
   }
 

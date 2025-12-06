@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -244,8 +244,13 @@ export default function UmkmVoucherComposite() {
     );
   }
 
+  useEffect(() => {
+    if (!isSessionLoading && (!session || session.role !== "UMKM")) {
+      router.push("/");
+    }
+  }, [isSessionLoading, session, router]);
+
   if (!isSessionLoading && (!session || session.role !== "UMKM")) {
-    router.push("/");
     return null;
   }
 

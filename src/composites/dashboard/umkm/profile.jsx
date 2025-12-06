@@ -98,8 +98,13 @@ export default function UmkmProfileComposite() {
     return <FullscreenLoader text="Menyimpan perubahan..." />;
   }
 
+  useEffect(() => {
+    if (!isLoading && (!session || session.role !== "UMKM")) {
+      router.push("/");
+    }
+  }, [isLoading, session, router]);
+
   if (!isLoading && (!session || session.role !== "UMKM")) {
-    router.push("/");
     return null;
   }
 
