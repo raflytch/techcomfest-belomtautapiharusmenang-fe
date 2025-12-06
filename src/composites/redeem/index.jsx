@@ -715,25 +715,19 @@ export default function RedeemComposite() {
       >
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center justify-center gap-2 text-emerald-600">
-              <CheckCircle className="h-6 w-6" />
+            <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-emerald-50 flex items-center justify-center">
+              <CheckCircle className="h-10 w-10 text-emerald-600" />
+            </div>
+            <AlertDialogTitle className="text-center text-xl">
               Voucher Berhasil Digunakan!
             </AlertDialogTitle>
-            <AlertDialogDescription asChild>
-              <div className="text-center space-y-3 pt-2">
-                <p>
-                  Voucher telah ditandai sebagai digunakan. Tunjukkan konfirmasi
-                  ini kepada UMKM untuk mendapatkan diskon.
-                </p>
-                <div className="h-16 w-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto">
-                  <CheckCircle className="h-8 w-8 text-emerald-600" />
-                </div>
-              </div>
+            <AlertDialogDescription className="text-center pt-2">
+              Tunjukkan konfirmasi ini kepada UMKM untuk mendapatkan diskon.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="sm:justify-center">
             <AlertDialogAction
-              className="bg-emerald-600 hover:bg-emerald-700 rounded-lg w-full sm:w-auto"
+              className="bg-emerald-600 hover:bg-emerald-700 rounded-lg w-full sm:w-auto px-8"
               onClick={() => setShowSuccessUseDialog(false)}
             >
               Selesai
