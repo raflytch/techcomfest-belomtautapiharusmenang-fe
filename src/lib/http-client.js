@@ -21,9 +21,12 @@ httpClient.interceptors.request.use(
     const token = getCookie("token");
 
     if (!token) {
+      // Only redirect on client-side
       if (typeof window !== "undefined") {
         window.location.href = "/auth";
+        return Promise.reject(new Error("No authentication token"));
       }
+      // On server-side, just reject without redirect
       return Promise.reject(new Error("No authentication token"));
     }
 
