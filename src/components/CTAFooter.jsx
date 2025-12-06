@@ -2,79 +2,80 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, ArrowRight, Sparkles } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Check, ArrowRight } from "lucide-react";
 
 export default function CTAFooter() {
-  const [isVisible, sectionRef] = (() => {
-    const [isVisible, setIsVisible] = useState(false);
-    const ref = useRef(null);
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => entry.isIntersecting && setIsVisible(true),
-        { threshold: 0.1 }
-      );
-      if (ref.current) observer.observe(ref.current);
-      return () => observer.disconnect();
-    }, []);
-    return [isVisible, ref];
-  })();
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setIsVisible(true),
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const benefits = [
+    "Gratis untuk warga",
+    "Verifikasi AI instan",
+    "Reward nyata",
+  ];
 
   return (
     <>
-      <section
-        ref={sectionRef}
-        className="py-20 bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600"
-      >
-        <div className="container mx-auto px-4">
+      {/* CTA Section */}
+      <section ref={sectionRef} className="py-16 md:py-24 bg-neutral-900">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className={`max-w-4xl mx-auto text-center transition-all duration-700 ${
+            className={`max-w-3xl mx-auto text-center transition-all duration-500 ${
               isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
             }`}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white mb-4">
               Siap Mengubah Aksi Hijau Jadi Impact Nyata?
             </h2>
-            <p className="text-lg md:text-xl text-green-50 mb-10">
+            <p className="text-neutral-400 mb-8 max-w-xl mx-auto">
               Bergabunglah dengan ribuan warga yang telah membuat perbedaan
               untuk lingkungan
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
               <Button
                 size="lg"
-                className="bg-white text-green-700 hover:bg-green-50 px-8 py-6 text-lg font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 h-12 text-base font-medium"
               >
                 Daftar Sekarang
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button
-                size="lg"
                 variant="outline"
-                className="border-2 border-white text-white bg-white/10 px-8 py-6 text-lg font-semibold hover:scale-105 transition-transform duration-300"
+                size="lg"
+                className="border-neutral-700 text-black hover:bg-neutral-800 hover:text-white px-6 h-12 text-base font-medium"
               >
                 Hubungi Kami
               </Button>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-8 text-white">
-              {[
-                "Gratis untuk warga",
-                "Verifikasi AI instan",
-                "Reward nyata",
-              ].map((text, index) => (
+            <div className="flex flex-wrap justify-center gap-6">
+              {benefits.map((text, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-2 transition-all duration-500 ${
+                  className={`flex items-center gap-2 text-neutral-400 transition-all duration-500 ${
                     isVisible
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-4"
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-4"
                   }`}
-                  style={{ transitionDelay: `${index * 150}ms` }}
+                  style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <Check className="w-5 h-5" />
-                  <span className="text-sm md:text-base">{text}</span>
+                  <div className="w-5 h-5 rounded-full bg-emerald-600/20 flex items-center justify-center">
+                    <Check className="w-3 h-3 text-emerald-500" />
+                  </div>
+                  <span className="text-sm">{text}</span>
                 </div>
               ))}
             </div>
@@ -82,12 +83,27 @@ export default function CTAFooter() {
         </div>
       </section>
 
-      <footer className="bg-gray-900 py-5">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center items-center">
-            <p className="text-sm text-gray-300">
+      {/* Footer */}
+      <footer className="bg-neutral-950 border-t border-neutral-800">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-neutral-500">
               © 2024 Sirkula. All rights reserved.
             </p>
+            <div className="flex items-center gap-6">
+              <a
+                href="#"
+                className="text-sm text-neutral-500 hover:text-neutral-300 transition-colors"
+              >
+                Privacy Policy
+              </a>
+              <a
+                href="#"
+                className="text-sm text-neutral-500 hover:text-neutral-300 transition-colors"
+              >
+                Terms of Service
+              </a>
+            </div>
           </div>
         </div>
       </footer>

@@ -1,113 +1,88 @@
-import { Sparkles, ArrowRight, Play } from "lucide-react";
+"use client";
+
+import { ArrowRight, Play } from "lucide-react";
 import { Button } from "./ui/button";
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { useCountUp } from "@/hooks/useCountsUp";
 import { Badge } from "./ui/badge";
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const HeroSection = () => {
   const [isVisible, heroRef] = useScrollAnimation();
-  const [statsCount1, countRef1] = useCountUp(15847, 2000);
-  const [statsCount2, countRef2] = useCountUp(2341, 2000);
-  const [statsCount3, countRef3] = useCountUp(8, 1000, 0);
 
   return (
-    <div className="w-full px-4 py-8 h-full bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
-      {/* Header */}
+    <section className="w-full relative -mt-16 min-h-screen">
+      {/* Background Image */}
       <div
-        ref={heroRef}
-        className={`flex justify-between items-center mb-5 transition-all duration-700  ${
-          isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-        }`}
-      >
-        <Badge className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-sm animate-pulse">
-          <Sparkles className="w-4 h-4 mr-2" />
-          AI-Powered Sustainability Platform
-        </Badge>
-      </div>
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/images/trash.jpg')" }}
+      />
+      {/* Dark Overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
 
-      <div className="grid lg:grid-cols-2 gap-12 items-start">
-        {/* Left Content */}
-        <div className="space-y-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-14 relative z-10">
+        <div ref={heroRef} className="max-w-4xl mx-auto text-center space-y-8">
+          {/* Badge */}
           <div
-            className={`transition-all duration-700 delay-100 ${
-              isVisible
-                ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-8"
-            }`}
-          >
-            <h1 className="text-5xl font-bold text-gray-900 mb-4">
-              Sense Every Action,
-            </h1>
-            <h1 className="text-5xl font-bold text-green-600 mb-6">
-              Reward Every Impact
-            </h1>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              Ubah setiap aksi hijau Anda menjadi data dampak nyata. Pilah
-              sampah, tanam pohon, konsumsi produk ramah lingkungan—semua
-              terverifikasi AI dan mendapat reward!
-            </p>
-          </div>
-
-          {/* Stats with counter animation */}
-          <div
-            className={`grid grid-cols-3 gap-8 transition-all duration-700 delay-300 ${
+            className={`transition-all duration-500 ${
               isVisible
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
+                : "opacity-0 -translate-y-4"
             }`}
           >
-            <div
-              ref={countRef1}
-              className="hover:scale-110 transition-transform duration-300"
+            <Badge
+              variant="outline"
+              className="px-4 py-1.5 text-sm font-medium border-white/30 text-white bg-white/10 backdrop-blur-sm"
             >
-              <div className="text-4xl font-bold text-green-600 mb-2">
-                {statsCount1.toLocaleString()}
-              </div>
-              <div className="text-sm text-gray-600">Aksi Hijau</div>
-            </div>
-            <div
-              ref={countRef2}
-              className="hover:scale-110 transition-transform duration-300"
-            >
-              <div className="text-4xl font-bold text-green-600 mb-2">
-                {statsCount2.toLocaleString()}
-              </div>
-              <div className="text-sm text-gray-600">Pengguna Aktif</div>
-            </div>
-            <div
-              ref={countRef3}
-              className="hover:scale-110 transition-transform duration-300"
-            >
-              <div className="text-4xl font-bold text-green-600 mb-2">
-                {Number(statsCount3).toFixed(1)} Ton
-              </div>
-              <div className="text-sm text-gray-600">Sampah Terpilah</div>
-            </div>
+              AI-Powered Sustainability Platform
+            </Badge>
+          </div>
+
+          {/* Headline */}
+          <div
+            className={`space-y-4 transition-all duration-500 delay-100 ${
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-4"
+            }`}
+          >
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white tracking-tight leading-tight drop-shadow-lg">
+              Sense Every Action,
+              <br />
+              <span className="text-[#FFC50F]">Reward Every Impact</span>
+            </h1>
+            <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto leading-relaxed drop-shadow">
+              Ubah setiap aksi hijau Anda menjadi data dampak nyata. Pilah
+              sampah, tanam pohon, konsumsi produk ramah lingkungan—semua
+              terverifikasi AI dan mendapat reward.
+            </p>
           </div>
 
           {/* CTA Buttons */}
           <div
-            className={`flex gap-4 transition-all duration-700 delay-500 ${
+            className={`flex flex-col sm:flex-row gap-3 justify-center transition-all duration-500 delay-200 lg:mt-12 ${
               isVisible
                 ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
+                : "opacity-0 translate-y-4"
             }`}
           >
-            <Button className="bg-green-600 hover:bg-green-700 text-white px-6 py-6 text-lg hover:scale-105 transition-transform duration-300">
+            <Button
+              size="lg"
+              className="bg-[#63A361] hover:bg-[#63A361] hover:opacity-80 text-white px-6 h-12 text-base font-medium shadow-lg"
+            >
               Mulai Aksi Hijau
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
             <Button
               variant="outline"
-              className="px-6 py-6 text-lg bg-white hover:scale-105 transition-transform duration-300"
+              size="lg"
+              className="border-white/40 text-white bg-transparent hover:bg-white/10 backdrop-blur-sm px-6 h-12 text-base font-medium"
             >
-              <Play className="w-5 h-5 mr-2" />
+              <Play className="w-4 h-4 mr-2" />
               Lihat Demo
             </Button>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

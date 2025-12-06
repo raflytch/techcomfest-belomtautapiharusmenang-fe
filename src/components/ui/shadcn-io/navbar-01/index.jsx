@@ -90,6 +90,7 @@ export const Navbar01 = React.forwardRef(
     const [isMobile, setIsMobile] = useState(false);
     const [isPopoverOpen, setIsPopoverOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const containerRef = useRef(null);
     const router = useRouter();
     const pathname = usePathname();
@@ -100,6 +101,16 @@ export const Navbar01 = React.forwardRef(
 
     useEffect(() => {
       setMounted(true);
+    }, []);
+
+    // Scroll listener for navbar background
+    useEffect(() => {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 10);
+      };
+      handleScroll();
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     const getInitials = (name) => {
@@ -534,5 +545,3 @@ export const Navbar01 = React.forwardRef(
 );
 
 Navbar01.displayName = "Navbar01";
-
-export { Logo, HamburgerIcon };

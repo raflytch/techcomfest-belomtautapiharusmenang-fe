@@ -9,12 +9,20 @@ import HeroSection from "@/components/HeroSection";
 
 export default function HomeComposite() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <HeroSection />
-      <ProblemsSection id="problemsSection" />
-      <FeaturesSection id="featuresSection" />
-      <HowItWorksSection id="howItWorksSection" />
-      <CTAFooter />
+      <div className="border-t border-neutral-100">
+        <ProblemsSection id="problemsSection" />
+      </div>
+      <div className="border-t border-neutral-100">
+        <FeaturesSection id="featuresSection" />
+      </div>
+      <div className="border-t border-neutral-100">
+        <HowItWorksSection id="howItWorksSection" />
+      </div>
+      <div className="border-t border-neutral-100">
+        <CTAFooter />
+      </div>
     </div>
   );
 }
