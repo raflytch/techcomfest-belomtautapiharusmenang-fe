@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { setCookie } from "cookies-next/client";
 import { useDispatch } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
@@ -12,6 +12,7 @@ import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function AuthCallbackComposite() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
@@ -22,7 +23,7 @@ export default function AuthCallbackComposite() {
 
       if (!token) {
         toast.error("Token tidak ditemukan");
-        window.location.href = "/auth";
+        router.push("/auth");
         return;
       }
 
@@ -42,27 +43,27 @@ export default function AuthCallbackComposite() {
 
         // Redirect based on needsProfileCompletion or role
         if (needsProfileCompletion === "true") {
-          window.location.href = "/profile";
+          router.push("/profile");
         } else {
           const role = sessionData.data?.role;
           switch (role) {
             case "UMKM":
-              window.location.href = "/dashboard/umkm";
+              router.push("/dashboard/umkm");
               break;
             case "DLH":
-              window.location.href = "/dashboard/dinas";
+              router.push("/dashboard/dinas");
               break;
             case "ADMIN":
-              window.location.href = "/dashboard/admin";
+              router.push("/dashboard/admin");
               break;
             default:
-              window.location.href = "/";
+              router.push("/");
           }
         }
       } catch (error) {
         console.error("Error processing callback:", error);
         toast.error("Gagal memproses login Google");
-        window.location.href = "/auth";
+        router.push("/auth");
       }
     };
 

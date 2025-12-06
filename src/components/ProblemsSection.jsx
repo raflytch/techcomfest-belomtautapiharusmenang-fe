@@ -3,7 +3,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { problems2 } from "@/lib/constanst";
 
@@ -38,13 +38,20 @@ export default function ProblemsSection({ id }) {
           {problems2.map((problem, index) => (
             <Card
               key={index}
-              className={`border border-neutral-200 bg-white hover:border-neutral-300 transition-all duration-300 ${
+              className={`relative border border-neutral-200 bg-white hover:border-neutral-300 transition-all duration-300 overflow-hidden ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
+              <BorderBeam
+                size={100}
+                duration={8}
+                delay={index * 2}
+                colorFrom="#f97316"
+                colorTo="#fb923c"
+              />
               <CardContent className="p-6">
                 <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center mb-4">
                   {React.cloneElement(problem.icon, {

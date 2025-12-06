@@ -3,6 +3,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { CheckCircle, Gift, BarChart3 } from "lucide-react";
 
@@ -59,13 +60,20 @@ export default function AboutUsSection({ id }) {
           {aboutUsItems.map((item, index) => (
             <Card
               key={index}
-              className={`border border-neutral-200 bg-white hover:border-neutral-300 transition-all duration-300 ${
+              className={`relative border border-neutral-200 bg-white hover:border-neutral-300 transition-all duration-300 overflow-hidden ${
                 isVisible
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-8"
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
+              <BorderBeam
+                size={100}
+                duration={8}
+                delay={index * 2}
+                colorFrom="#10b981"
+                colorTo="#eab308"
+              />
               <CardContent className="p-6">
                 <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center mb-4">
                   {React.cloneElement(item.icon, {

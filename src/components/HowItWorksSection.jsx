@@ -3,7 +3,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { BorderBeam } from "@/components/ui/border-beam";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { steps } from "@/lib/constanst";
 
@@ -57,7 +57,14 @@ export default function HowItWorksSection({ id }) {
                 </div>
 
                 {/* Step Card */}
-                <Card className="border border-neutral-200 bg-white h-full">
+                <Card className="relative border border-neutral-200 bg-white h-full overflow-hidden">
+                  <BorderBeam
+                    size={80}
+                    duration={7}
+                    delay={index * 1.5}
+                    colorFrom="#3b82f6"
+                    colorTo="#60a5fa"
+                  />
                   <CardContent className="p-5 text-center">
                     <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-blue-50 flex items-center justify-center">
                       {React.cloneElement(step.icon, {

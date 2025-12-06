@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,7 @@ import { useLogin } from "@/hooks/use-auth";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 export default function UserLoginComposite() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -121,7 +123,9 @@ export default function UserLoginComposite() {
             variant="outline"
             className="w-full border"
             onClick={() => {
-              window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/users/auth/google`;
+              router.push(
+                `${process.env.NEXT_PUBLIC_API_URL}/users/auth/google`
+              );
             }}
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
