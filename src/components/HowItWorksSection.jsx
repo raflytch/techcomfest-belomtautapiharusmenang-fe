@@ -11,7 +11,7 @@ export default function HowItWorksSection({ id }) {
   const [isVisible, sectionRef] = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 bg-neutral-50" id={id}>
+    <section ref={sectionRef} className="py-16 md:py-24" id={id}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div
@@ -25,7 +25,7 @@ export default function HowItWorksSection({ id }) {
           >
             Cara Kerja
           </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-neutral-900 mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-gradient-to-r from-emerald-600 via-emerald-500 to-yellow-500 bg-clip-text text-transparent mb-4">
             Mudah, Cepat, dan Terverifikasi
           </h2>
           <p className="text-neutral-500 max-w-2xl mx-auto">
@@ -59,9 +59,9 @@ export default function HowItWorksSection({ id }) {
                 {/* Step Card */}
                 <Card className="border border-neutral-200 bg-white h-full">
                   <CardContent className="p-5 text-center">
-                    <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-neutral-100 flex items-center justify-center">
+                    <div className="w-10 h-10 mx-auto mb-3 rounded-lg bg-blue-50 flex items-center justify-center">
                       {React.cloneElement(step.icon, {
-                        className: "w-5 h-5 text-neutral-700",
+                        className: "w-5 h-5 text-blue-600",
                       })}
                     </div>
                     <h3 className="text-base font-medium text-neutral-900 mb-2">

@@ -3,11 +3,31 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { features } from "@/lib/constanst";
+import { CheckCircle, Gift, BarChart3 } from "lucide-react";
 
-export default function FeaturesSection({ id }) {
+const aboutUsItems = [
+  {
+    icon: <CheckCircle />,
+    title: "Aksi Hijau Terverifikasi",
+    description:
+      "Setiap aksi pemilah sampah, penanaman pohon, dan konsumsi produk ramah lingkungan Anda diverifikasi menggunakan teknologi AI canggih untuk memastikan keaslian dan dampak nyata.",
+  },
+  {
+    icon: <Gift />,
+    title: "Reward ke UMKM",
+    description:
+      "Tukarkan poin Anda dengan voucher dan produk dari UMKM lokal. Setiap reward yang Anda dapatkan turut mendukung pertumbuhan ekonomi komunitas sekitar.",
+  },
+  {
+    icon: <BarChart3 />,
+    title: "Dampak Terukur",
+    description:
+      "Lihat dampak nyata dari setiap aksi hijau Anda melalui dashboard interaktif. Pantau kontribusi Anda terhadap pengurangan emisi karbon dan pelestarian lingkungan.",
+  },
+];
+
+export default function AboutUsSection({ id }) {
   const [isVisible, sectionRef] = useScrollAnimation();
 
   return (
@@ -23,20 +43,20 @@ export default function FeaturesSection({ id }) {
             variant="outline"
             className="mb-4 border-neutral-200 text-neutral-600 bg-neutral-50 px-3 py-1"
           >
-            Fitur Unggulan
+            Tentang Kami
           </Badge>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-gradient-to-r from-emerald-600 via-emerald-500 to-yellow-500 bg-clip-text text-transparent mb-4">
-            Teknologi AI untuk Aksi Hijau Anda
+            Apa itu Sirkula
           </h2>
           <p className="text-neutral-500 max-w-2xl mx-auto">
-            Platform berbasis AI yang memverifikasi, merekam, dan memberikan
-            reward untuk setiap aksi keberlanjutan Anda
+            Platform berbasis AI yang mengubah aksi hijau Anda menjadi dampak
+            terukur dan reward nyata
           </p>
         </div>
 
-        {/* Features Grid */}
+        {/* About Us Cards Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
-          {features.map((feature, index) => (
+          {aboutUsItems.map((item, index) => (
             <Card
               key={index}
               className={`border border-neutral-200 bg-white hover:border-neutral-300 transition-all duration-300 ${
@@ -47,28 +67,17 @@ export default function FeaturesSection({ id }) {
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               <CardContent className="p-6">
-                <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center mb-4">
-                  {React.cloneElement(feature.icon, {
-                    className: "w-5 h-5 text-teal-600",
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center mb-4">
+                  {React.cloneElement(item.icon, {
+                    className: "w-5 h-5 text-emerald-600",
                   })}
                 </div>
                 <h3 className="text-lg font-medium text-neutral-900 mb-2">
-                  {feature.title}
+                  {item.title}
                 </h3>
-                <p className="text-sm text-neutral-500 leading-relaxed mb-4">
-                  {feature.description}
+                <p className="text-sm text-neutral-500 leading-relaxed">
+                  {item.description}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {feature.tags.map((tag, tagIndex) => (
-                    <Badge
-                      key={tagIndex}
-                      variant="secondary"
-                      className="bg-neutral-100 text-neutral-600 font-normal text-xs"
-                    >
-                      {tag.label}
-                    </Badge>
-                  ))}
-                </div>
               </CardContent>
             </Card>
           ))}

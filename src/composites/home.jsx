@@ -6,23 +6,19 @@ import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import CTAFooter from "@/components/CTAFooter";
 import HeroSection from "@/components/HeroSection";
+import AboutUsSection from "@/components/AboutUsSection";
+import FAQ from "@/components/FAQ";
 
 export default function HomeComposite() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <HeroSection />
-      <div className="border-t border-neutral-100">
-        <ProblemsSection id="problemsSection" />
-      </div>
-      <div className="border-t border-neutral-100">
-        <FeaturesSection id="featuresSection" />
-      </div>
-      <div className="border-t border-neutral-100">
-        <HowItWorksSection id="howItWorksSection" />
-      </div>
-      <div className="border-t border-neutral-100">
-        <CTAFooter />
-      </div>
+      <AboutUsSection id="aboutUsSection" />
+      <ProblemsSection id="problemsSection" />
+      <HowItWorksSection id="howItWorksSection" />
+      <FeaturesSection id="featuresSection" />
+      <FAQ id="faqSection" />
+      <CTAFooter />
     </div>
   );
 }
