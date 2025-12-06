@@ -14,6 +14,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import { AuroraText } from "@/components/ui/aurora-text";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -276,7 +277,13 @@ export default function RedeemComposite() {
                 className="text-2xl md:text-3xl font-bold"
                 sparklesCount={8}
               >
-                Tukar Poin
+                <AuroraText
+                  colors={["#10b981", "#14b8a6", "#0ea5e9", "#10b981"]}
+                  className="text-2xl md:text-3xl font-bold"
+                  speed={1.5}
+                >
+                  Tukar Poin
+                </AuroraText>
               </SparklesText>
             </div>
             <p className="text-zinc-500 ml-13">

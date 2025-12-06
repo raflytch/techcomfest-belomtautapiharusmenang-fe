@@ -64,6 +64,7 @@ import {
 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import { AuroraText } from "@/components/ui/aurora-text";
 
 const Map = dynamic(() => import("@/components/map"), { ssr: false });
 
@@ -232,7 +233,13 @@ export default function SirkulaGreenActionComposite() {
                 className="text-2xl sm:text-3xl lg:text-4xl font-bold"
                 sparklesCount={8}
               >
-                Sirkula Green Action
+                <AuroraText
+                  colors={["#10b981", "#14b8a6", "#0ea5e9", "#10b981"]}
+                  className="text-2xl sm:text-3xl lg:text-4xl font-bold"
+                  speed={1.5}
+                >
+                  Sirkula Green Action
+                </AuroraText>
               </SparklesText>
             </div>
             <p className="text-sm sm:text-base text-muted-foreground">
@@ -314,7 +321,7 @@ export default function SirkulaGreenActionComposite() {
 
         {showForm && (
           <Card className="border-slate-200 shadow-lg">
-            <CardHeader className="bg-linear-to-r from-emerald-50 to-teal-50 border-b border-slate-200 py-2">
+            <CardHeader className="bg-linear-to-r border-b border-slate-200 py-2">
               <CardTitle className="text-xl sm:text-2xl flex items-center gap-2">
                 <Sparkles className="h-6 w-6 text-emerald-600" />
                 Kirim Aksi Hijau Baru

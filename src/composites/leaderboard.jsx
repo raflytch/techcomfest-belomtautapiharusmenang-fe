@@ -10,6 +10,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { SparklesText } from "@/components/ui/sparkles-text";
+import { AuroraText } from "@/components/ui/aurora-text";
 import { images } from "@/lib/constanst";
 import {
   Trophy,
@@ -267,7 +268,13 @@ const LeaderboardComposite = () => {
             className="text-2xl sm:text-3xl font-bold mb-2"
             sparklesCount={8}
           >
-            Leaderboard
+            <AuroraText
+              colors={["#10b981", "#14b8a6", "#0ea5e9", "#10b981"]}
+              className="text-2xl sm:text-3xl font-bold"
+              speed={1.5}
+            >
+              Leaderboard
+            </AuroraText>
           </SparklesText>
           <p className="text-zinc-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
             Kumpulkan poin dari setiap aksi hijau dan tukarkan dengan reward
