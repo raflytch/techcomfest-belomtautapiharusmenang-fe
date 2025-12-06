@@ -40,7 +40,7 @@ import { toast } from "sonner";
 // Skeleton for detail page
 function VoucherDetailSkeleton() {
   return (
-    <div className="min-h-screen bg-zinc-50/50">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         <Skeleton className="h-8 w-32 mb-6" />
         <div className="grid md:grid-cols-2 gap-6">
@@ -143,7 +143,7 @@ export default function VoucherDetailComposite({ slug }) {
 
   if (!voucher) {
     return (
-      <div className="min-h-screen bg-zinc-50/50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <Card className="border border-zinc-100 shadow-sm max-w-md">
           <CardContent className="py-12 text-center">
             <Gift className="h-12 w-12 text-zinc-300 mx-auto mb-3" />
@@ -169,7 +169,7 @@ export default function VoucherDetailComposite({ slug }) {
     <>
       {isRedeeming && <FullscreenLoader text="Memproses penukaran..." />}
 
-      <div className="min-h-screen bg-zinc-50/50">
+      <div className="min-h-screen">
         <div className="container mx-auto px-4 py-6 max-w-4xl">
           {/* Back Button */}
           <Button

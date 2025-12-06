@@ -262,12 +262,12 @@ export default function RedeemComposite() {
     <>
       {isUsingVoucher && <FullscreenLoader text="Menggunakan voucher..." />}
 
-      <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
+      <div className="min-h-screen">
         <div className="container mx-auto px-4 py-8 max-w-6xl">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-sm">
+              <div className="h-10 w-10 rounded-xl bg-emerald-600 flex items-center justify-center">
                 <Gift className="h-5 w-5 text-white" />
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-zinc-900">
@@ -290,10 +290,10 @@ export default function RedeemComposite() {
               </>
             ) : (
               <>
-                <Card className="border border-zinc-200/60 shadow-sm bg-white hover:shadow-md transition-all duration-200">
+                <Card className="border border-zinc-200 bg-white hover:border-emerald-200 transition-colors">
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center shadow-sm">
-                      <Coins className="h-6 w-6 text-white" />
+                    <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center">
+                      <Coins className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500 font-medium">
@@ -306,10 +306,10 @@ export default function RedeemComposite() {
                   </CardContent>
                 </Card>
 
-                <Card className="border border-zinc-200/60 shadow-sm bg-white hover:shadow-md transition-all duration-200">
+                <Card className="border border-zinc-200 bg-white hover:border-emerald-200 transition-colors">
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-sm">
-                      <Ticket className="h-6 w-6 text-white" />
+                    <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center">
+                      <Ticket className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500 font-medium">
@@ -322,10 +322,10 @@ export default function RedeemComposite() {
                   </CardContent>
                 </Card>
 
-                <Card className="border border-zinc-200/60 shadow-sm bg-white hover:shadow-md transition-all duration-200">
+                <Card className="border border-zinc-200 bg-white hover:border-emerald-200 transition-colors">
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-sm">
-                      <Timer className="h-6 w-6 text-white" />
+                    <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center">
+                      <Timer className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500 font-medium">
@@ -338,10 +338,10 @@ export default function RedeemComposite() {
                   </CardContent>
                 </Card>
 
-                <Card className="border border-zinc-200/60 shadow-sm bg-white hover:shadow-md transition-all duration-200">
+                <Card className="border border-zinc-200 bg-white hover:border-emerald-200 transition-colors">
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center shadow-sm">
-                      <CheckCircle className="h-6 w-6 text-white" />
+                    <div className="h-12 w-12 rounded-xl bg-emerald-50 flex items-center justify-center">
+                      <CheckCircle className="h-6 w-6 text-emerald-600" />
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500 font-medium">
@@ -390,7 +390,7 @@ export default function RedeemComposite() {
                     placeholder="Cari voucher berdasarkan nama atau UMKM..."
                     value={voucherSearch}
                     onChange={(e) => setVoucherSearch(e.target.value)}
-                    className="pl-12 pr-12 h-12 bg-white border-zinc-200 focus:border-green-500 focus:ring-green-500/20 rounded-xl w-full text-base"
+                    className="pl-12 pr-12 h-12 bg-white border-zinc-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl w-full text-base"
                   />
                   {voucherSearch && (
                     <button
@@ -433,7 +433,7 @@ export default function RedeemComposite() {
                     {vouchers.map((voucher) => (
                       <Card
                         key={voucher.id}
-                        className="overflow-hidden border border-zinc-200/60 shadow-sm bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
+                        className="overflow-hidden border border-zinc-200 bg-white hover:border-emerald-200 hover:shadow-sm transition-all group"
                       >
                         <div className="p-3 pb-0">
                           <div className="relative h-44 bg-zinc-100 overflow-hidden rounded-xl">
@@ -443,15 +443,7 @@ export default function RedeemComposite() {
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-500"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                            <Badge
-                              className={cn(
-                                "absolute top-3 right-3 px-3 py-1 font-semibold shadow-sm",
-                                voucher.discountType === "PERCENTAGE"
-                                  ? "bg-green-500 hover:bg-green-500"
-                                  : "bg-blue-500 hover:bg-blue-500"
-                              )}
-                            >
+                            <Badge className="absolute top-3 right-3 px-3 py-1 font-semibold bg-emerald-600 hover:bg-emerald-600">
                               {getDiscountLabel(voucher)}
                             </Badge>
                           </div>
@@ -488,7 +480,7 @@ export default function RedeemComposite() {
                           </div>
 
                           <div className="flex items-center justify-between text-sm pt-1">
-                            <div className="flex items-center gap-1.5 text-green-600 font-semibold">
+                            <div className="flex items-center gap-1.5 text-emerald-600 font-semibold">
                               <Coins className="h-4 w-4" />
                               {voucher.pointsRequired} Poin
                             </div>
@@ -503,7 +495,7 @@ export default function RedeemComposite() {
 
                         <CardFooter className="p-4 pt-0">
                           <Button
-                            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg h-10 font-medium shadow-sm"
+                            className="w-full bg-emerald-600 hover:bg-emerald-700 rounded-lg h-10 font-medium"
                             onClick={() => router.push(`/reedem/${voucher.id}`)}
                           >
                             Lihat Detail
@@ -555,7 +547,7 @@ export default function RedeemComposite() {
                     {claims.map((claim) => (
                       <Card
                         key={claim.id}
-                        className="overflow-hidden border border-zinc-200/60 shadow-sm bg-white hover:shadow-md transition-all duration-200"
+                        className="overflow-hidden border border-zinc-200 bg-white hover:border-emerald-200 transition-colors"
                       >
                         <div className="flex flex-col sm:flex-row">
                           <div className="p-3 pb-0 sm:pb-3 sm:pr-0 shrink-0">
@@ -566,7 +558,6 @@ export default function RedeemComposite() {
                                 fill
                                 className="object-cover"
                               />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                             </div>
                           </div>
 
@@ -587,8 +578,8 @@ export default function RedeemComposite() {
                                 className={cn(
                                   "shrink-0 px-3 py-1 font-medium",
                                   claim.status === "PENDING"
-                                    ? "bg-amber-100 text-amber-700 hover:bg-amber-100"
-                                    : "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                                    ? "bg-amber-50 text-amber-700 hover:bg-amber-50"
+                                    : "bg-emerald-50 text-emerald-700 hover:bg-emerald-50"
                                 )}
                               >
                                 {claim.status === "PENDING"
@@ -644,7 +635,7 @@ export default function RedeemComposite() {
                               <div className="mt-4 pt-3 border-t border-zinc-100">
                                 <Button
                                   size="sm"
-                                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg font-medium shadow-sm"
+                                  className="bg-emerald-600 hover:bg-emerald-700 rounded-lg font-medium"
                                   onClick={() => handleUseVoucher(claim)}
                                 >
                                   <QrCode className="h-4 w-4 mr-1.5" />
@@ -671,7 +662,7 @@ export default function RedeemComposite() {
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <QrCode className="h-5 w-5 text-green-600" />
+              <QrCode className="h-5 w-5 text-emerald-600" />
               Gunakan Voucher
             </AlertDialogTitle>
             <AlertDialogDescription asChild>
@@ -708,7 +699,7 @@ export default function RedeemComposite() {
           <AlertDialogFooter>
             <AlertDialogCancel className="rounded-lg">Batal</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg"
+              className="bg-emerald-600 hover:bg-emerald-700 rounded-lg"
               onClick={confirmUseVoucher}
             >
               Ya, Gunakan Sekarang
@@ -724,7 +715,7 @@ export default function RedeemComposite() {
       >
         <AlertDialogContent className="max-w-md">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center justify-center gap-2 text-green-600">
+            <AlertDialogTitle className="flex items-center justify-center gap-2 text-emerald-600">
               <CheckCircle className="h-6 w-6" />
               Voucher Berhasil Digunakan!
             </AlertDialogTitle>
@@ -734,15 +725,15 @@ export default function RedeemComposite() {
                   Voucher telah ditandai sebagai digunakan. Tunjukkan konfirmasi
                   ini kepada UMKM untuk mendapatkan diskon.
                 </p>
-                <div className="h-16 w-16 rounded-2xl bg-green-100 flex items-center justify-center mx-auto">
-                  <CheckCircle className="h-8 w-8 text-green-600" />
+                <div className="h-16 w-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto">
+                  <CheckCircle className="h-8 w-8 text-emerald-600" />
                 </div>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="sm:justify-center">
             <AlertDialogAction
-              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg w-full sm:w-auto"
+              className="bg-emerald-600 hover:bg-emerald-700 rounded-lg w-full sm:w-auto"
               onClick={() => setShowSuccessUseDialog(false)}
             >
               Selesai
