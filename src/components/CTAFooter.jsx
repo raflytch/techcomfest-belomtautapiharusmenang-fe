@@ -27,7 +27,21 @@ export default function CTAFooter() {
   return (
     <>
       {/* CTA Section */}
-      <section ref={sectionRef} className="py-16 md:py-24 bg-neutral-900">
+      <section
+        ref={sectionRef}
+        className="py-16 md:py-24 bg-gray-900"
+        style={{
+          backgroundImage: `
+        radial-gradient(circle at 50% 50%, 
+          rgba(34, 197, 94, 0.18) 0%, 
+          rgba(34, 197, 94, 0.1) 25%, 
+          rgba(34, 197, 94, 0.04) 35%, 
+          transparent 50%
+        )
+      `,
+          backgroundSize: "100% 100%",
+        }}
+      >
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div
             className={`max-w-3xl mx-auto text-center transition-all duration-500 ${
@@ -36,10 +50,10 @@ export default function CTAFooter() {
                 : "opacity-0 translate-y-8"
             }`}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-linear-to-r from-yellow-600 via-yellow-500 to-emerald-500 bg-clip-text text-transparent mb-4">
               Siap Mengubah Aksi Hijau Jadi Impact Nyata?
             </h2>
-            <p className="text-neutral-400 mb-8 max-w-xl mx-auto">
+            <p className="text-neutral-500 mb-8 max-w-xl mx-auto">
               Bergabunglah dengan ribuan warga yang telah membuat perbedaan
               untuk lingkungan
             </p>
@@ -65,7 +79,7 @@ export default function CTAFooter() {
               {benefits.map((text, index) => (
                 <div
                   key={index}
-                  className={`flex items-center gap-2 text-neutral-400 transition-all duration-500 ${
+                  className={`flex items-center gap-2 text-neutral-500 transition-all duration-500 ${
                     isVisible
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-4"
@@ -85,21 +99,21 @@ export default function CTAFooter() {
 
       {/* Footer */}
       <footer className="bg-neutral-950 border-t border-neutral-800">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-neutral-400">
               © 2024 Sirkula. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <a
                 href="#"
-                className="text-sm text-neutral-500 hover:text-neutral-300 transition-colors"
+                className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
               >
                 Privacy Policy
               </a>
               <a
                 href="#"
-                className="text-sm text-neutral-500 hover:text-neutral-300 transition-colors"
+                className="text-sm text-neutral-400 hover:text-neutral-300 transition-colors"
               >
                 Terms of Service
               </a>

@@ -11,7 +11,7 @@ export default function ProblemsSection({ id }) {
   const [isVisible, sectionRef] = useScrollAnimation();
 
   return (
-    <section ref={sectionRef} className="py-16 md:py-24 bg-neutral-50" id={id}>
+    <section ref={sectionRef} className="py-16 md:py-24" id={id}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div
@@ -25,7 +25,7 @@ export default function ProblemsSection({ id }) {
           >
             Mengapa Sirkula?
           </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-neutral-900 mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold bg-gradient-to-r from-emerald-600 via-emerald-500 to-yellow-500 bg-clip-text text-transparent mb-4">
             Masalah yang Kami Selesaikan
           </h2>
           <p className="text-neutral-500 max-w-2xl mx-auto">
@@ -46,9 +46,9 @@ export default function ProblemsSection({ id }) {
               style={{ transitionDelay: `${index * 100}ms` }}
             >
               <CardContent className="p-6">
-                <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center mb-4">
+                <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center mb-4">
                   {React.cloneElement(problem.icon, {
-                    className: "w-5 h-5 text-neutral-700",
+                    className: "w-5 h-5 text-orange-600",
                   })}
                 </div>
                 <h3 className="text-lg font-medium text-neutral-900 mb-2">
