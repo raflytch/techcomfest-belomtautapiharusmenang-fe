@@ -587,7 +587,7 @@ export default function SirkulaGreenActionComposite() {
         )}
 
         <Card className="border-slate-200">
-          <CardHeader className="bg-slate-50 border-b border-slate-200">
+          <CardHeader className="border-b border-slate-200">
             <CardTitle className="text-xl sm:text-2xl">
               Aksi Hijau Saya
             </CardTitle>
