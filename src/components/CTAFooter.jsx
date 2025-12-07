@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Check, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function CTAFooter() {
   const [isVisible, setIsVisible] = useState(false);
@@ -59,13 +60,15 @@ export default function CTAFooter() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10">
-              <Button
-                size="lg"
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 h-12 text-base font-medium"
-              >
-                Daftar Sekarang
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
+              <Link href="/sign-up">
+                <Button
+                  size="lg"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 h-12 text-base font-medium w-full sm:w-auto"
+                >
+                  Daftar Sekarang
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
               <Button
                 variant="outline"
                 size="lg"

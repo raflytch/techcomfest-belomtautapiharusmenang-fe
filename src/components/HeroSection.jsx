@@ -64,7 +64,7 @@ const HeroSection = () => {
             >
               <Button
                 size="lg"
-                className="bg-white hover:bg-emerald-50 text-[#2d5a3d] px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium border shadow-sm w-full sm:w-auto"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-700/40 transition-all w-full sm:w-auto"
               >
                 Mulai Aksi Hijau
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -72,7 +72,7 @@ const HeroSection = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-black text-black bg-transparent hover:bg-white backdrop-blur-sm px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium w-full sm:w-auto"
+                className="border-2 border-emerald-600 text-emerald-700 bg-white hover:bg-emerald-50 px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium shadow-md hover:shadow-lg transition-all w-full sm:w-auto"
               >
                 <Play className="w-4 h-4 mr-2" />
                 Lihat Demo
