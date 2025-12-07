@@ -230,6 +230,12 @@ export default function UmkmVoucherComposite() {
 
   const isMutating = isCreating || isUpdating || isDeleting;
 
+  useEffect(() => {
+    if (!isSessionLoading && (!session || session.role !== "UMKM")) {
+      router.push("/");
+    }
+  }, [isSessionLoading, session, router]);
+
   if (isMutating) {
     return (
       <FullscreenLoader
@@ -243,12 +249,6 @@ export default function UmkmVoucherComposite() {
       />
     );
   }
-
-  useEffect(() => {
-    if (!isSessionLoading && (!session || session.role !== "UMKM")) {
-      router.push("/");
-    }
-  }, [isSessionLoading, session, router]);
 
   if (!isSessionLoading && (!session || session.role !== "UMKM")) {
     return null;

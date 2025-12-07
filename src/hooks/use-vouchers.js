@@ -92,9 +92,9 @@ export const useCreateVoucher = () => {
 
   return useMutation({
     mutationFn: voucherService.createVoucher,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-vouchers"] });
-      queryClient.invalidateQueries({ queryKey: ["voucher-stats"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["my-vouchers"] });
+      await queryClient.invalidateQueries({ queryKey: ["voucher-stats"] });
       toast.success("Voucher berhasil dibuat");
     },
     onError: (error) => {
@@ -108,10 +108,10 @@ export const useUpdateVoucher = () => {
 
   return useMutation({
     mutationFn: voucherService.updateVoucher,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-vouchers"] });
-      queryClient.invalidateQueries({ queryKey: ["voucher-stats"] });
-      queryClient.invalidateQueries({ queryKey: ["voucher"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["my-vouchers"] });
+      await queryClient.invalidateQueries({ queryKey: ["voucher-stats"] });
+      await queryClient.invalidateQueries({ queryKey: ["voucher"] });
       toast.success("Voucher berhasil diperbarui");
     },
     onError: (error) => {
@@ -125,9 +125,9 @@ export const useDeleteVoucher = () => {
 
   return useMutation({
     mutationFn: voucherService.deleteVoucher,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-vouchers"] });
-      queryClient.invalidateQueries({ queryKey: ["voucher-stats"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["my-vouchers"] });
+      await queryClient.invalidateQueries({ queryKey: ["voucher-stats"] });
       toast.success("Voucher berhasil dihapus");
     },
     onError: (error) => {

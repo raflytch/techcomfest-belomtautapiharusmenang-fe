@@ -155,7 +155,7 @@ export function AppSidebar() {
   const menuItems = getMenuItems();
 
   return (
-    <Sidebar>
+    <Sidebar suppressHydrationWarning>
       <SidebarHeader className="border-b">
         <Link href="/" className="flex items-center gap-3 px-2 py-3">
           <Image src={images.logo} alt="Sirkula Logo" className="w-8 h-8" />
@@ -167,7 +167,7 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu suppressHydrationWarning>
               {isLoading ? (
                 <>
                   <SidebarMenuSkeleton showIcon />
@@ -195,7 +195,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t">
+      <SidebarFooter className="border-t" suppressHydrationWarning>
         {isLoading ? (
           <div className="p-2">
             <SidebarMenuSkeleton showIcon />

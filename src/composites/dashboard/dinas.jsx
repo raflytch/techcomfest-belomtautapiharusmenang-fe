@@ -107,15 +107,15 @@ export default function DinasDashboardComposite() {
     setDetailDialogOpen(true);
   };
 
-  if (sessionLoading) {
-    return <FullscreenLoader text="Memuat dashboard..." />;
-  }
-
   useEffect(() => {
     if (!session || session.role !== "DLH") {
       router.push("/");
     }
   }, [session, router]);
+
+  if (sessionLoading) {
+    return <FullscreenLoader text="Memuat dashboard..." />;
+  }
 
   if (!session || session.role !== "DLH") {
     return null;

@@ -154,11 +154,14 @@ export const useSession = () => {
       } catch (error) {
         dispatch(setError(error.message));
         throw error;
+      } finally {
+        dispatch(setLoading(false));
       }
     },
     enabled: !!token,
-    retry: false,
+    retry: 1,
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 };
 
@@ -198,8 +201,8 @@ export const useUpdateUmkmProfile = () => {
 
   return useMutation({
     mutationFn: authService.updateUmkmProfile,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["session"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["session"] });
       toast.success("Profil UMKM berhasil diperbarui!");
     },
     onError: (error) => {

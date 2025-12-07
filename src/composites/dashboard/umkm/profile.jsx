@@ -90,19 +90,23 @@ export default function UmkmProfileComposite() {
     if (logoFile) data.logo = logoFile;
 
     if (Object.keys(data).length > 0) {
-      updateUmkmProfile(data);
+      updateUmkmProfile(data, {
+        onSuccess: () => {
+          setLogoFile(null);
+        },
+      });
     }
   };
-
-  if (isUpdating) {
-    return <FullscreenLoader text="Menyimpan perubahan..." />;
-  }
 
   useEffect(() => {
     if (!isLoading && (!session || session.role !== "UMKM")) {
       router.push("/");
     }
   }, [isLoading, session, router]);
+
+  if (isUpdating) {
+    return <FullscreenLoader text="Menyimpan perubahan..." />;
+  }
 
   if (!isLoading && (!session || session.role !== "UMKM")) {
     return null;

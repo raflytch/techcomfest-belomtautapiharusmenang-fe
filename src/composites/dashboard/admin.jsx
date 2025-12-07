@@ -106,15 +106,15 @@ export default function AdminDashboardComposite() {
     setDetailDialogOpen(true);
   };
 
-  if (sessionLoading) {
-    return <FullscreenLoader text="Memuat dashboard..." />;
-  }
-
   useEffect(() => {
     if (!session || session.role !== "ADMIN") {
       router.push("/");
     }
   }, [session, router]);
+
+  if (sessionLoading) {
+    return <FullscreenLoader text="Memuat dashboard..." />;
+  }
 
   if (!session || session.role !== "ADMIN") {
     return null;
