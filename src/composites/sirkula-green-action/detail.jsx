@@ -147,7 +147,7 @@ export default function GreenActionDetailComposite({ id }) {
           className="gap-2 w-fit hover:bg-slate-100"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Actions
+          Kembali ke Aksi
         </Button>
         <div className="flex flex-col sm:flex-row gap-2">
           {action.status === "REJECTED" && (
@@ -157,8 +157,8 @@ export default function GreenActionDetailComposite({ id }) {
               className="gap-2 border-amber-300 text-amber-700 hover:bg-amber-50 hover:border-amber-400"
             >
               <RefreshCw className="h-4 w-4" />
-              <span className="hidden sm:inline">Retry Verification</span>
-              <span className="sm:hidden">Retry</span>
+              <span className="hidden sm:inline">Coba Verifikasi Lagi</span>
+              <span className="sm:hidden">Coba Lagi</span>
             </Button>
           )}
           <AlertDialog>
@@ -168,24 +168,24 @@ export default function GreenActionDetailComposite({ id }) {
                 className="gap-2 bg-rose-600 hover:bg-rose-700"
               >
                 <Trash2 className="h-4 w-4" />
-                Delete
+                Hapus
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="max-w-md">
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>Apakah Anda yakin?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your green action and all associated data.
+                  Tindakan ini tidak dapat dibatalkan. Ini akan menghapus aksi
+                  hijau Anda secara permanen beserta semua data terkait.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>Batal</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={handleDelete}
                   className="bg-rose-600 hover:bg-rose-700"
                 >
-                  Delete
+                  Hapus
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -228,7 +228,7 @@ export default function GreenActionDetailComposite({ id }) {
             {action.mediaType === "IMAGE" ? (
               <img
                 src={action.mediaUrl}
-                alt="Action proof"
+                alt="Bukti aksi"
                 className="w-full h-auto max-h-[600px] object-contain bg-slate-50"
               />
             ) : (
@@ -245,7 +245,7 @@ export default function GreenActionDetailComposite({ id }) {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-medium text-slate-600">
-                    Points Earned
+                    Poin Didapat
                   </CardTitle>
                   <Award className="h-5 w-5 text-emerald-600" />
                 </div>
@@ -255,7 +255,7 @@ export default function GreenActionDetailComposite({ id }) {
                   <span className="text-3xl font-bold text-emerald-600">
                     {action.points}
                   </span>
-                  <span className="text-sm text-slate-500">pts</span>
+                  <span className="text-sm text-slate-500">poin</span>
                 </div>
               </CardContent>
             </Card>
@@ -263,7 +263,7 @@ export default function GreenActionDetailComposite({ id }) {
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-sm font-medium text-slate-600">
-                    AI Score
+                    Skor AI
                   </CardTitle>
                   <Sparkles className="h-5 w-5 text-blue-600" />
                 </div>
@@ -280,7 +280,7 @@ export default function GreenActionDetailComposite({ id }) {
             <Card className="border-slate-200 hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium text-slate-600">
-                  Category
+                  Kategori
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -306,7 +306,7 @@ export default function GreenActionDetailComposite({ id }) {
                 ) : (
                   <XCircle className="h-5 w-5 text-rose-600" />
                 )}
-                AI Feedback
+                Umpan Balik AI
               </AlertTitle>
               <AlertDescription className="mt-2 text-sm leading-relaxed">
                 {action.aiFeedback}
@@ -318,7 +318,7 @@ export default function GreenActionDetailComposite({ id }) {
             <div>
               <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-blue-600" />
-                Detected Items
+                Item Terdeteksi
               </h3>
               <div className="flex flex-wrap gap-2">
                 {JSON.parse(action.aiLabels).map((label, index) => (
@@ -338,7 +338,7 @@ export default function GreenActionDetailComposite({ id }) {
             <div>
               <h3 className="text-base font-semibold mb-3 flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-rose-600" />
-                Location
+                Lokasi
               </h3>
               <div className="rounded-lg overflow-hidden border-2 border-slate-200">
                 <Map
@@ -366,4 +366,3 @@ export default function GreenActionDetailComposite({ id }) {
     </div>
   );
 }
-

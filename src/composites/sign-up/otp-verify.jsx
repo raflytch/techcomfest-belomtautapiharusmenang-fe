@@ -20,6 +20,7 @@ import {
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useVerifyOtp, useResendOtp } from "@/hooks/use-auth";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 export default function OtpVerifyComposite() {
   const searchParams = useSearchParams();
@@ -62,7 +63,8 @@ export default function OtpVerifyComposite() {
 
   return (
     <AuthLayout>
-      <Card className="w-full max-w-md border shadow-none">
+      <Card className="w-full max-w-md border shadow-none relative overflow-hidden">
+        <BorderBeam size={250} duration={12} delay={9} />
         <CardHeader className="text-center">
           <Link
             href="/sign-up"

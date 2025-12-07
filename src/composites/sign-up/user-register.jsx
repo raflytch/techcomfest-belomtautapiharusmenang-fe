@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useRegisterUser } from "@/hooks/use-auth";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 export default function UserRegisterComposite() {
   const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +46,8 @@ export default function UserRegisterComposite() {
 
   return (
     <AuthLayout>
-      <Card className="w-full max-w-md border shadow-none mx-4 sm:mx-0">
+      <Card className="w-full max-w-md border shadow-none mx-4 sm:mx-0 relative overflow-hidden">
+        <BorderBeam size={250} duration={12} delay={9} />
         <CardHeader className="text-center px-4 sm:px-6">
           <Link
             href="/sign-up"

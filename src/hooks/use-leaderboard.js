@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import httpClient from "@/lib/http-client";
+import { leaderboardService } from "@/services/leaderboard.service";
 
 export const useLeaderboard = (page = 1, limit = 10) => {
   const [data, setData] = useState([]);
@@ -13,11 +13,14 @@ export const useLeaderboard = (page = 1, limit = 10) => {
         setLoading(true);
         setError(null);
 
-        const response = await httpClient.get("/leaderboard");
+        const response = await leaderboardService.getLeaderboard({
+          page,
+          limit,
+        });
 
-        if (response.data.statusCode === 200) {
-          setData(response.data.data);
-          setMeta(response.data.meta);
+        if (response.statusCode === 200) {
+          setData(response.data);
+          setMeta(response.meta);
         } else {
           setError("Failed to fetch leaderboard");
         }
@@ -47,10 +50,10 @@ export const useTopThree = () => {
         setLoading(true);
         setError(null);
 
-        const response = await httpClient.get("/leaderboard/top-three");
+        const response = await leaderboardService.getTopThree();
 
-        if (response.data.statusCode === 200) {
-          setData(response.data.data);
+        if (response.statusCode === 200) {
+          setData(response.data);
         } else {
           setError("Failed to fetch top three");
         }

@@ -11,18 +11,43 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import AuthLayout from "@/components/auth/AuthLayout";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 export default function AuthSelectComposite() {
   return (
     <AuthLayout>
-      <Card className="w-full max-w-md border shadow-none">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Selamat Datang</CardTitle>
+      <Card className="w-full max-w-[420px] sm:max-w-md mx-4 sm:mx-auto border shadow-none relative overflow-hidden">
+        <BorderBeam size={250} duration={12} delay={9} />
+        <CardHeader className="text-center p-5 sm:p-6 pb-4 sm:pb-4">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground hover:text-foreground mb-3 sm:mb-4 w-fit"
+          >
+            <svg
+              width="20"
+              height="20"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-5 h-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Kembali ke Beranda
+          </Link>
+          <CardTitle className="text-2xl sm:text-3xl font-bold">
+            Selamat Datang
+          </CardTitle>
           <CardDescription>
             Masuk ke akun Anda untuk melanjutkan
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 sm:space-y-4 p-5 sm:p-6 pt-0">
           <p className="text-center text-sm text-muted-foreground mb-4">
             Pilih jenis akun untuk masuk
           </p>

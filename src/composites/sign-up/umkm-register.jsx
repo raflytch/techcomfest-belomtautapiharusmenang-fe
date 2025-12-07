@@ -23,6 +23,7 @@ import {
 import AuthLayout from "@/components/auth/AuthLayout";
 import { useRegisterUmkm } from "@/hooks/use-auth";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
+import { BorderBeam } from "@/components/ui/border-beam";
 
 export default function UmkmRegisterComposite() {
   const [showPassword, setShowPassword] = useState(false);
@@ -59,7 +60,8 @@ export default function UmkmRegisterComposite() {
 
   return (
     <AuthLayout>
-      <Card className="w-full max-w-md border shadow-none max-h-[90vh] overflow-y-auto">
+      <Card className="w-full max-w-md border shadow-none max-h-[90vh] overflow-y-auto relative">
+        <BorderBeam size={250} duration={12} delay={9} />
         <CardHeader className="text-center">
           <Link
             href="/sign-up"
@@ -123,16 +125,38 @@ export default function UmkmRegisterComposite() {
                 value={formData.umkmCategory}
                 onValueChange={handleSelectChange}
               >
-                <SelectTrigger className="border">
+                <SelectTrigger className="border w-full">
                   <SelectValue placeholder="Pilih kategori usaha" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Makanan & Minuman">
-                    Makanan & Minuman
+                  <SelectItem value="Daur Ulang Sampah">
+                    Daur Ulang Sampah
                   </SelectItem>
-                  <SelectItem value="Retail/Toko">Retail/Toko</SelectItem>
-                  <SelectItem value="Jasa">Jasa</SelectItem>
-                  <SelectItem value="Manufaktur">Manufaktur</SelectItem>
+                  <SelectItem value="Produk Ramah Lingkungan">
+                    Produk Ramah Lingkungan
+                  </SelectItem>
+                  <SelectItem value="Makanan & Minuman Organik">
+                    Makanan & Minuman Organik
+                  </SelectItem>
+                  <SelectItem value="Kerajinan dari Bahan Daur Ulang">
+                    Kerajinan dari Bahan Daur Ulang
+                  </SelectItem>
+                  <SelectItem value="Fashion Berkelanjutan">
+                    Fashion Berkelanjutan
+                  </SelectItem>
+                  <SelectItem value="Bank Sampah">Bank Sampah</SelectItem>
+                  <SelectItem value="Kompos & Pupuk Organik">
+                    Kompos & Pupuk Organik
+                  </SelectItem>
+                  <SelectItem value="Green Energy & Teknologi">
+                    Green Energy & Teknologi
+                  </SelectItem>
+                  <SelectItem value="Eco-friendly Packaging">
+                    Eco-friendly Packaging
+                  </SelectItem>
+                  <SelectItem value="Zero Waste Store">
+                    Zero Waste Store
+                  </SelectItem>
                   <SelectItem value="Lainnya">Lainnya</SelectItem>
                 </SelectContent>
               </Select>

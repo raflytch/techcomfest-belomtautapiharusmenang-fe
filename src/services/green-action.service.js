@@ -2,7 +2,9 @@ import httpClient from "@/lib/http-client";
 
 export const greenActionService = {
   getCategories: async () => {
-    const response = await httpClient.get("/green-actions/categories");
+    const response = await httpClient.get("/green-actions/categories", {
+      skipAuth: true,
+    });
     return response.data;
   },
 

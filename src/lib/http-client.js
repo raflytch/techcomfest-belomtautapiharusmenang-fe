@@ -21,8 +21,18 @@ httpClient.interceptors.request.use(
     const token = getCookie("token");
 
     if (!token && typeof window !== "undefined") {
-      window.location.href = "/auth";
-      return Promise.reject(new Error("No authentication token"));
+      // Daftar path yang tidak memerlukan autentikasi
+      const publicPaths = ["/", "/auth", "/sign-up"];
+      const currentPath = window.location.pathname;
+      const isPublicPath = publicPaths.some(
+        (path) => currentPath === path || currentPath.startsWith(path + "/")
+      );
+
+      // Hanya redirect ke /auth jika bukan di halaman public
+      if (!isPublicPath) {
+        window.location.href = "/auth";
+        return Promise.reject(new Error("No authentication token"));
+      }
     }
 
     if (token) {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { useLeaderboard, useTopThree } from "@/hooks/useLeaderboard";
+import { useLeaderboard, useTopThree } from "@/hooks/use-leaderboard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
