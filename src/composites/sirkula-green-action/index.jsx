@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import dynamic from "next/dynamic";
@@ -80,6 +80,7 @@ export default function SirkulaGreenActionComposite() {
   const dispatch = useDispatch();
   const [showForm, setShowForm] = useState(false);
   const [showFileSizeDialog, setShowFileSizeDialog] = useState(false);
+  const [createdActionId, setCreatedActionId] = useState(null);
   const [formData, setFormData] = useState({
     category: "",
     subCategory: "",
@@ -97,6 +98,12 @@ export default function SirkulaGreenActionComposite() {
   const { data: actionsData, isLoading: actionsLoading } = useMyGreenActions();
   const { data: statsData, isLoading: statsLoading } = useMyGreenActionStats();
   const createMutation = useCreateGreenAction();
+
+  useEffect(() => {
+    if (createdActionId) {
+      router.push(`/sirkula-green-action/${createdActionId}`);
+    }
+  }, [createdActionId, router]);
 
   const handleLocationSelect = (location) => {
     setLocation(location);
@@ -141,7 +148,7 @@ export default function SirkulaGreenActionComposite() {
     submitData.append("media", formData.media);
 
     createMutation.mutate(submitData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setShowForm(false);
         setFormData({
           category: "",
@@ -155,6 +162,11 @@ export default function SirkulaGreenActionComposite() {
         setLocation(null);
         setMediaPreview(null);
         dispatch(resetGreenActionForm());
+
+        // Set created action ID untuk trigger redirect via useEffect
+        if (data?.data?.id) {
+          setCreatedActionId(data.data.id);
+        }
       },
     });
   };
