@@ -107,10 +107,10 @@ export default function AdminDashboardComposite() {
   };
 
   useEffect(() => {
-    if (!session || session.role !== "ADMIN") {
+    if (!sessionLoading && session && session.role !== "ADMIN") {
       router.push("/");
     }
-  }, [session, router]);
+  }, [sessionLoading, session, router]);
 
   if (sessionLoading) {
     return <FullscreenLoader text="Memuat dashboard..." />;
