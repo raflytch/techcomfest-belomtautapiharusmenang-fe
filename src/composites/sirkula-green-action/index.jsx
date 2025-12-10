@@ -85,9 +85,6 @@ export default function SirkulaGreenActionComposite() {
     category: "",
     subCategory: "",
     description: "",
-    locationName: "",
-    district: "",
-    city: "",
     media: null,
   });
   const [selectedLocation, setLocation] = useState(null);
@@ -470,57 +467,6 @@ export default function SirkulaGreenActionComposite() {
                     rows={3}
                     className="resize-none border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
                   />
-                </div>
-
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="locationName"
-                      className="text-sm font-medium"
-                    >
-                      Nama Lokasi
-                    </Label>
-                    <Input
-                      id="locationName"
-                      value={formData.locationName}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          locationName: e.target.value,
-                        })
-                      }
-                      placeholder="Contoh: Taman Kota"
-                      className="h-11 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="district" className="text-sm font-medium">
-                      Kecamatan/Kelurahan
-                    </Label>
-                    <Input
-                      id="district"
-                      value={formData.district}
-                      onChange={(e) =>
-                        setFormData({ ...formData, district: e.target.value })
-                      }
-                      placeholder="Contoh: Menteng"
-                      className="h-11 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
-                    />
-                  </div>
-                  <div className="space-y-2 sm:col-span-2 lg:col-span-1">
-                    <Label htmlFor="city" className="text-sm font-medium">
-                      Kota
-                    </Label>
-                    <Input
-                      id="city"
-                      value={formData.city}
-                      onChange={(e) =>
-                        setFormData({ ...formData, city: e.target.value })
-                      }
-                      placeholder="Contoh: Jakarta Pusat"
-                      className="h-11 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
-                    />
-                  </div>
                 </div>
 
                 <div className="space-y-2">

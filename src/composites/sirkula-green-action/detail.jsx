@@ -347,6 +347,7 @@ export default function GreenActionDetailComposite({ id }) {
                     lng: action.longitude,
                   }}
                   onLocationSelect={() => {}}
+                  readOnly={true}
                 />
               </div>
               {(action.district || action.city) && (

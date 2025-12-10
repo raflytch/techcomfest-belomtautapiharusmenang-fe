@@ -4,7 +4,6 @@ const initialState = {
   selectedLocation: null,
   selectedCategory: null,
   selectedSubCategory: null,
-  categories: null,
 };
 
 const greenActionSlice = createSlice({
@@ -20,9 +19,6 @@ const greenActionSlice = createSlice({
     setSelectedSubCategory: (state, action) => {
       state.selectedSubCategory = action.payload;
     },
-    setCategories: (state, action) => {
-      state.categories = action.payload;
-    },
     resetGreenActionForm: (state) => {
       state.selectedLocation = null;
       state.selectedCategory = null;
@@ -35,7 +31,6 @@ export const {
   setSelectedLocation,
   setSelectedCategory,
   setSelectedSubCategory,
-  setCategories,
   resetGreenActionForm,
 } = greenActionSlice.actions;
 
