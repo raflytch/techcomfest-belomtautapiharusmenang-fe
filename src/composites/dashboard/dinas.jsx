@@ -279,7 +279,7 @@ export default function DinasDashboardComposite() {
                   setStatusFilter(value === "all" ? "" : value)
                 }
               >
-                <SelectTrigger id="status" className="text-sm">
+                <SelectTrigger id="status" className="text-sm w-full">
                   <SelectValue placeholder="Semua Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -305,7 +305,7 @@ export default function DinasDashboardComposite() {
                   setCategoryFilter(value === "all" ? "" : value)
                 }
               >
-                <SelectTrigger id="category" className="text-sm">
+                <SelectTrigger id="category" className="text-sm w-full">
                   <SelectValue placeholder="Semua Kategori" />
                 </SelectTrigger>
                 <SelectContent>
