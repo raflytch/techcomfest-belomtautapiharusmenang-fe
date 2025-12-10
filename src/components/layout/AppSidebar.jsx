@@ -155,19 +155,30 @@ export function AppSidebar() {
   const menuItems = getMenuItems();
 
   return (
-    <Sidebar suppressHydrationWarning>
+    <Sidebar suppressHydrationWarning className="border-r">
       <SidebarHeader className="border-b">
-        <Link href="/" className="flex items-center gap-3 px-2 py-3">
-          <Image src={images.logo} alt="Sirkula Logo" className="w-8 h-8" />
-          <span className="font-semibold text-lg text-green-800">Sirkula</span>
+        <Link
+          href="/"
+          className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 sm:py-4"
+        >
+          <Image
+            src={images.logo}
+            alt="Sirkula Logo"
+            className="w-8 h-8 sm:w-9 sm:h-9 shrink-0"
+          />
+          <span className="font-semibold text-base sm:text-lg text-green-800">
+            Sirkula
+          </span>
         </Link>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="px-2 sm:px-3">
         <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs sm:text-sm px-2 sm:px-3 py-2">
+            Menu
+          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu suppressHydrationWarning>
+            <SidebarMenu suppressHydrationWarning className="space-y-1">
               {isLoading ? (
                 <>
                   <SidebarMenuSkeleton showIcon />
@@ -181,10 +192,14 @@ export function AppSidebar() {
                       asChild
                       isActive={pathname === item.url}
                       tooltip={item.title}
+                      className="h-10 sm:h-11 px-3 sm:px-4 text-sm sm:text-base"
                     >
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
+                      <Link
+                        href={item.url}
+                        className="flex items-center gap-2 sm:gap-3"
+                      >
+                        <item.icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+                        <span className="truncate">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -195,7 +210,10 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t" suppressHydrationWarning>
+      <SidebarFooter
+        className="border-t px-2 sm:px-3 py-2"
+        suppressHydrationWarning
+      >
         {isLoading ? (
           <div className="p-2">
             <SidebarMenuSkeleton showIcon />
@@ -207,9 +225,9 @@ export function AppSidebar() {
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton
                     size="lg"
-                    className="data-[state=open]:bg-sidebar-accent"
+                    className="data-[state=open]:bg-sidebar-accent h-auto py-2 sm:py-3 px-3 sm:px-4"
                   >
-                    <Avatar className="h-8 w-8">
+                    <Avatar className="h-9 w-9 sm:h-10 sm:w-10 shrink-0">
                       <AvatarImage
                         src={
                           session.role === "UMKM"
@@ -218,39 +236,41 @@ export function AppSidebar() {
                         }
                         alt={session.name}
                       />
-                      <AvatarFallback className="bg-green-100 text-green-800">
+                      <AvatarFallback className="bg-green-100 text-green-800 text-xs sm:text-sm">
                         {getInitials(session.name)}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex flex-col gap-0.5 leading-none">
-                      <span className="font-medium">{session.name}</span>
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                    <div className="flex flex-col gap-0.5 leading-none min-w-0 flex-1">
+                      <span className="font-medium text-sm sm:text-base truncate">
+                        {session.name}
+                      </span>
+                      <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1 truncate">
                         {getRoleIcon()}
-                        {getRoleLabel()}
+                        <span className="truncate">{getRoleLabel()}</span>
                       </span>
                     </div>
-                    <ChevronUp className="ml-auto" />
+                    <ChevronUp className="ml-auto w-4 h-4 shrink-0" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   side="top"
-                  className="w-[--radix-popper-anchor-width]"
+                  className="w-[--radix-popper-anchor-width] min-w-[200px]"
                 >
                   <DropdownMenuItem asChild>
                     <Link
                       href={`${getDashboardPath()}/profile`}
-                      className="cursor-pointer"
+                      className="cursor-pointer text-sm sm:text-base py-2"
                     >
-                      <User className="w-4 h-4 mr-2" />
-                      Profil Akun
+                      <User className="w-4 h-4 mr-2 shrink-0" />
+                      <span>Profil Akun</span>
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={logout}
-                    className="text-red-600 cursor-pointer"
+                    className="text-red-600 cursor-pointer text-sm sm:text-base py-2"
                   >
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Keluar
+                    <LogOut className="w-4 h-4 mr-2 shrink-0" />
+                    <span>Keluar</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

@@ -20,24 +20,26 @@ export default function ClientLayout({ children }) {
 
   if (isDashboard) {
     return (
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4 bg-white">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <span className="text-sm font-medium text-muted-foreground">
-              Dashboard
-            </span>
-          </header>
-          <main className="flex-1 bg-zinc-50">{children}</main>
-        </SidebarInset>
+      <SidebarProvider defaultOpen={false}>
+        <div className="flex min-h-screen w-full">
+          <AppSidebar />
+          <SidebarInset className="flex-1">
+            <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b bg-white px-4">
+              <SidebarTrigger className="-ml-1" />
+              <Separator orientation="vertical" className="mr-2 h-4" />
+              <span className="text-sm font-medium text-muted-foreground">
+                Dashboard
+              </span>
+            </header>
+            <main className="bg-zinc-50">{children}</main>
+          </SidebarInset>
+        </div>
       </SidebarProvider>
     );
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#fefcff] relative">
+    <div className="min-h-screen w-full bg-[#fefcff] relative overflow-x-hidden">
       {/* Dreamy Sky Pink Glow */}
       <div
         className="absolute inset-0 z-0"
