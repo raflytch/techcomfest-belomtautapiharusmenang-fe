@@ -41,4 +41,9 @@ export const greenActionService = {
     const response = await httpClient.post(`/green-actions/${id}/retry`);
     return response.data;
   },
+
+  getAllGreenActions: async (params = {}) => {
+    const response = await httpClient.get("/green-actions", { params });
+    return response.data;
+  },
 };

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getCookie } from "cookies-next/client";
 import {
   Users,
   ChevronLeft,
@@ -103,16 +102,6 @@ export default function AdminUsersComposite() {
       router.push("/");
     }
   }, [sessionLoading, session, router]);
-
-  // Debugging - log token, session, and data
-  useEffect(() => {
-    const token = getCookie("token");
-    console.log("🔑 Token exists:", !!token);
-    console.log("👤 Session:", session);
-    console.log("📊 Users data:", usersData);
-    console.log("❌ Users error:", usersError);
-    console.log("⏳ Users loading:", usersLoading);
-  }, [session, usersData, usersError, usersLoading]);
 
   const getInitials = (name) => {
     if (!name) return "U";

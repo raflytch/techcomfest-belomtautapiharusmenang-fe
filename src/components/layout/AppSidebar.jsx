@@ -60,11 +60,6 @@ const dinasMenuItems = [
     url: "/dashboard/dinas",
     icon: LayoutDashboard,
   },
-  {
-    title: "Profil",
-    url: "/dashboard/dinas/profile",
-    icon: User,
-  },
 ];
 
 const adminMenuItems = [
@@ -178,12 +173,18 @@ export function AppSidebar() {
             Menu
           </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu suppressHydrationWarning className="space-y-1">
+            <SidebarMenu className="space-y-1">
               {isLoading ? (
                 <>
-                  <SidebarMenuSkeleton showIcon />
-                  <SidebarMenuSkeleton showIcon />
-                  <SidebarMenuSkeleton showIcon />
+                  <SidebarMenuItem>
+                    <SidebarMenuSkeleton showIcon />
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuSkeleton showIcon />
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuSkeleton showIcon />
+                  </SidebarMenuItem>
                 </>
               ) : (
                 menuItems.map((item) => (
@@ -198,8 +199,8 @@ export function AppSidebar() {
                         href={item.url}
                         className="flex items-center gap-2 sm:gap-3"
                       >
-                        <item.icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                        <span className="truncate">{item.title}</span>
+                        <item.icon className="w-4 h-4 shrink-0" />
+                        <span className="truncate text-sm">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -241,10 +242,10 @@ export function AppSidebar() {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col gap-0.5 leading-none min-w-0 flex-1">
-                      <span className="font-medium text-sm sm:text-base truncate">
+                      <span className="font-medium text-sm truncate">
                         {session.name}
                       </span>
-                      <span className="text-[10px] sm:text-xs text-muted-foreground flex items-center gap-1 truncate">
+                      <span className="text-xs text-muted-foreground flex items-center gap-1 truncate">
                         {getRoleIcon()}
                         <span className="truncate">{getRoleLabel()}</span>
                       </span>
@@ -256,18 +257,20 @@ export function AppSidebar() {
                   side="top"
                   className="w-[--radix-popper-anchor-width] min-w-[200px]"
                 >
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`${getDashboardPath()}/profile`}
-                      className="cursor-pointer text-sm sm:text-base py-2"
-                    >
-                      <User className="w-4 h-4 mr-2 shrink-0" />
-                      <span>Profil Akun</span>
-                    </Link>
-                  </DropdownMenuItem>
+                  {session.role !== "ADMIN" && session.role !== "DLH" && (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href={`${getDashboardPath()}/profile`}
+                        className="cursor-pointer text-sm py-2"
+                      >
+                        <User className="w-4 h-4 mr-2 shrink-0" />
+                        <span>Profil Akun</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem
                     onClick={logout}
-                    className="text-red-600 cursor-pointer text-sm sm:text-base py-2"
+                    className="text-red-600 cursor-pointer text-sm py-2"
                   >
                     <LogOut className="w-4 h-4 mr-2 shrink-0" />
                     <span>Keluar</span>

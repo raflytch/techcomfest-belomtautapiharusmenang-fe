@@ -109,3 +109,10 @@ export const useRetryVerification = () => {
     },
   });
 };
+
+export const useGetAllGreenActions = (params = {}) => {
+  return useQuery({
+    queryKey: ["all-green-actions", params],
+    queryFn: () => greenActionService.getAllGreenActions(params),
+  });
+};
