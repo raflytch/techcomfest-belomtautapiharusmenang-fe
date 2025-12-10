@@ -27,13 +27,16 @@ import { useSession, useUpdateUmkmProfile } from "@/hooks/use-auth";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
 const UMKM_CATEGORIES = [
-  "Makanan & Minuman",
-  "Fashion & Pakaian",
-  "Kerajinan Tangan",
-  "Pertanian & Perkebunan",
-  "Kesehatan & Kecantikan",
-  "Jasa & Layanan",
-  "Teknologi",
+  "Daur Ulang Sampah",
+  "Produk Ramah Lingkungan",
+  "Makanan & Minuman Organik",
+  "Kerajinan dari Bahan Daur Ulang",
+  "Fashion Berkelanjutan",
+  "Bank Sampah",
+  "Kompos & Pupuk Organik",
+  "Green Energy & Teknologi",
+  "Eco-friendly Packaging",
+  "Zero Waste Store",
   "Lainnya",
 ];
 

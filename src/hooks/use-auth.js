@@ -262,3 +262,18 @@ export const useGetUserById = (id) => {
     enabled: !!id,
   });
 };
+
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: authService.deleteUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success("User berhasil dihapus!");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Gagal menghapus user");
+    },
+  });
+};
