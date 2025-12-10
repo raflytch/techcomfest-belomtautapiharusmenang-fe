@@ -137,11 +137,8 @@ export default function SirkulaGreenActionComposite() {
     submitData.append("category", formData.category);
     submitData.append("subCategory", formData.subCategory);
     submitData.append("description", formData.description);
-    submitData.append("locationName", formData.locationName);
     submitData.append("latitude", selectedLocation.lat);
     submitData.append("longitude", selectedLocation.lng);
-    submitData.append("district", formData.district);
-    submitData.append("city", formData.city);
     submitData.append("media", formData.media);
 
     createMutation.mutate(submitData, {
@@ -151,9 +148,6 @@ export default function SirkulaGreenActionComposite() {
           category: "",
           subCategory: "",
           description: "",
-          locationName: "",
-          district: "",
-          city: "",
           media: null,
         });
         setLocation(null);
