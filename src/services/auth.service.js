@@ -130,4 +130,9 @@ export const authService = {
     const response = await httpClient.get(`/users/${id}`);
     return response.data;
   },
+
+  deleteUser: async (id) => {
+    const response = await httpClient.delete(`/users/admin/${id}`);
+    return response.data;
+  },
 };
