@@ -15,13 +15,15 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-function LocationMarker({ position, setPosition }) {
+function LocationMarker({ position, setPosition, readOnly }) {
   const map = useMapEvents({
     click(e) {
-      setPosition({
-        lat: e.latlng.lat,
-        lng: e.latlng.lng,
-      });
+      if (!readOnly) {
+        setPosition({
+          lat: e.latlng.lat,
+          lng: e.latlng.lng,
+        });
+      }
     },
   });
 
@@ -34,7 +36,11 @@ function LocationMarker({ position, setPosition }) {
   return position ? <Marker position={[position.lat, position.lng]} /> : null;
 }
 
-export default function Map({ onLocationSelect, initialPosition }) {
+export default function Map({
+  onLocationSelect,
+  initialPosition,
+  readOnly = false,
+}) {
   const [position, setPosition] = useState(initialPosition || null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const mapRef = useRef(null);
@@ -76,27 +82,21 @@ export default function Map({ onLocationSelect, initialPosition }) {
 
   return (
     <div className="space-y-3">
-      <div className="flex gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleUseCurrentLocation}
-          disabled={isLoadingLocation}
-          className="flex items-center gap-2"
-        >
-          <Locate className="h-4 w-4" />
-          {isLoadingLocation ? "Getting location..." : "Use Current Location"}
-        </Button>
-        {position && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            <span>
-              {position.lat.toFixed(6)}, {position.lng.toFixed(6)}
-            </span>
-          </div>
-        )}
-      </div>
+      {!readOnly && (
+        <div className="flex gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleUseCurrentLocation}
+            disabled={isLoadingLocation}
+            className="flex items-center gap-2"
+          >
+            <Locate className="h-4 w-4" />
+            {isLoadingLocation ? "Getting location..." : "Use Current Location"}
+          </Button>
+        </div>
+      )}
       <div className="h-[400px] w-full rounded-lg overflow-hidden border relative z-0">
         <MapContainer
           center={defaultCenter}
@@ -109,7 +109,11 @@ export default function Map({ onLocationSelect, initialPosition }) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <LocationMarker position={position} setPosition={setPosition} />
+          <LocationMarker
+            position={position}
+            setPosition={setPosition}
+            readOnly={readOnly}
+          />
         </MapContainer>
       </div>
     </div>
