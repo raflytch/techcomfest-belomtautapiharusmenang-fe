@@ -15,8 +15,11 @@ import {
   Sparkles,
 } from "lucide-react";
 import logo from "../../public/images/logo-sirkula.png";
+import googleLogo from "../../public/images/google-logo.png";
+
 export const images = {
   logo,
+  googleLogo,
 };
 
 export const navigationLinks = [
