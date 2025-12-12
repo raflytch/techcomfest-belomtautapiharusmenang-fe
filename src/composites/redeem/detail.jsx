@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useGetVoucherById, useRedeemVoucher } from "@/hooks/use-vouchers";
 import { useSession } from "@/hooks/use-auth";
+import { images } from "@/lib/constanst";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -211,7 +212,7 @@ export default function VoucherDetailComposite({ slug }) {
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full overflow-hidden border border-zinc-200">
                   <Image
-                    src={voucher.umkm.logoUrl}
+                    src={voucher.umkm.logoUrl || images.logo.src}
                     alt={voucher.umkm.name}
                     width={40}
                     height={40}

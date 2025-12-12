@@ -166,7 +166,6 @@ export const useSession = () => {
 };
 
 export const useLogout = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
@@ -175,7 +174,8 @@ export const useLogout = () => {
     dispatch(clearUser());
     queryClient.clear();
     toast.success("Logout berhasil!");
-    router.push("/auth");
+    // Use window.location for full page reload to ensure auth page is clickable
+    window.location.href = "/auth";
   };
 
   return { logout };

@@ -11,6 +11,7 @@ import {
 } from "@/hooks/use-vouchers";
 import { useSession } from "@/hooks/use-auth";
 import { useDebounce } from "@/hooks/use-debounce";
+import { images } from "@/lib/constanst";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { SparklesText } from "@/components/ui/sparkles-text";
@@ -465,7 +466,7 @@ export default function RedeemComposite() {
                           <div className="flex items-center gap-2.5">
                             <div className="h-9 w-9 rounded-full overflow-hidden border-2 border-white shadow-sm">
                               <Image
-                                src={voucher.umkm.logoUrl}
+                                src={voucher.umkm.logoUrl || images.logo.src}
                                 alt={voucher.umkm.name}
                                 width={36}
                                 height={36}

@@ -519,7 +519,7 @@ export default function UmkmVoucherComposite() {
                   </div>
                 )}
 
-                <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0 pt-4 sm:pt-6">
+                <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-3 pt-4 sm:pt-6">
                   <Button
                     type="button"
                     variant="outline"

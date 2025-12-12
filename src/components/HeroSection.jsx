@@ -4,10 +4,16 @@ import { ArrowRight, Play } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 const HeroSection = () => {
   const [isVisible, heroRef] = useScrollAnimation();
+  const router = useRouter();
+
+  const handleMulaiAksiHijau = () => {
+    router.push("/sirkula-green-action");
+  };
 
   return (
     <section className="w-full relative -mt-16">
@@ -64,6 +70,7 @@ const HeroSection = () => {
             >
               <Button
                 size="lg"
+                onClick={handleMulaiAksiHijau}
                 className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-700/40 transition-all w-full sm:w-auto"
               >
                 Mulai Aksi Hijau

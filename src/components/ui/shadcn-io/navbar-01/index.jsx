@@ -5,6 +5,10 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState, useRef } from "react";
+import { deleteCookie } from "cookies-next/client";
+import { useDispatch } from "react-redux";
+import { clearUser } from "@/features/slices/user.slice";
+import { toast } from "sonner";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -26,7 +30,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { navigationLinks } from "@/lib/constanst";
 import { images } from "@/lib/constanst";
-import { useSession, useLogout } from "@/hooks/use-auth";
+import { useSession } from "@/hooks/use-auth";
 import {
   User,
   LogOut,
@@ -96,9 +100,9 @@ export const Navbar01 = React.forwardRef(
     const router = useRouter();
     const pathname = usePathname();
     const queryClient = useQueryClient();
+    const dispatch = useDispatch();
 
     const { data: session, isLoading, refetch } = useSession();
-    const { logout } = useLogout();
 
     useEffect(() => {
       setMounted(true);
@@ -259,6 +263,14 @@ export const Navbar01 = React.forwardRef(
       return false;
     };
 
+    const handleLogout = () => {
+      deleteCookie("token");
+      dispatch(clearUser());
+      queryClient.clear();
+      toast.success("Logout berhasil!");
+      router.push("/auth");
+    };
+
     return (
       <header
         ref={combinedRef}
@@ -287,37 +299,56 @@ export const Navbar01 = React.forwardRef(
                   className="w-64 p-3 bg-white/95 backdrop-blur-md border border-zinc-200/60 shadow-lg rounded-xl"
                 >
                   <nav className="space-y-1">
-                    {navigationLinks.map((link, index) => {
-                      const icon = getLinkIcon(link.label);
-                      return (
-                        <Link
-                          key={index}
-                          href={getLinkHref(link.href)}
-                          onClick={(e) => handleNavigation(e, link.href)}
-                          className={cn(
-                            "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
-                            isActiveLink(link.href)
-                              ? "bg-green-50 text-green-700"
-                              : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-                          )}
-                        >
-                          {icon && (
-                            <span
-                              className={cn(
-                                "p-1.5 rounded-md",
-                                isActiveLink(link.href)
-                                  ? "bg-green-100"
-                                  : "bg-zinc-100"
-                              )}
-                            >
-                              {icon}
-                            </span>
-                          )}
-                          <span>{link.label}</span>
-                          <ChevronRight className="h-4 w-4 ml-auto opacity-40" />
-                        </Link>
-                      );
-                    })}
+                    {session &&
+                    (session.role === "UMKM" ||
+                      session.role === "ADMIN" ||
+                      session.role === "DLH") ? (
+                      // For UMKM, ADMIN, and DLH - only show Dashboard
+                      <Link
+                        href={getDashboardLink()}
+                        onClick={() => setIsPopoverOpen(false)}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all bg-green-50 text-green-700"
+                      >
+                        <span className="p-1.5 rounded-md bg-green-100">
+                          <LayoutDashboard className="h-4 w-4" />
+                        </span>
+                        <span>Dashboard</span>
+                        <ChevronRight className="h-4 w-4 ml-auto opacity-40" />
+                      </Link>
+                    ) : (
+                      // For WARGA and not logged in - show all navigation links
+                      navigationLinks.map((link, index) => {
+                        const icon = getLinkIcon(link.label);
+                        return (
+                          <Link
+                            key={index}
+                            href={getLinkHref(link.href)}
+                            onClick={(e) => handleNavigation(e, link.href)}
+                            className={cn(
+                              "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                              isActiveLink(link.href)
+                                ? "bg-green-50 text-green-700"
+                                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                            )}
+                          >
+                            {icon && (
+                              <span
+                                className={cn(
+                                  "p-1.5 rounded-md",
+                                  isActiveLink(link.href)
+                                    ? "bg-green-100"
+                                    : "bg-zinc-100"
+                                )}
+                              >
+                                {icon}
+                              </span>
+                            )}
+                            <span>{link.label}</span>
+                            <ChevronRight className="h-4 w-4 ml-auto opacity-40" />
+                          </Link>
+                        );
+                      })
+                    )}
                   </nav>
 
                   {/* Mobile User Info */}
@@ -364,26 +395,43 @@ export const Navbar01 = React.forwardRef(
               {!isMobile && (
                 <NavigationMenu className="hidden lg:flex">
                   <NavigationMenuList className="gap-1">
-                    {navigationLinks.map((link, index) => {
-                      const icon = getLinkIcon(link.label);
-                      return (
-                        <NavigationMenuItem key={index}>
-                          <Link
-                            href={getLinkHref(link.href)}
-                            onClick={(e) => handleNavigation(e, link.href)}
-                            className={cn(
-                              "group inline-flex h-9 items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all",
-                              isActiveLink(link.href)
-                                ? "bg-green-50 text-green-700"
-                                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-                            )}
-                          >
-                            {icon}
-                            {link.label}
-                          </Link>
-                        </NavigationMenuItem>
-                      );
-                    })}
+                    {session &&
+                    (session.role === "UMKM" ||
+                      session.role === "ADMIN" ||
+                      session.role === "DLH") ? (
+                      // For UMKM, ADMIN, and DLH - only show Dashboard
+                      <NavigationMenuItem>
+                        <Link
+                          href={getDashboardLink()}
+                          className="group inline-flex h-9 items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all bg-green-50 text-green-700"
+                        >
+                          <LayoutDashboard className="h-4 w-4" />
+                          Dashboard
+                        </Link>
+                      </NavigationMenuItem>
+                    ) : (
+                      // For WARGA and not logged in - show all navigation links
+                      navigationLinks.map((link, index) => {
+                        const icon = getLinkIcon(link.label);
+                        return (
+                          <NavigationMenuItem key={index}>
+                            <Link
+                              href={getLinkHref(link.href)}
+                              onClick={(e) => handleNavigation(e, link.href)}
+                              className={cn(
+                                "group inline-flex h-9 items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all",
+                                isActiveLink(link.href)
+                                  ? "bg-green-50 text-green-700"
+                                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                              )}
+                            >
+                              {icon}
+                              {link.label}
+                            </Link>
+                          </NavigationMenuItem>
+                        );
+                      })
+                    )}
                   </NavigationMenuList>
                 </NavigationMenu>
               )}
@@ -454,55 +502,59 @@ export const Navbar01 = React.forwardRef(
                     </div>
                   </div>
 
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/profile"
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
-                    >
-                      <div className="h-8 w-8 rounded-md bg-zinc-100 flex items-center justify-center">
-                        <User className="h-4 w-4 text-zinc-600" />
-                      </div>
-                      <span className="font-medium">Profil</span>
-                    </Link>
-                  </DropdownMenuItem>
+                  {session.role === "WARGA" ? (
+                    // For WARGA - show all menu items
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="/profile"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                        >
+                          <div className="h-8 w-8 rounded-md bg-zinc-100 flex items-center justify-center">
+                            <User className="h-4 w-4 text-zinc-600" />
+                          </div>
+                          <span className="font-medium">Profil</span>
+                        </Link>
+                      </DropdownMenuItem>
 
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/sirkula-green-action"
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
-                    >
-                      <div className="h-8 w-8 rounded-md bg-purple-100 flex items-center justify-center">
-                        <Sparkles className="h-4 w-4 text-purple-600" />
-                      </div>
-                      <span className="font-medium">Sirkula-AI</span>
-                    </Link>
-                  </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="/sirkula-green-action"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                        >
+                          <div className="h-8 w-8 rounded-md bg-purple-100 flex items-center justify-center">
+                            <Sparkles className="h-4 w-4 text-purple-600" />
+                          </div>
+                          <span className="font-medium">Sirkula-AI</span>
+                        </Link>
+                      </DropdownMenuItem>
 
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/reedem"
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
-                    >
-                      <div className="h-8 w-8 rounded-md bg-green-100 flex items-center justify-center">
-                        <Gift className="h-4 w-4 text-green-600" />
-                      </div>
-                      <span className="font-medium">Tukar Poin</span>
-                    </Link>
-                  </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="/reedem"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                        >
+                          <div className="h-8 w-8 rounded-md bg-green-100 flex items-center justify-center">
+                            <Gift className="h-4 w-4 text-green-600" />
+                          </div>
+                          <span className="font-medium">Tukar Poin</span>
+                        </Link>
+                      </DropdownMenuItem>
 
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href="/leaderboard"
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
-                    >
-                      <div className="h-8 w-8 rounded-md bg-amber-100 flex items-center justify-center">
-                        <Trophy className="h-4 w-4 text-amber-600" />
-                      </div>
-                      <span className="font-medium">Leaderboard</span>
-                    </Link>
-                  </DropdownMenuItem>
-
-                  {session.role !== "WARGA" && (
+                      <DropdownMenuItem asChild>
+                        <Link
+                          href="/leaderboard"
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer"
+                        >
+                          <div className="h-8 w-8 rounded-md bg-amber-100 flex items-center justify-center">
+                            <Trophy className="h-4 w-4 text-amber-600" />
+                          </div>
+                          <span className="font-medium">Leaderboard</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  ) : (
+                    // For UMKM, ADMIN, DLH - only show Dashboard
                     <DropdownMenuItem asChild>
                       <Link
                         href={getDashboardLink()}
@@ -520,7 +572,7 @@ export const Navbar01 = React.forwardRef(
 
                   <DropdownMenuItem
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50"
-                    onClick={logout}
+                    onClick={handleLogout}
                   >
                     <div className="h-8 w-8 rounded-md bg-red-100 flex items-center justify-center">
                       <LogOut className="h-4 w-4 text-red-600" />

@@ -3,6 +3,11 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { deleteCookie } from "cookies-next/client";
+import { useDispatch } from "react-redux";
+import { useQueryClient } from "@tanstack/react-query";
+import { clearUser } from "@/features/slices/user.slice";
+import { toast } from "sonner";
 import {
   LayoutDashboard,
   User,
@@ -34,7 +39,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { images } from "@/lib/constanst";
-import { useSession, useLogout } from "@/hooks/use-auth";
+import { useSession } from "@/hooks/use-auth";
 
 const umkmMenuItems = [
   {
@@ -78,8 +83,9 @@ const adminMenuItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const { data: session, isLoading } = useSession();
-  const { logout } = useLogout();
 
   const getInitials = (name) => {
     if (!name) return "U";
@@ -145,6 +151,14 @@ export function AppSidebar() {
       default:
         return session.role;
     }
+  };
+
+  const handleLogout = () => {
+    deleteCookie("token");
+    dispatch(clearUser());
+    queryClient.clear();
+    toast.success("Logout berhasil!");
+    router.push("/auth");
   };
 
   const menuItems = getMenuItems();
@@ -269,7 +283,7 @@ export function AppSidebar() {
                     </DropdownMenuItem>
                   )}
                   <DropdownMenuItem
-                    onClick={logout}
+                    onClick={handleLogout}
                     className="text-red-600 cursor-pointer text-sm py-2"
                   >
                     <LogOut className="w-4 h-4 mr-2 shrink-0" />

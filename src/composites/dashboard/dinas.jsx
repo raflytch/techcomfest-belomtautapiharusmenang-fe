@@ -64,6 +64,11 @@ export default function DinasDashboardComposite() {
   const [districtFilter, setDistrictFilter] = useState("");
   const [cityFilter, setCityFilter] = useState("");
 
+  // Debounced filter values
+  const debouncedSearch = useDebounce(searchQuery, 500);
+  const debouncedDistrict = useDebounce(districtFilter, 500);
+  const debouncedCity = useDebounce(cityFilter, 500);
+
   // Build query params
   const queryParams = useMemo(() => {
     const params = {};
@@ -495,9 +500,12 @@ export default function DinasDashboardComposite() {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="h-full w-full flex items-center justify-center">
-                        <Video className="h-8 w-8 sm:h-6 sm:w-6 text-zinc-400" />
-                      </div>
+                      <video
+                        src={action.mediaUrl}
+                        className="h-full w-full object-cover"
+                        muted
+                        playsInline
+                      />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

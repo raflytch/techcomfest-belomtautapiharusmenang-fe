@@ -48,6 +48,7 @@
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "lottie-react": "^2.4.1",
+    "lottie-web": "^5.13.0",
     "lucide-react": "^0.555.0",
     "motion": "^12.23.25",
     "next": "16.0.7",
