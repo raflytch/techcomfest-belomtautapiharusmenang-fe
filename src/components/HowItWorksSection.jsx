@@ -34,8 +34,8 @@ export default function HowItWorksSection({ id }) {
         </div>
 
         {/* Steps */}
-        <div className="max-w-6xl mx-auto px-2 sm:px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-6 md:gap-8 lg:gap-6">
             {/* Connecting Line - Desktop only */}
             <div className="hidden lg:block absolute top-6 left-[calc(12.5%+1rem)] right-[calc(12.5%+1rem)] h-px bg-neutral-200 z-0" />
 
@@ -49,13 +49,6 @@ export default function HowItWorksSection({ id }) {
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
-                {/* Step Number */}
-                <div className="flex justify-center mb-3 md:mb-4">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white border-2 border-neutral-200 text-neutral-900 rounded-full flex items-center justify-center text-xs md:text-sm font-semibold relative z-10 shadow-sm">
-                    {step.number}
-                  </div>
-                </div>
-
                 {/* Step Card */}
                 <Card className="relative border border-neutral-200 bg-white h-full overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                   <BorderBeam
@@ -65,7 +58,14 @@ export default function HowItWorksSection({ id }) {
                     colorFrom="#3b82f6"
                     colorTo="#60a5fa"
                   />
-                  <CardContent className="p-4 md:p-5 text-center">
+                  <CardContent className="p-5 sm:p-6 md:p-7 text-center">
+                    {/* Step Number - Inside Card */}
+                    <div className="flex justify-center mb-4 sm:mb-5 md:mb-6">
+                      <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-white border-2 border-neutral-200 text-neutral-900 rounded-full flex items-center justify-center text-xs sm:text-sm md:text-base font-semibold shadow-sm">
+                        {step.number}
+                      </div>
+                    </div>
+                    
                     <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-3 md:mb-4 rounded-xl bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center">
                       {React.cloneElement(step.icon, {
                         className: "w-6 h-6 md:w-7 md:h-7 text-blue-600",

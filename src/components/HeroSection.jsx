@@ -71,7 +71,7 @@ const HeroSection = () => {
               <Button
                 size="lg"
                 onClick={handleMulaiAksiHijau}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium shadow-lg shadow-emerald-600/30 hover:shadow-xl hover:shadow-emerald-700/40 transition-all w-full sm:w-auto"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium border-2 border-emerald-700 hover:border-emerald-800 transition-all w-full sm:w-auto"
               >
                 Mulai Aksi Hijau
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -79,7 +79,7 @@ const HeroSection = () => {
               <Button
                 variant="outline"
                 size="lg"
-                className="border-2 border-emerald-600 text-emerald-700 bg-white hover:bg-emerald-50 px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium shadow-md hover:shadow-lg transition-all w-full sm:w-auto"
+                className="border-2 border-emerald-500 text-emerald-700 bg-white hover:bg-emerald-50 hover:border-emerald-600 px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium transition-all w-full sm:w-auto"
               >
                 <Play className="w-4 h-4 mr-2" />
                 Lihat Demo
@@ -96,7 +96,7 @@ const HeroSection = () => {
             }`}
           >
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[450px] lg:h-[450px]">
-              <div className="absolute inset-0 rounded-full border-2 sm:border-4 border-emerald-200/25 overflow-hidden shadow-xl">
+              <div className="absolute inset-0 rounded-full border-[3px] sm:border-4 border-emerald-400/60 overflow-hidden">
                 <Image
                   src="/images/plant.webp"
                   alt="Green Plant"
@@ -105,8 +105,9 @@ const HeroSection = () => {
                   priority
                 />
               </div>
-              {/* Decorative Ring */}
-              <div className="absolute -inset-4 rounded-full border border-emerald-100/20 -z-10 hidden lg:block" />
+              {/* Decorative Rings */}
+              <div className="absolute -inset-3 rounded-full border-2 border-emerald-300/30 -z-10" />
+              <div className="absolute -inset-6 rounded-full border border-emerald-200/20 -z-10 hidden sm:block" />
             </div>
           </div>
         </div>
