@@ -1,5 +1,18 @@
 # TechComFest 2026 - Belom Tau Tapi Harus Menang
 
+## 🌱 Tentang Sirkula
+
+**Sirkula** adalah platform digital berbasis AI untuk melakukan green action seperti pemilahan sampah, penanaman pohon, dan berbagai aksi ramah lingkungan lainnya.
+
+### 🎯 Fitur Utama:
+
+- ✅ **Verifikasi AI Otomatis** - Upload foto/video aksi hijau, AI akan memverifikasi secara otomatis
+- 🎁 **Sistem Poin & Reward** - Dapatkan poin dari setiap aksi terverifikasi
+- 🎫 **Tukar Voucher** - Tukarkan poin dengan voucher menarik dari UMKM ramah lingkungan
+- 📊 **Dashboard Impact** - Lihat dampak kolektif dari aksi hijau Anda dan komunitas
+
+---
+
 ## 👥 Team Members
 
 | Name                    | Role              |
@@ -14,44 +27,97 @@
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (recommended) / npm / yarn
+Pastikan Anda telah menginstal:
+
+- **Node.js** versi 18 atau lebih tinggi ([Download Node.js](https://nodejs.org/))
+- **pnpm** (recommended) / npm / yarn
+  ```bash
+  # Install pnpm secara global
+  npm install -g pnpm
+  ```
 
 ### Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/raflytch/techcomfest-belomtautapiharusmenang-fe.git
+1. **Clone repository**
 
-# Navigate to project directory
-cd techcomfest-belomtautapiharusmenang-fe
+   ```bash
+   git clone https://github.com/raflytch/techcomfest-belomtautapiharusmenang-fe.git
+   ```
 
-# Install dependencies
-pnpm install
-```
+2. **Navigate to project directory**
+
+   ```bash
+   cd techcomfest-belomtautapiharusmenang-fe
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
+   > Atau gunakan `npm install` / `yarn install` jika tidak menggunakan pnpm
 
 ### Environment Variables
 
-Create a `.env.local` file in the root directory:
+1. **Copy file env.example menjadi .env.local**
 
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api
-```
+   ```bash
+   # Windows (PowerShell)
+   Copy-Item env.example .env.local
+
+   # Linux/Mac
+   cp env.example .env.local
+   ```
+
+2. **Edit file .env.local dan sesuaikan dengan konfigurasi Anda**
+
+   ```env
+   # API Configuration
+   NEXT_PUBLIC_API_URL=http://localhost:8000/api
+   ```
+
+   **Konfigurasi:**
+
+   - `NEXT_PUBLIC_API_URL`: URL backend API Sirkula
+     - Development: `http://localhost:8000/api`
+     - Production: Sesuaikan dengan URL production API Anda
 
 ### Running the Application
 
+1. **Development mode**
+
+   ```bash
+   pnpm dev
+   ```
+
+   Aplikasi akan berjalan di [http://localhost:3000](http://localhost:3000)
+
+2. **Build for production**
+
+   ```bash
+   pnpm build
+   ```
+
+3. **Start production server**
+   ```bash
+   pnpm start
+   ```
+
+### Troubleshooting
+
+**Error: Cannot find module**
+
 ```bash
-# Development mode
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Start production server
-pnpm start
+# Hapus node_modules dan install ulang
+rm -rf node_modules
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Error: Port 3000 already in use**
+
+```bash
+# Jalankan di port lain
+pnpm dev -- -p 3001
+```
 
 ---
 

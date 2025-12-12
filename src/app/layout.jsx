@@ -12,8 +12,9 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "Sirkula - Platform Pengelolaan Sampah",
-  description: "Platform digital untuk pengelolaan sampah berbasis komunitas",
+  title: "Sirkula - Platform Green Action Berbasis AI",
+  description:
+    "Platform digital berbasis AI untuk melakukan green action seperti pemilahan sampah, penanaman pohon, dan aksi ramah lingkungan lainnya. Dapatkan poin dan tukarkan dengan voucher menarik!",
 };
 
 export default function RootLayout({ children }) {
