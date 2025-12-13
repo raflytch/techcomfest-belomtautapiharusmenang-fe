@@ -7,7 +7,7 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-const HeroSection = () => {
+const HeroSection = ({ onOpenVideo }) => {
   const [isVisible, heroRef] = useScrollAnimation();
   const router = useRouter();
 
@@ -22,9 +22,7 @@ const HeroSection = () => {
           ref={heroRef}
           className="flex flex-col lg:flex-row justify-between gap-8 lg:gap-12 items-center max-w-7xl mx-auto"
         >
-          {/* Left Column - Text Content */}
           <div className="space-y-6 sm:space-y-8 text-center lg:text-left w-full lg:w-1/2">
-            {/* Badge */}
             <div
               className={`transition-all duration-500 flex justify-center lg:justify-start ${
                 isVisible
@@ -40,7 +38,6 @@ const HeroSection = () => {
               </Badge>
             </div>
 
-            {/* Headline */}
             <div
               className={`space-y-3 sm:space-y-4 transition-all duration-500 delay-100 ${
                 isVisible
@@ -60,7 +57,6 @@ const HeroSection = () => {
               </p>
             </div>
 
-            {/* CTA Buttons */}
             <div
               className={`flex flex-col sm:flex-row gap-3 sm:gap-4 transition-all duration-500 delay-200 justify-center lg:justify-start ${
                 isVisible
@@ -79,6 +75,7 @@ const HeroSection = () => {
               <Button
                 variant="outline"
                 size="lg"
+                onClick={onOpenVideo}
                 className="border-2 border-emerald-500 text-emerald-700 bg-white hover:bg-emerald-50 hover:border-emerald-600 px-6 sm:px-8 h-11 sm:h-12 text-sm sm:text-base font-medium transition-all w-full sm:w-auto"
               >
                 <Play className="w-4 h-4 mr-2" />
@@ -87,7 +84,6 @@ const HeroSection = () => {
             </div>
           </div>
 
-          {/* Right Column - Circular Image */}
           <div
             className={`flex justify-center lg:justify-end transition-all duration-500 delay-300 w-full lg:w-1/2 mt-8 lg:mt-0 ${
               isVisible
@@ -105,7 +101,6 @@ const HeroSection = () => {
                   priority
                 />
               </div>
-              {/* Decorative Rings */}
               <div className="absolute -inset-3 rounded-full border-2 border-emerald-300/30 -z-10" />
               <div className="absolute -inset-6 rounded-full border border-emerald-200/20 -z-10 hidden sm:block" />
             </div>

@@ -22,6 +22,8 @@ export const images = {
   googleLogo,
 };
 
+export const DEMO_VIDEO_URL = "https://ik.imagekit.io/72mu50jam/Sirkula.mp4";
+
 export const navigationLinks = [
   { href: "/", label: "Home", icon: Home },
   { href: "/sirkula-green-action", label: "Sirkula-AI", icon: Sparkles },
