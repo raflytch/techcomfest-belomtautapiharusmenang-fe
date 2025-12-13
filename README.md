@@ -11,6 +11,13 @@
 - 🎫 **Tukar Voucher** - Tukarkan poin dengan voucher menarik dari UMKM ramah lingkungan
 - 📊 **Dashboard Impact** - Lihat dampak kolektif dari aksi hijau Anda dan komunitas
 
+### 🔑 Default Accounts
+
+| Role  | Email            | Password    |
+| ----- | ---------------- | ----------- |
+| ADMIN | admin@sirkula.id | Admin123456 |
+| DLH   | dlh@sirkula.id   | Dlh123456   |
+
 ---
 
 ## 👥 Team Members
