@@ -40,6 +40,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
@@ -143,6 +152,7 @@ export default function ProfileComposite() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteStep, setDeleteStep] = useState(1);
   const [deleteOtp, setDeleteOtp] = useState("");
+  const [showFileSizeDialog, setShowFileSizeDialog] = useState(false);
 
   const getInitials = (name) => {
     if (!name) return "U";
@@ -165,6 +175,13 @@ export default function ProfileComposite() {
   const handleAvatarChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validasi ukuran file maksimal 1MB (1 * 1024 * 1024 bytes)
+      const maxSize = 1 * 1024 * 1024;
+      if (file.size > maxSize) {
+        setShowFileSizeDialog(true);
+        e.target.value = ""; // Reset input file
+        return;
+      }
       setAvatarFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -236,24 +253,50 @@ export default function ProfileComposite() {
   }
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto max-w-4xl px-4 py-6 sm:py-8">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 sm:mb-6"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Kembali ke Beranda
-        </Link>
+    <>
+      {/* Alert Dialog untuk ukuran file terlalu besar */}
+      <AlertDialog
+        open={showFileSizeDialog}
+        onOpenChange={setShowFileSizeDialog}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-red-600">
+              <XCircle className="h-5 w-5" />
+              Ukuran File Terlalu Besar
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm">
+              File yang Anda pilih melebihi batas maksimal <strong>1MB</strong>.
+              Silakan pilih file dengan ukuran yang lebih kecil atau kompres
+              file Anda terlebih dahulu.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction className="bg-emerald-600 hover:bg-emerald-700">
+              Mengerti
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
-        <div className="flex items-center gap-3 mb-6 sm:mb-8">
-          <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-emerald-600 flex items-center justify-center">
-            <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+      <div className="min-h-screen">
+        <div className="container mx-auto max-w-4xl px-4 py-6 sm:py-8">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 sm:mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Kembali ke Beranda
+          </Link>
+
+          <div className="flex items-center gap-3 mb-6 sm:mb-8">
+            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+              <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-zinc-900">
+              Profil Saya
+            </h1>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-zinc-900">
-            Profil Saya
-          </h1>
-        </div>
 
         <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
           <Card className="border border-zinc-200 bg-white lg:col-span-1">
@@ -369,7 +412,7 @@ export default function ProfileComposite() {
                           Ganti Foto
                         </Button>
                         <p className="text-[10px] text-muted-foreground mt-1">
-                          JPEG, PNG, GIF, WebP. Maks 5MB
+                          JPEG, PNG, GIF, WebP. Maks 1MB
                         </p>
                       </div>
                     </div>
@@ -628,5 +671,6 @@ export default function ProfileComposite() {
         </div>
       </div>
     </div>
+    </>
   );
 }

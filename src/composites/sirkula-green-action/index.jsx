@@ -110,8 +110,8 @@ export default function SirkulaGreenActionComposite() {
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validasi ukuran file maksimal 3MB (3 * 1024 * 1024 bytes)
-      const maxSize = 3 * 1024 * 1024;
+      // Validasi ukuran file maksimal 1MB (1 * 1024 * 1024 bytes)
+      const maxSize = 1 * 1024 * 1024;
       if (file.size > maxSize) {
         setShowFileSizeDialog(true);
         e.target.value = ""; // Reset input file
@@ -213,7 +213,7 @@ export default function SirkulaGreenActionComposite() {
               Ukuran File Terlalu Besar
             </AlertDialogTitle>
             <AlertDialogDescription className="text-sm">
-              File yang Anda pilih melebihi batas maksimal <strong>3MB</strong>.
+              File yang Anda pilih melebihi batas maksimal <strong>1MB</strong>.
               Silakan pilih file dengan ukuran yang lebih kecil atau kompres
               file Anda terlebih dahulu.
             </AlertDialogDescription>
@@ -477,7 +477,7 @@ export default function SirkulaGreenActionComposite() {
                   <Label htmlFor="media" className="text-sm font-medium">
                     Upload Media (Gambar/Video) *{" "}
                     <span className="text-xs text-muted-foreground">
-                      (Maks. 3MB)
+                      (Maks. 1MB)
                     </span>
                   </Label>
                   <Input

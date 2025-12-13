@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Store, MapPin, FileText, Camera, Save } from "lucide-react";
+import { Store, MapPin, FileText, Camera, Save, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,6 +23,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useSession, useUpdateUmkmProfile } from "@/hooks/use-auth";
 import FullscreenLoader from "@/components/ui/fullscreen-loader";
 
@@ -55,6 +64,7 @@ export default function UmkmProfileComposite() {
   });
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
+  const [showFileSizeDialog, setShowFileSizeDialog] = useState(false);
 
   useEffect(() => {
     if (session) {
@@ -73,6 +83,13 @@ export default function UmkmProfileComposite() {
   const handleLogoChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validasi ukuran file maksimal 1MB (1 * 1024 * 1024 bytes)
+      const maxSize = 1 * 1024 * 1024;
+      if (file.size > maxSize) {
+        setShowFileSizeDialog(true);
+        e.target.value = ""; // Reset input file
+        return;
+      }
       setLogoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -116,16 +133,42 @@ export default function UmkmProfileComposite() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8">
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-green-800">
-            Profil UMKM
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Kelola informasi bisnis UMKM Anda
-          </p>
-        </div>
+    <>
+      {/* Alert Dialog untuk ukuran file terlalu besar */}
+      <AlertDialog
+        open={showFileSizeDialog}
+        onOpenChange={setShowFileSizeDialog}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2 text-red-600">
+              <XCircle className="h-5 w-5" />
+              Ukuran File Terlalu Besar
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm">
+              File yang Anda pilih melebihi batas maksimal <strong>1MB</strong>.
+              Silakan pilih file dengan ukuran yang lebih kecil atau kompres
+              file Anda terlebih dahulu.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction className="bg-emerald-600 hover:bg-emerald-700">
+              Mengerti
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <div className="p-4 sm:p-6 lg:p-8">
+        <div className="max-w-3xl mx-auto space-y-6">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-bold text-green-800">
+              Profil UMKM
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+              Kelola informasi bisnis UMKM Anda
+            </p>
+          </div>
 
         <Card className="border shadow-none">
           <CardHeader className="p-4 sm:p-6">
@@ -193,7 +236,7 @@ export default function UmkmProfileComposite() {
                       Upload Logo
                     </Button>
                     <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
-                      JPEG, PNG, GIF, WebP. Maks 5MB
+                      JPEG, PNG, GIF, WebP. Maks 1MB
                     </p>
                   </div>
                 </div>
@@ -289,5 +332,6 @@ export default function UmkmProfileComposite() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
