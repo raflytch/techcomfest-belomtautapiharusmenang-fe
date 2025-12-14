@@ -153,13 +153,15 @@ export const useSession = () => {
         return data.data;
       } catch (error) {
         dispatch(setError(error.message));
+        dispatch(clearUser());
+        deleteCookie("token");
         throw error;
       } finally {
         dispatch(setLoading(false));
       }
     },
     enabled: !!token,
-    retry: 1,
+    retry: false,
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });

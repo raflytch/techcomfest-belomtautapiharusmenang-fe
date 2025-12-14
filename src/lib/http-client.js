@@ -55,6 +55,13 @@ httpClient.interceptors.response.use(
       deleteCookie("token");
     }
 
+    if (
+      error.response?.status === 404 &&
+      error.config?.url?.includes("/users/session")
+    ) {
+      deleteCookie("token");
+    }
+
     return Promise.reject(error);
   }
 );
